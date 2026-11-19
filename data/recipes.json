@@ -1,0 +1,96 @@
+[
+  {
+    "id": "chili-sin-carne",
+    "title": "Chili sin carne",
+    "servings": 2,
+    "cook_minutes": 25,
+    "dietary_tags": ["vegetarisch", "vegan"],
+    "ingredients": [
+      {"amount": 1, "unit": "stuk", "name": "ui"},
+      {"amount": 1, "unit": "stuk", "name": "rode paprika"},
+      {"amount": 240, "unit": "g", "name": "uitgelekte kidneybonen"},
+      {"amount": 400, "unit": "g", "name": "tomatenblokjes"},
+      {"amount": 1, "unit": "el", "name": "olijfolie"},
+      {"amount": 1, "unit": "tl", "name": "gemalen komijn"}
+    ],
+    "steps": [
+      "Snijd de ui en paprika in blokjes.",
+      "Bak de ui en paprika 5 minuten in de olijfolie. Roer de komijn erdoor.",
+      "Voeg de kidneybonen en tomaten toe en laat de chili 20 minuten zachtjes sudderen."
+    ]
+  },
+  {
+    "id": "courgettesoep",
+    "title": "Courgettesoep",
+    "servings": 3,
+    "cook_minutes": 18,
+    "dietary_tags": ["vegetarisch", "vegan"],
+    "ingredients": [
+      {"amount": 2, "unit": "stuks", "name": "courgette"},
+      {"amount": 1, "unit": "stuk", "name": "ui"},
+      {"amount": 600, "unit": "ml", "name": "groentebouillon"},
+      {"amount": 1, "unit": "el", "name": "olijfolie"}
+    ],
+    "steps": [
+      "Snijd de courgettes en ui in stukken.",
+      "Fruit de ui 3 minuten in olijfolie en voeg de courgette en bouillon toe.",
+      "Laat 15 minuten zacht koken en mix de soep glad."
+    ]
+  },
+  {
+    "id": "pasta-met-spinazie",
+    "title": "Romige pasta met spinazie",
+    "servings": 2,
+    "cook_minutes": 15,
+    "dietary_tags": ["vegetarisch", "bevat melk", "bevat tarwe"],
+    "ingredients": [
+      {"amount": 180, "unit": "g", "name": "tarwepasta"},
+      {"amount": 150, "unit": "g", "name": "verse spinazie"},
+      {"amount": 100, "unit": "ml", "name": "kookroom"},
+      {"amount": 1, "unit": "teentje", "name": "knoflook"},
+      {"amount": 1, "unit": "el", "name": "olijfolie"}
+    ],
+    "steps": [
+      "Kook de pasta volgens de verpakking en giet af.",
+      "Bak de fijngehakte knoflook kort in olijfolie en voeg de spinazie toe.",
+      "Voeg de room toe zodra de spinazie geslonken is. Meng de saus door de pasta."
+    ]
+  },
+  {
+    "id": "quinoasalade",
+    "title": "Quinoasalade met komkommer",
+    "servings": 2,
+    "cook_minutes": 15,
+    "dietary_tags": ["vegetarisch", "vegan"],
+    "ingredients": [
+      {"amount": 120, "unit": "g", "name": "quinoa"},
+      {"amount": 240, "unit": "ml", "name": "water"},
+      {"amount": 0.5, "unit": "stuk", "name": "komkommer"},
+      {"amount": 150, "unit": "g", "name": "kerstomaten"},
+      {"amount": 1, "unit": "el", "name": "citroensap"},
+      {"amount": 1, "unit": "el", "name": "olijfolie"}
+    ],
+    "steps": [
+      "Spoel de quinoa en laat die 15 minuten zacht koken in het water.",
+      "Snijd de komkommer in blokjes en halveer de kerstomaten.",
+      "Meng de afgekoelde quinoa, groenten, olijfolie en het citroensap."
+    ]
+  },
+  {
+    "id": "appel-uit-de-oven",
+    "title": "Appel uit de oven met kaneel",
+    "servings": 2,
+    "cook_minutes": 20,
+    "dietary_tags": ["vegetarisch", "vegan"],
+    "ingredients": [
+      {"amount": 2, "unit": "stuks", "name": "appel"},
+      {"amount": 0.5, "unit": "tl", "name": "kaneel"},
+      {"amount": 1, "unit": "el", "name": "ahornsiroop"}
+    ],
+    "steps": [
+      "Verwarm de oven voor op 180 °C.",
+      "Snijd de appels in partjes en meng ze met de kaneel en ahornsiroop.",
+      "Bak de partjes 20 minuten op 180 °C."
+    ]
+  }
+]
