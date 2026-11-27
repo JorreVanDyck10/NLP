@@ -10,6 +10,7 @@ Een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De
 | --- | --- | --- |
 | Agent, receptzoeker, MCP en benchmark | [Installatie en voortgang](docs/VOORTGANG.md) | `chef_agent.py`, `recipe_search.py`, `scale_server.py`, `evaluate_chef.py`, `requirements.txt` en optioneel `requirements-eval.txt` |
 | Lokale RAG-demo met Ollama | [Demo starten](docs/OLLAMA-DEMO.md) | `flavor_chef.py`, `requirements-demo.txt` |
+| Lokale interface en demo (persoon 4) | [Interface starten en verdedigen](docs/LOKALE-INTERFACE.md) | `chef_ui.py`, `requirements-ui.txt` |
 
 Voer alle installatie- en startcommando's uit vanuit de repository-root: de map met deze README. De twee onderdelen gebruiken verschillende datasets en virtuele omgevingen.
 

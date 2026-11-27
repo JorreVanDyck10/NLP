@@ -30,6 +30,10 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 - [ ] Sluit Groq aan met een beschikbaar model op het gratis plan. De opdracht noemt Llama 3.1 8B als voorbeeld. Groq verwijst voor dat model nu naar `openai/gpt-oss-20b`. [Groq-modelwijzigingen](https://console.groq.com/docs/deprecations)
 - [ ] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT).
 - [ ] Maak een eenvoudige lokale interface met gesprekken, opgehaalde tekststukken, MCP-toolcalls en live metingen.
+  - [x] Bouw het scherm in `chef_ui.py` met vraag/antwoord, bronfragmenten, toolinvoer/-uitvoer en beschikbare metingen na afloop; zie [persoon 4](LOKALE-INTERFACE.md).
+  - [x] Voeg expliciete meldingen voor ontbrekende metingen en een gemarkeerde gesimuleerde voorbeeldmodus toe; controleer die met AppTest.
+  - [x] Controleer de echte lokale zoek- en schaalvraag via AppTest: curryfragment met 420 ml water, daarna MCP-resultaat 735 ml voor 7 porties.
+  - [ ] Controleer live Groq-tokenmetingen en TTFT met een beschikbare sleutel en oefen de demo zelf. Tussenstappen worden nog niet tijdens uitvoering gestreamd.
 
 ## 5. Proces en GenAI · 10%
 

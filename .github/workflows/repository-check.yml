@@ -25,6 +25,10 @@ jobs:
           python-version: '3.13'
       - name: Structuur, links en syntax controleren
         run: python scripts/check_repository.py
+      - name: Interfacetest installeren zonder modellen
+        run: python -m pip install streamlit==1.45.0
+      - name: Interface controleren met AppTest
+        run: python scripts/test_chef_ui.py
       - name: Whitespace controleren
         env:
           EVENT_NAME: ${{ github.event_name }}
