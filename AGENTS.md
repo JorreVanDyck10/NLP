@@ -8,6 +8,6 @@ Deze instructies gelden voor de volledige repository.
 4. Volg de mapindeling en onderhoudsafspraken. Werk bij verplaatsingen alle verwijzingen bij. Voeg geen gegenereerde indexen, omgevingen, modellen, lokale meetuitvoer of geheimen toe.
 5. Voer vóór oplevering `python scripts/check_repository.py` en `git diff --check` uit, plus de functionele controles die bij de wijziging horen. Rapporteer wat is gecontroleerd en wat niet kon worden uitgevoerd.
 6. Werk documentatie bij als gebruik, installatie, voortgang of structuur verandert. Controleer de volledige diff en de te committen bestanden.
-7. Controleer vóór elke oplevering [docs/PROJECTKEUZES.md](docs/PROJECTKEUZES.md). Werk het bij bij nieuwe of gewijzigde projectkeuzes. Leg vast wat is gebruikt, waarom en welke instellingen of beperkingen relevant zijn voor het eindrapport.
+7. Houd [docs/PROJECTKEUZES.md](docs/PROJECTKEUZES.md) actueel als gezamenlijk keuzeoverzicht. Noteer per nieuwe of gewijzigde keuze de techniek, toepassing, reden, relevante lesbasis en werkelijk uitgevoerde controle of beperking. Verwijs vanuit **Gebruikt en waarom** in het [projectrapport](docs/RAPPORT.md) naar dat overzicht. Leg meetresultaten en controles vast bij de betrokken fase en onderscheid eigen werk, AI-hulp, echte metingen en simulaties.
 
 Gebruik de checklist uit CONTRIBUTING.md bij iedere wijziging. Houd commits en pull requests beperkt tot één samenhangende taak.

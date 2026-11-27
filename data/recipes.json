@@ -98,5 +98,832 @@
       "Vet een pan licht in en verwarm op middelhoog vuur. Gebruik ongeveer 60 ml beslag per pannenkoek. Draai na circa 2 minuten om zodra er luchtbelletjes verschijnen en bak de tweede kant nog ongeveer 1 minuut. Houd gebakken pannenkoeken warm in de oven."
     ],
     "substitutions": ["Gebruik eventueel ander seizoensfruit in plaats van aardbeien."]
+  },
+  {
+    "id": "franse-omelet",
+    "title": "Franse omelet",
+    "category": "ontbijt",
+    "servings": 1,
+    "prep_minutes": 5,
+    "cook_times": [{"minutes": 5}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Omlet",
+    "provenance": {"corpus_id": "plwb:12895", "title": "Książka kucharska/Omlet", "revision": 550537, "history_url": "https://pl.wikibooks.org/w/index.php?curid=12895&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "eieren", "quantity": 2, "unit": "stuk"},
+      {"name": "melk", "quantity": 1, "unit": "el"},
+      {"name": "tarwebloem", "quantity": 1, "unit": "el"},
+      {"name": "suiker (optioneel)", "quantity": 1, "unit": "el"},
+      {"name": "boter", "quantity": 1, "unit": "tl"}
+    ],
+    "instructions": [
+      "Klop de eieren los met de melk en bloem. Gebruik de suiker alleen voor een zoete omelet.",
+      "Smelt de boter in een koekenpan en giet het eimengsel erin.",
+      "Bak op matig vuur tot de onderkant licht kleurt en de bovenkant gestold is. Schuif de omelet op een bord."
+    ]
+  },
+  {
+    "id": "omelet-met-kaas-en-bieslook",
+    "title": "Omelet met kaas en bieslook",
+    "category": "ontbijt",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 25}],
+    "dietary_tags": ["bevat zuivel"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Omlet_z_serem_i_zio%C5%82ami",
+    "provenance": {"corpus_id": "plwb:17002", "title": "Książka kucharska/Omlet z serem i ziołami", "revision": 550512, "history_url": "https://pl.wikibooks.org/w/index.php?curid=17002&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "eieren", "quantity": 4, "unit": "stuk"},
+      {"name": "tarwebloem", "quantity": 8, "unit": "el"},
+      {"name": "geraspte halfharde kaas", "quantity": 100, "unit": "g"},
+      {"name": "bieslook", "quantity": 1, "unit": "bos"},
+      {"name": "water", "quantity": 4, "unit": "el"},
+      {"name": "plantaardige olie", "quantity": 2, "unit": "el"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Scheid de eieren. Meng de dooiers met bloem, water en zout en verwarm het beslag zachtjes tot het indikt.",
+      "Klop de eiwitten stijf. Spatel ze samen met de kaas en een deel van de bieslook door het beslag.",
+      "Verhit olie en bak vier omeletten licht goudbruin. Strooi de resterende bieslook erover."
+    ]
+  },
+  {
+    "id": "spaans-roerei-met-tomaat",
+    "title": "Spaans roerei met tomaat",
+    "category": "ontbijt",
+    "servings": 3,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 20}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Jajecznica_po_hiszpa%C5%84sku",
+    "provenance": {"corpus_id": "plwb:19360", "title": "Książka kucharska/Jajecznica po hiszpańsku", "revision": 549208, "history_url": "https://pl.wikibooks.org/w/index.php?curid=19360&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "eieren", "quantity": 6, "unit": "stuk"},
+      {"name": "rijpe tomaten", "quantity": 4, "unit": "stuk"},
+      {"name": "uien", "quantity": 3, "unit": "stuk"},
+      {"name": "knoflook", "quantity": 4, "unit": "teen"},
+      {"name": "olijfolie", "quantity": 3, "unit": "el"},
+      {"name": "gehakte peterselie", "quantity": 1, "unit": "el"},
+      {"name": "zout"},
+      {"name": "zwarte peper"}
+    ],
+    "instructions": [
+      "Ontvel de tomaten met heet water en snijd ze klein.",
+      "Fruit de gesnipperde ui en knoflook in olijfolie. Voeg de tomaat toe en laat ongeveer 15 minuten zacht koken.",
+      "Breng op smaak met peper en zout. Roer de losgeklopte eieren erdoor en bak tot ze stollen. Werk af met peterselie."
+    ]
+  },
+  {
+    "id": "havermoutpap-met-appelmoes",
+    "title": "Havermoutpap met appelmoes",
+    "category": "ontbijt",
+    "servings": 1,
+    "prep_minutes": 5,
+    "cook_times": [{"minutes": 10}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Owsianka_z_musem_jab%C5%82kowym",
+    "provenance": {"corpus_id": "plwb:27934", "title": "Książka kucharska/Owsianka z musem jabłkowym", "revision": 550580, "history_url": "https://pl.wikibooks.org/w/index.php?curid=27934&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "grove havervlokken", "quantity": 250, "unit": "ml"},
+      {"name": "melk", "quantity": 250, "unit": "ml"},
+      {"name": "water", "quantity": 250, "unit": "ml"},
+      {"name": "zout", "quantity": 1, "unit": "snufje"},
+      {"name": "appelmoes"}
+    ],
+    "instructions": [
+      "Doe havervlokken, melk, water en zout in een steelpan.",
+      "Kook zachtjes en roer af en toe tot de vlokken het vocht hebben opgenomen.",
+      "Schep de pap in een kom en voeg naar smaak appelmoes toe."
+    ]
+  },
+  {
+    "id": "hartige-wentelteefjes",
+    "title": "Hartige wentelteefjes",
+    "category": "ontbijt",
+    "servings": 2,
+    "prep_minutes": 5,
+    "cook_times": [{"minutes": 10}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Grzanki_w_jajku",
+    "provenance": {"corpus_id": "plwb:20914", "title": "Książka kucharska/Grzanki w jajku", "revision": 550552, "history_url": "https://pl.wikibooks.org/w/index.php?curid=20914&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "ei", "quantity": 1, "unit": "stuk"},
+      {"name": "melk", "quantity": 50, "unit": "ml"},
+      {"name": "oud stokbrood of broodje", "quantity": 1, "unit": "stuk"},
+      {"name": "boter", "quantity": 1, "unit": "el"},
+      {"name": "zout"},
+      {"name": "zwarte peper"}
+    ],
+    "instructions": [
+      "Klop ei, melk, zout en peper los in een diep bord.",
+      "Snijd het brood in sneetjes en smelt de boter in een koekenpan.",
+      "Haal het brood aan beide zijden door het eimengsel en bak het aan beide kanten goudbruin."
+    ]
+  },
+  {
+    "id": "poolse-aardappelpannenkoeken",
+    "title": "Poolse aardappelpannenkoeken",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 15}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Placki_ziemniaczane",
+    "provenance": {"corpus_id": "plwb:13055", "title": "Książka kucharska/Placki ziemniaczane", "revision": 550665, "history_url": "https://pl.wikibooks.org/w/index.php?curid=13055&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0", "adaptation": "Plantaardige olie gekozen uit de vetopties in de bron."},
+    "ingredients": [
+      {"name": "middelgrote aardappelen (samen ongeveer 800 g)", "quantity": 6, "unit": "stuk"},
+      {"name": "ui", "quantity": 1, "unit": "stuk"},
+      {"name": "ei", "quantity": 1, "unit": "stuk"},
+      {"name": "tarwebloem", "quantity": 4.5, "unit": "el"},
+      {"name": "zout", "quantity": 1, "unit": "tl"},
+      {"name": "plantaardige olie", "quantity": 4, "unit": "el"}
+    ],
+    "instructions": [
+      "Schil en rasp de aardappelen. Snipper de ui.",
+      "Meng aardappel en ui met het ei, de bloem en het zout tot een samenhangend beslag.",
+      "Verhit de olie, schep kleine hoopjes beslag in de pan en bak beide kanten goudbruin."
+    ]
+  },
+  {
+    "id": "forel-in-folie",
+    "title": "Forel in folie",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 75,
+    "cook_times": [{"minutes": 20}],
+    "dietary_tags": ["bevat vis"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Pstr%C4%85g_w_folii",
+    "provenance": {"corpus_id": "plwb:14171", "title": "Książka kucharska/Pstrąg w folii", "revision": 549832, "history_url": "https://pl.wikibooks.org/w/index.php?curid=14171&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "schoongemaakte forellen", "quantity": 4, "unit": "stuk"},
+      {"name": "citroenen (uitgeperst)", "quantity": 2, "unit": "stuk"},
+      {"name": "gesmolten boter", "quantity": 6, "unit": "el"},
+      {"name": "knoflook", "quantity": 4, "unit": "teen"},
+      {"name": "peterselie", "quantity": 1, "unit": "bos"},
+      {"name": "zout"},
+      {"name": "peper"}
+    ],
+    "instructions": [
+      "Meng boter, citroensap, geperste knoflook, gehakte peterselie, peper en zout.",
+      "Laat de forellen circa 60 minuten in de marinade staan in de koelkast. Keer ze tussendoor.",
+      "Verpak elke vis met wat marinade in folie en bak circa 20 minuten op 200 °C."
+    ]
+  },
+  {
+    "id": "vis-in-dillesaus",
+    "title": "Vis in dillesaus",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 20,
+    "cook_times": [{"minutes": 25}],
+    "dietary_tags": ["bevat vis"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Ryba_w_sosie_koperkowym",
+    "provenance": {"corpus_id": "plwb:13749", "title": "Książka kucharska/Ryba w sosie koperkowym", "revision": 549873, "history_url": "https://pl.wikibooks.org/w/index.php?curid=13749&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "visfilets", "quantity": 800, "unit": "g"},
+      {"name": "champignons", "quantity": 500, "unit": "g"},
+      {"name": "uien", "quantity": 3, "unit": "stuk"},
+      {"name": "boter", "quantity": 1, "unit": "el"},
+      {"name": "zure room", "quantity": 250, "unit": "ml"},
+      {"name": "droge witte wijn", "quantity": 250, "unit": "ml"},
+      {"name": "gehakte dille", "quantity": 4, "unit": "el"},
+      {"name": "citroensap"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Dep de filets droog, besprenkel met citroensap en kruid met zout. Snipper de uien en snijd de champignons.",
+      "Stoof ui en champignons in boter onder een deksel. Leg de vis erop, voeg wijn toe en gaar de vis.",
+      "Haal de filets uit de pan. Roer zure room door het stoofvocht, breng aan de kook en voeg dille en zout toe. Schenk de saus over de vis."
+    ]
+  },
+  {
+    "id": "visovenschotel-met-aardappel",
+    "title": "Visovenschotel met aardappel",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 60}],
+    "dietary_tags": ["bevat vis"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Ryba_zapiekana_z_ziemniakami",
+    "provenance": {"corpus_id": "plwb:14342", "title": "Książka kucharska/Ryba zapiekana z ziemniakami", "revision": 549880, "history_url": "https://pl.wikibooks.org/w/index.php?curid=14342&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "visfilets", "quantity": 600, "unit": "g"},
+      {"name": "aardappelen", "quantity": 500, "unit": "g"},
+      {"name": "melk", "quantity": 500, "unit": "ml"},
+      {"name": "ui", "quantity": 1, "unit": "stuk"},
+      {"name": "margarine", "quantity": 2, "unit": "el"},
+      {"name": "gehakte peterselie", "quantity": 1, "unit": "el"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Dep de vis droog en kruid met zout. Snijd de geschilde aardappelen in plakken en snipper de ui.",
+      "Vet de ovenschaal in met margarine. Leg eerst de vis in de schaal en bedek met aardappel en ui.",
+      "Voeg zout en melk toe. Bak ongeveer 60 minuten op 150 °C en strooi peterselie op de schotel."
+    ]
+  },
+  {
+    "id": "spaanse-aardappeltortilla",
+    "title": "Spaanse aardappeltortilla",
+    "category": "lunch",
+    "servings": 4,
+    "prep_minutes": 30,
+    "cook_times": [{"minutes": 25}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Tortilla_de_patatas",
+    "provenance": {"corpus_id": "plwb:20534", "title": "Książka kucharska/Tortilla de patatas", "revision": 550569, "history_url": "https://pl.wikibooks.org/w/index.php?curid=20534&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "eieren", "quantity": 4, "unit": "stuk"},
+      {"name": "middelgrote aardappelen", "quantity": 5, "unit": "stuk"},
+      {"name": "ui", "quantity": 1, "unit": "stuk"},
+      {"name": "olijfolie (ruim om in te bakken)"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Snijd de geschilde aardappelen in dunne plakken en snipper de ui. Fruit de ui en bak de aardappelen mee tot ze zacht zijn.",
+      "Laat de aardappelen en ui uitlekken. Klop de eieren met zout, meng alles voorzichtig en laat 10–15 minuten staan.",
+      "Bak de tortilla 4–5 minuten op matig vuur. Keer met behulp van een bord en bak de tweede kant tot het ei gestold is."
+    ]
+  },
+  {
+    "id": "quiche-lorraine",
+    "title": "Quiche Lorraine",
+    "category": "lunch",
+    "servings": 6,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 30}],
+    "dietary_tags": ["bevat vlees"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Quiche_lorraine",
+    "provenance": {"corpus_id": "plwb:18806", "title": "Książka kucharska/Quiche lorraine", "revision": 550528, "history_url": "https://pl.wikibooks.org/w/index.php?curid=18806&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "hartig kruimeldeeg", "quantity": 300, "unit": "g"},
+      {"name": "gerookt spek", "quantity": 6, "unit": "plak"},
+      {"name": "geraspte stevige kaas", "quantity": 100, "unit": "g"},
+      {"name": "ui", "quantity": 0.5, "unit": "stuk"},
+      {"name": "eieren", "quantity": 3, "unit": "stuk"},
+      {"name": "zure room (12% vet)", "quantity": 200, "unit": "ml"},
+      {"name": "cayennepeper"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Laat het deeg ontdooien en bekleed de vorm ermee.",
+      "Verdeel gesneden spek, ui en kaas over de bodem. Klop de eieren met zure room, cayennepeper en zout en giet het mengsel in de vorm.",
+      "Bak eerst 20 minuten op 180 °C en daarna 10 minuten op 150 °C. Laat de quiche afkoelen."
+    ]
+  },
+  {
+    "id": "wortelsalade-met-honing",
+    "title": "Wortelsalade met honing",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 2}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Sur%C3%B3wka_marchwiowa_z_miodem",
+    "provenance": {"corpus_id": "plwb:15666", "title": "Książka kucharska/Surówka marchwiowa z miodem", "revision": 550060, "history_url": "https://pl.wikibooks.org/w/index.php?curid=15666&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "wortelen", "quantity": 4, "unit": "stuk"},
+      {"name": "rozijnen", "quantity": 4, "unit": "el"},
+      {"name": "honing", "quantity": 3, "unit": "tl"},
+      {"name": "pikant paprikapoeder", "quantity": 0.25, "unit": "tl"}
+    ],
+    "instructions": [
+      "Rasp de geschilde wortelen fijn en meng ze met paprikapoeder.",
+      "Kook de rozijnen 2 minuten in 250 ml water en giet ze af.",
+      "Meng wortel en rozijnen met honing. Giet overtollig vocht af en laat 5 minuten rusten."
+    ]
+  },
+  {
+    "id": "rodekoolsalade-met-appel",
+    "title": "Rodekoolsalade met appel",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Sur%C3%B3wka_z_czerwonej_kapusty",
+    "provenance": {"corpus_id": "plwb:21800", "title": "Książka kucharska/Surówka z czerwonej kapusty", "revision": 550061, "history_url": "https://pl.wikibooks.org/w/index.php?curid=21800&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "kleine rode kool", "quantity": 1, "unit": "stuk"},
+      {"name": "zure appels", "quantity": 3, "unit": "stuk"},
+      {"name": "gefermenteerde augurken", "quantity": 5, "unit": "stuk"},
+      {"name": "plantaardige olie", "quantity": 2.5, "unit": "el"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Verwijder de buitenste bladeren van de kool en snipper de rest fijn.",
+      "Schil de appels en snijd ze met de augurken in blokjes.",
+      "Meng alles met plantaardige olie en breng op smaak met zout."
+    ]
+  },
+  {
+    "id": "rijstnoedelsalade-met-paprika",
+    "title": "Rijstnoedelsalade met paprika",
+    "category": "lunch",
+    "servings": 4,
+    "prep_minutes": 20,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Sa%C5%82atka_z_makaronu_ry%C5%BCowego_i_papryki",
+    "provenance": {"corpus_id": "plwb:18788", "title": "Książka kucharska/Sałatka z makaronu ryżowego i papryki", "revision": 549939, "history_url": "https://pl.wikibooks.org/w/index.php?curid=18788&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "rode paprika", "quantity": 1, "unit": "stuk"},
+      {"name": "groene paprika", "quantity": 1, "unit": "stuk"},
+      {"name": "oranje paprika", "quantity": 1, "unit": "stuk"},
+      {"name": "rijstnoedels", "quantity": 0.5, "unit": "pak"},
+      {"name": "gedroogde judasoren", "quantity": 7, "unit": "stuk"},
+      {"name": "komkommer", "quantity": 1, "unit": "stuk"},
+      {"name": "sojasaus", "quantity": 60, "unit": "ml"},
+      {"name": "pikant paprikapoeder"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Week gedroogde judasoren en rijstnoedels apart ongeveer 15 minuten in heet water en laat ze uitlekken.",
+      "Snijd de ontpitte paprika's, komkommer en geweekte paddenstoelen in dunne reepjes.",
+      "Schep alles door de noedels en voeg sojasaus, paprikapoeder en zout toe."
+    ]
+  },
+  {
+    "id": "waldorfsalade-met-noten",
+    "title": "Waldorfsalade met noten",
+    "category": "snack",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Sa%C5%82atka_Waldorf",
+    "provenance": {"corpus_id": "plwb:31936", "title": "Książka kucharska/Sałatka Waldorf", "revision": 550602, "history_url": "https://pl.wikibooks.org/w/index.php?curid=31936&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "appelblokjes (circa)", "quantity": 500, "unit": "ml"},
+      {"name": "fijngesneden bleekselderij (circa)", "quantity": 500, "unit": "ml"},
+      {"name": "noten (circa)", "quantity": 250, "unit": "ml"},
+      {"name": "olijfolie"}
+    ],
+    "instructions": [
+      "Schil de appels, verwijder de klokhuizen en snijd de appels in blokjes.",
+      "Was de selderijstengels en snijd ze fijn.",
+      "Meng appel, selderij en noten en besprenkel met olijfolie."
+    ]
+  },
+  {
+    "id": "bloemkoolgratin-met-kaas",
+    "title": "Bloemkoolgratin met kaas",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 25}],
+    "dietary_tags": ["bevat zuivel"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Kalafior_zapiekany_z_serem",
+    "provenance": {"corpus_id": "plwb:18655", "title": "Książka kucharska/Kalafior zapiekany z serem", "revision": 549233, "history_url": "https://pl.wikibooks.org/w/index.php?curid=18655&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "grote bloemkool", "quantity": 1, "unit": "stuk"},
+      {"name": "geraspte harde of halfharde kaas", "quantity": 150, "unit": "g"},
+      {"name": "boter", "quantity": 2, "unit": "el"},
+      {"name": "paneermeel", "quantity": 2, "unit": "el"},
+      {"name": "nootmuskaat", "quantity": 1, "unit": "snufje"},
+      {"name": "citroensap", "quantity": 1, "unit": "tl"},
+      {"name": "verse dille", "quantity": 1, "unit": "bos"},
+      {"name": "suiker"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Kook de bloemkool beetgaar met zout, suiker en citroensap. Giet af en verdeel in roosjes.",
+      "Leg de bloemkool in een ovenschaal. Voeg gesmolten boter, kaas en met nootmuskaat gemengd paneermeel toe.",
+      "Gratineer in een voorverwarmde oven tot de kaas smelt en het paneermeel goud kleurt. Bestrooi met dille."
+    ]
+  },
+  {
+    "id": "courgette-uit-de-oven-met-oscypek",
+    "title": "Courgette uit de oven met oscypek",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 25,
+    "cook_times": [{"minutes": 15}],
+    "dietary_tags": ["bevat zuivel"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Cukinia_zapiekana_z_pomidorami_i_oscypkiem",
+    "provenance": {"corpus_id": "plwb:18622", "title": "Książka kucharska/Cukinia zapiekana z pomidorami i oscypkiem", "revision": 549088, "history_url": "https://pl.wikibooks.org/w/index.php?curid=18622&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "courgette", "quantity": 1, "unit": "stuk"},
+      {"name": "tomaten", "quantity": 2, "unit": "stuk"},
+      {"name": "gerookte oscypek-schapenkaas", "quantity": 1, "unit": "stuk"},
+      {"name": "knoflook", "quantity": 1, "unit": "bol"},
+      {"name": "verse basilicum", "quantity": 1, "unit": "bos"},
+      {"name": "olijfolie", "quantity": 3, "unit": "el"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Snijd de kaas dun. Ontvel de tomaten met kokend water en snijd ze in plakken.",
+      "Snijd de courgette in plakken van ongeveer 1 cm, zout ze, laat 15 minuten staan en bak kort.",
+      "Meng geperste knoflook met olijfolie. Bestrijk de courgette in een ovenschaal en leg basilicum, tomaat en kaas erbovenop.",
+      "Bak ongeveer 10 minuten op 180 °C."
+    ]
+  },
+  {
+    "id": "stoofschotel-van-aubergine-en-courgette",
+    "title": "Stoofschotel van aubergine en courgette",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 40,
+    "cook_times": [{"minutes": 25}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Zapiekanka_z_bak%C5%82a%C5%BCan%C3%B3w",
+    "provenance": {"corpus_id": "plwb:15683", "title": "Książka kucharska/Zapiekanka z bakłażanów", "revision": 550150, "history_url": "https://pl.wikibooks.org/w/index.php?curid=15683&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "middelgrote aubergines", "quantity": 3, "unit": "stuk"},
+      {"name": "middelgrote courgette", "quantity": 1, "unit": "stuk"},
+      {"name": "tomaten", "quantity": 4, "unit": "stuk"},
+      {"name": "uien", "quantity": 2, "unit": "stuk"},
+      {"name": "Provençaalse kruiden", "quantity": 2.5, "unit": "tl"},
+      {"name": "gehakte peterselie", "quantity": 2, "unit": "el"},
+      {"name": "plantaardige olie", "quantity": 60, "unit": "ml"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Snijd de aubergines in halve plakken, bestrooi met zout en laat ongeveer 30 minuten staan. Dep droog.",
+      "Snijd de geschilde tomaten, courgette en uien in grote blokken. Bak de aubergine aan beide kanten in olie.",
+      "Voeg de overige groenten toe en stoof afgedekt tot ze zacht zijn. Breng op smaak met Provençaalse kruiden en peterselie."
+    ]
+  },
+  {
+    "id": "marmitako-met-tonijn-en-aardappel",
+    "title": "Marmitako met tonijn en aardappel",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 35}],
+    "dietary_tags": ["bevat vis"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Marmitako",
+    "provenance": {"corpus_id": "plwb:20552", "title": "Książka kucharska/Marmitako", "revision": 550517, "history_url": "https://pl.wikibooks.org/w/index.php?curid=20552&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "verse tonijn", "quantity": 500, "unit": "g"},
+      {"name": "groene paprika", "quantity": 1, "unit": "stuk"},
+      {"name": "aardappelen", "quantity": 3, "unit": "stuk"},
+      {"name": "ui", "quantity": 1, "unit": "stuk"},
+      {"name": "olijfolie", "quantity": 75, "unit": "ml"},
+      {"name": "water", "quantity": 750, "unit": "ml"},
+      {"name": "mild paprikapoeder"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Snijd de tonijn en geschilde aardappelen in blokjes. Snipper de ui en snijd de paprika in repen.",
+      "Fruit de ui in de olie en bak de paprika 3–5 minuten mee. Voeg aardappel, paprikapoeder en water toe.",
+      "Laat 20–25 minuten zacht koken. Voeg zout en tonijn toe en gaar de vis nog ongeveer 5 minuten."
+    ]
+  },
+  {
+    "id": "rasam-met-tomaat-en-mosterdzaad",
+    "title": "Rasam met tomaat en mosterdzaad",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 15}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Rasam",
+    "provenance": {"corpus_id": "plwb:61680", "title": "Książka kucharska/Rasam", "revision": 550679, "history_url": "https://pl.wikibooks.org/w/index.php?curid=61680&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "water", "quantity": 750, "unit": "ml"},
+      {"name": "plantaardige olie", "quantity": 2, "unit": "el"},
+      {"name": "rijpe tomaten", "quantity": 4, "unit": "stuk"},
+      {"name": "gehakte verse koriander", "quantity": 10, "unit": "g"},
+      {"name": "geraspte gember", "quantity": 1, "unit": "tl"},
+      {"name": "mosterdzaad", "quantity": 1, "unit": "tl"},
+      {"name": "gemalen komijn", "quantity": 0.5, "unit": "tl"},
+      {"name": "zwarte peperkorrels", "quantity": 3, "unit": "stuk"},
+      {"name": "pikant paprikapoeder", "quantity": 1, "unit": "snufje"}
+    ],
+    "instructions": [
+      "Ontvel de tomaten, verwijder de pitten en snijd het vruchtvlees klein.",
+      "Bak gember kort in olie. Voeg water en tomaten toe en kook tot de tomaat uiteenvalt.",
+      "Rooster mosterdzaad tot het begint te springen. Voeg het toe met komijn, peperkorrels, paprikapoeder en koriander."
+    ]
+  },
+  {
+    "id": "tarator-met-komkommer-en-kefir",
+    "title": "Tarator met komkommer en kefir",
+    "category": "lunch",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Tarator",
+    "provenance": {"corpus_id": "plwb:14752", "title": "Książka kucharska/Tarator", "revision": 550497, "history_url": "https://pl.wikibooks.org/w/index.php?curid=14752&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "kefir", "quantity": 400, "unit": "g"},
+      {"name": "grote komkommer", "quantity": 1, "unit": "stuk"},
+      {"name": "knoflook", "quantity": 2, "unit": "teen"},
+      {"name": "verse dille", "quantity": 1, "unit": "bos"},
+      {"name": "plantaardige olie", "quantity": 2, "unit": "el"},
+      {"name": "zout"},
+      {"name": "peper"}
+    ],
+    "instructions": [
+      "Schil de komkommer en snijd in kleine blokjes.",
+      "Meng kefir met olie. Plet fijngehakte knoflook met wat zout en hak de dille klein.",
+      "Roer alles door elkaar en breng de koude soep op smaak met peper en zout."
+    ]
+  },
+  {
+    "id": "broccoliroomsoep-met-vleesbouillon",
+    "title": "Broccoliroomsoep met vleesbouillon",
+    "category": "lunch",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 15}],
+    "dietary_tags": ["bevat vlees"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Zupa_kremowa_z_broku%C5%82%C3%B3w",
+    "provenance": {"corpus_id": "plwb:16256", "title": "Książka kucharska/Zupa kremowa z brokułów", "revision": 550199, "history_url": "https://pl.wikibooks.org/w/index.php?curid=16256&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "broccoli", "quantity": 500, "unit": "g"},
+      {"name": "olijfolie", "quantity": 1.5, "unit": "el"},
+      {"name": "ui", "quantity": 1, "unit": "stuk"},
+      {"name": "knoflook", "quantity": 2, "unit": "teen"},
+      {"name": "vleesbouillon", "quantity": 750, "unit": "ml"},
+      {"name": "zure room", "quantity": 1, "unit": "potje"},
+      {"name": "gedroogde dille", "quantity": 1, "unit": "tl"},
+      {"name": "zout"},
+      {"name": "peper"}
+    ],
+    "instructions": [
+      "Snijd zowel de broccoliroosjes als de stelen klein. Fruit ui en knoflook in olijfolie.",
+      "Voeg de broccoli en bouillon toe en kook afgedekt 5 minuten op laag vuur.",
+      "Giet af en vang de bouillon op. Pureer broccoli met zure room.",
+      "Voeg de puree terug aan de bouillon, kruid met dille, zout en peper en breng kort aan de kook."
+    ]
+  },
+  {
+    "id": "maisroomsoep-met-aardappel",
+    "title": "Maisroomsoep met aardappel",
+    "category": "lunch",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 20}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Zupa_kremowa_z_kukurydzy",
+    "provenance": {"corpus_id": "plwb:13990", "title": "Książka kucharska/Zupa kremowa z kukurydzy", "revision": 550201, "history_url": "https://pl.wikibooks.org/w/index.php?curid=13990&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "mais", "quantity": 2, "unit": "blik"},
+      {"name": "aardappelen", "quantity": 250, "unit": "g"},
+      {"name": "lente-uien (witte delen)", "quantity": 4, "unit": "stuk"},
+      {"name": "groentebouillon", "quantity": 800, "unit": "ml"},
+      {"name": "zure room", "quantity": 200, "unit": "ml"},
+      {"name": "mild paprikapoeder", "quantity": 1, "unit": "el"},
+      {"name": "olijfolie", "quantity": 3, "unit": "el"},
+      {"name": "zout"},
+      {"name": "peper"}
+    ],
+    "instructions": [
+      "Meng olijfolie met paprikapoeder voor de afwerking.",
+      "Kook aardappelblokjes met de helft van de mais, groentebouillon en zure room 15 minuten onder een deksel.",
+      "Pureer de soep. Voeg fijngesneden lente-ui en resterende mais toe en kook nog circa 3 minuten.",
+      "Kruid met zout en peper en werk af met de paprikaolie."
+    ]
+  },
+  {
+    "id": "tzatziki-met-tijm",
+    "title": "Tzatziki met tijm",
+    "category": "bijgerecht",
+    "servings": 4,
+    "prep_minutes": 25,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Sos_tzatziki",
+    "provenance": {"corpus_id": "plwb:2462", "title": "Książka kucharska/Sos tzatziki", "revision": 550494, "history_url": "https://pl.wikibooks.org/w/index.php?curid=2462&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "plattekaas of dikke Griekse yoghurt", "quantity": 500, "unit": "ml"},
+      {"name": "knoflook", "quantity": 4, "unit": "teen"},
+      {"name": "komkommer", "quantity": 1, "unit": "stuk"},
+      {"name": "olijfolie", "quantity": 1, "unit": "el"},
+      {"name": "wijnazijn", "quantity": 1, "unit": "el"},
+      {"name": "zout", "quantity": 1, "unit": "snufje"},
+      {"name": "tijm", "quantity": 1, "unit": "snufje"},
+      {"name": "peper"}
+    ],
+    "instructions": [
+      "Rasp de geschilde komkommer en knijp er zoveel mogelijk vocht uit.",
+      "Meng geperste knoflook en komkommer met plattekaas, olijfolie en wijnazijn.",
+      "Breng op smaak met zout, tijm en peper en zet minstens 15 minuten koud."
+    ]
+  },
+  {
+    "id": "spaanse-tomaten-knoflooksaus",
+    "title": "Spaanse tomaten-knoflooksaus",
+    "category": "bijgerecht",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 20}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Sos_pomidorowy_po_hiszpa%C5%84sku",
+    "provenance": {"corpus_id": "plwb:19522", "title": "Książka kucharska/Sos pomidorowy po hiszpańsku", "revision": 550024, "history_url": "https://pl.wikibooks.org/w/index.php?curid=19522&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "middelgrote tomaten", "quantity": 5, "unit": "stuk"},
+      {"name": "tarwebroodje", "quantity": 1, "unit": "stuk"},
+      {"name": "olijfolie", "quantity": 4, "unit": "el"},
+      {"name": "knoflook", "quantity": 5, "unit": "teen"},
+      {"name": "wijnazijn", "quantity": 1, "unit": "el"},
+      {"name": "pikant paprikapoeder", "quantity": 0.5, "unit": "tl"},
+      {"name": "zout"},
+      {"name": "zwarte peper"}
+    ],
+    "instructions": [
+      "Ontvel de tomaten met kokend water en snijd ze klein.",
+      "Fruit de geperste knoflook in 1 eetlepel olie. Voeg tomaat, verkruimeld brood, wijnazijn en paprikapoeder toe en laat zacht indikken.",
+      "Haal de saus door een zeef en voeg al roerend de resterende 3 eetlepels olie toe. Kruid met zout en peper en verwarm kort."
+    ]
+  },
+  {
+    "id": "patatas-bravas-uit-de-oven",
+    "title": "Patatas bravas uit de oven",
+    "category": "snack",
+    "servings": 6,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 90}],
+    "dietary_tags": ["veganistisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Patatas_bravas",
+    "provenance": {"corpus_id": "plwb:21570", "title": "Książka kucharska/Patatas bravas", "revision": 550529, "history_url": "https://pl.wikibooks.org/w/index.php?curid=21570&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "aardappelen", "quantity": 1.5, "unit": "kg"},
+      {"name": "knoflook", "quantity": 1, "unit": "teen"},
+      {"name": "olijfolie", "quantity": 2.5, "unit": "el"},
+      {"name": "zout"}
+    ],
+    "instructions": [
+      "Borstel de aardappelen schoon en snijd ze met schil in partjes.",
+      "Meng de partjes met olie, geplette knoflook en zout.",
+      "Spreid uit in één laag en rooster ongeveer 90 minuten op 175 °C."
+    ]
+  },
+  {
+    "id": "yoghurtcake",
+    "title": "Yoghurtcake",
+    "category": "dessert",
+    "servings": 10,
+    "prep_minutes": 20,
+    "cook_times": [{"minutes": 45}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Ciasto_jogurtowe",
+    "provenance": {"corpus_id": "plwb:18692", "title": "Książka kucharska/Ciasto jogurtowe", "revision": 549069, "history_url": "https://pl.wikibooks.org/w/index.php?curid=18692&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "tarwebloem", "quantity": 750, "unit": "g"},
+      {"name": "bakpoeder", "quantity": 2, "unit": "el"},
+      {"name": "baksoda", "quantity": 1, "unit": "tl"},
+      {"name": "boter", "quantity": 250, "unit": "g"},
+      {"name": "suiker", "quantity": 150, "unit": "g"},
+      {"name": "eieren", "quantity": 6, "unit": "stuk"},
+      {"name": "naturelyoghurt", "quantity": 250, "unit": "ml"}
+    ],
+    "instructions": [
+      "Meng de bloem met bakpoeder en baksoda.",
+      "Klop boter met suiker en de eidooiers. Voeg afwisselend bloemmengsel en yoghurt toe.",
+      "Klop de eiwitten stijf en spatel ze in het beslag. Bak de cake 45 minuten op 200 °C."
+    ]
+  },
+  {
+    "id": "koulourakia-boterkoekjes",
+    "title": "Koulourakia boterkoekjes",
+    "category": "dessert",
+    "servings": 8,
+    "prep_minutes": 75,
+    "cook_times": [{"minutes": 12}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Greckie_rogaliki_ma%C5%9Blane",
+    "provenance": {"corpus_id": "plwb:20805", "title": "Książka kucharska/Greckie rogaliki maślane", "revision": 551094, "history_url": "https://pl.wikibooks.org/w/index.php?curid=20805&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "boter (plus extra voor de plaat)", "quantity": 150, "unit": "g"},
+      {"name": "suiker", "quantity": 150, "unit": "g"},
+      {"name": "eieren (een voor het deeg, een om te bestrijken)", "quantity": 2, "unit": "stuk"},
+      {"name": "eidooiers", "quantity": 2, "unit": "stuk"},
+      {"name": "tarwebloem", "quantity": 150, "unit": "g"},
+      {"name": "bakpoeder", "quantity": 2, "unit": "tl"}
+    ],
+    "instructions": [
+      "Klop boter en suiker romig. Meng er één ei, de dooiers, bloem en bakpoeder door.",
+      "Kneed tot zacht deeg en laat het 60 minuten in de koelkast rusten.",
+      "Rol dunne strengen en vorm ringen of maantjes. Bestrijk met het tweede losgeklopte ei en bak 10–12 minuten op 150 °C."
+    ]
+  },
+  {
+    "id": "fruitbekers-met-honingyoghurt",
+    "title": "Fruitbekers met honingyoghurt",
+    "category": "dessert",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Owocowe_pucharki",
+    "provenance": {"corpus_id": "plwb:18747", "title": "Książka kucharska/Owocowe pucharki", "revision": 549572, "history_url": "https://pl.wikibooks.org/w/index.php?curid=18747&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "verse abrikozen", "quantity": 8, "unit": "stuk"},
+      {"name": "watermeloen", "quantity": 500, "unit": "g"},
+      {"name": "meloen", "quantity": 500, "unit": "g"},
+      {"name": "kiwi's", "quantity": 4, "unit": "stuk"},
+      {"name": "citroen (uitgeperst)", "quantity": 1, "unit": "stuk"},
+      {"name": "vanillesuiker"},
+      {"name": "naturelyoghurt", "quantity": 430, "unit": "g"},
+      {"name": "vloeibare honing", "quantity": 6, "unit": "el"},
+      {"name": "verse munt"}
+    ],
+    "instructions": [
+      "Schil of ontpit het fruit waar nodig en snijd het in stukjes.",
+      "Los vanillesuiker op in citroensap en verdeel het over het fruit.",
+      "Klop de yoghurt los met honing. Verdeel fruit en honingyoghurt over de bekers en garneer met munt."
+    ]
+  },
+  {
+    "id": "bananenmilkshake-met-kaneel",
+    "title": "Bananenmilkshake met kaneel",
+    "category": "drank",
+    "servings": 3,
+    "prep_minutes": 5,
+    "cook_times": [{"minutes": 0}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Shake_Bananowy",
+    "provenance": {"corpus_id": "plwb:2720", "title": "Książka kucharska/Shake Bananowy", "revision": 549977, "history_url": "https://pl.wikibooks.org/w/index.php?curid=2720&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "banaan", "quantity": 1, "unit": "stuk"},
+      {"name": "melk", "quantity": 300, "unit": "ml"},
+      {"name": "vanille- of roomijs", "quantity": 1, "unit": "bolletje"},
+      {"name": "gemalen kaneel"},
+      {"name": "citroensap", "quantity": 1, "unit": "tl"},
+      {"name": "ijsblokjes (optioneel)", "quantity": 1.5, "unit": "stuk"}
+    ],
+    "instructions": [
+      "Doe de gepelde banaan met citroensap in een blender.",
+      "Voeg ijs, melk en eventueel ijsblokjes toe en mix 1–3 minuten.",
+      "Verdeel de shake over glazen en strooi er kaneel over."
+    ]
+  },
+  {
+    "id": "maisbrood-van-tante-caroline",
+    "title": "Maisbrood van tante Caroline",
+    "category": "brood",
+    "servings": 6,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 25}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Chleb_kukurydziany_Ciotki_Karoliny",
+    "provenance": {"corpus_id": "plwb:31851", "title": "Książka kucharska/Chleb kukurydziany Ciotki Karoliny", "revision": 550624, "history_url": "https://pl.wikibooks.org/w/index.php?curid=31851&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0", "adaptation": "Boter gekozen uit de vetopties in de bron."},
+    "ingredients": [
+      {"name": "maismeel", "quantity": 190, "unit": "ml"},
+      {"name": "tarwebloem", "quantity": 190, "unit": "ml"},
+      {"name": "bakpoeder", "quantity": 3, "unit": "tl"},
+      {"name": "suiker", "quantity": 1, "unit": "el"},
+      {"name": "zout", "quantity": 0.33, "unit": "tl"},
+      {"name": "ei (losgeklopt)", "quantity": 1, "unit": "stuk"},
+      {"name": "melk (aangelengd met water)", "quantity": 190, "unit": "ml"},
+      {"name": "gesmolten boter", "quantity": 2, "unit": "tl"}
+    ],
+    "instructions": [
+      "Verwarm de oven op 190 °C en vet een ondiepe bakvorm in.",
+      "Meng maismeel, bloem, bakpoeder, suiker, zout, ei, melk en boter tot een glad beslag.",
+      "Giet in de vorm en bak ongeveer 25 minuten op 190 °C."
+    ]
+  },
+  {
+    "id": "spaghetti-met-kerriesaus",
+    "title": "Spaghetti met kerriesaus",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 5,
+    "cook_times": [{"minutes": 10}],
+    "dietary_tags": ["bevat zuivel"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Makaron_z_curry",
+    "provenance": {"corpus_id": "plwb:1431", "title": "Książka kucharska/Makaron z curry", "revision": 549484, "history_url": "https://pl.wikibooks.org/w/index.php?curid=1431&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "spaghetti", "quantity": 400, "unit": "g"},
+      {"name": "slagroom (30% vet)", "quantity": 125, "unit": "ml"},
+      {"name": "geraspte Parmezaanse kaas", "quantity": 4, "unit": "el"},
+      {"name": "kerriepoeder", "quantity": 1, "unit": "tl"},
+      {"name": "boter", "quantity": 1, "unit": "el"}
+    ],
+    "instructions": [
+      "Kook de spaghetti beetgaar en giet af.",
+      "Roer de room los met Parmezaanse kaas en kerriepoeder. Verwarm de saus zachtjes.",
+      "Meng de warme spaghetti met boter en voeg de saus toe."
+    ]
+  },
+  {
+    "id": "witte-borsjt-met-paddenstoelen",
+    "title": "Witte borsjt met paddenstoelen",
+    "category": "avondeten",
+    "servings": 4,
+    "prep_minutes": 15,
+    "cook_times": [{"minutes": 40}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://pl.wikibooks.org/wiki/Ksi%C4%85%C5%BCka_kucharska/Barszcz_bia%C5%82y",
+    "provenance": {"corpus_id": "plwb:6263", "title": "Książka kucharska/Barszcz biały", "revision": 514510, "history_url": "https://pl.wikibooks.org/w/index.php?curid=6263&action=history", "attribution": "Autorzy Wikibooks (pl.wikibooks.org, Książka kucharska)", "license": "CC-BY-SA-4.0"},
+    "ingredients": [
+      {"name": "gedroogde eetbare paddenstoelen (60–80 g)", "quantity": 70, "unit": "g"},
+      {"name": "water", "quantity": 750, "unit": "ml"},
+      {"name": "zure starter voor witte borsjt", "quantity": 750, "unit": "ml"},
+      {"name": "zure room", "quantity": 250, "unit": "ml"},
+      {"name": "ui", "quantity": 1, "unit": "stuk"},
+      {"name": "boter", "quantity": 1, "unit": "el"},
+      {"name": "zout"},
+      {"name": "zwarte peper"}
+    ],
+    "instructions": [
+      "Spoel de paddenstoelen en laat ze een nacht weken in het water.",
+      "Kook ze gaar in het weekwater en zeef de bouillon. Fruit gesnipperde ui in boter en voeg toe aan de bouillon.",
+      "Voeg de zure starter toe en breng aan de kook. Roer de zure room erdoor, breng op smaak en verwarm kort."
+    ]
   }
 ]

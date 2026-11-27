@@ -1,0 +1,9 @@
+[
+  {"id": "omelet-melk", "question": "Hoeveel melk gaat in de Franse omelet?", "recipe_id": "franse-omelet", "evidence": [["1 el melk"]]},
+  {"id": "marmitako-hoeveelheden", "question": "Hoeveel verse tonijn en water heb ik nodig voor marmitako?", "recipe_id": "marmitako-met-tonijn-en-aardappel", "evidence": [["500 g verse tonijn"], ["750 ml water"]]},
+  {"id": "yoghurtcake-oven", "question": "Hoe lang en op welke oventemperatuur bak ik de yoghurtcake?", "recipe_id": "yoghurtcake", "evidence": [["45 minuten op 200 °C"]]},
+  {"id": "tzatziki-knoflook", "question": "Hoeveel knoflook gaat er in de tzatziki met tijm?", "recipe_id": "tzatziki-met-tijm", "evidence": [["4 teen knoflook"]]},
+  {"id": "broccoliroomsoep-bouillon", "question": "Wat voor bouillon gebruik je voor de broccoliroomsoep en hoeveel?", "recipe_id": "broccoliroomsoep-met-vleesbouillon", "evidence": [["750 ml vleesbouillon"]]},
+  {"id": "rodekoolsalade-kooktijd", "question": "Hoe lang moet ik de rodekoolsalade met appel koken?", "recipe_id": "rodekoolsalade-met-appel", "evidence": [["Kooktijd: 0 minuten"]]},
+  {"id": "quiche-oven", "question": "Welke twee oventemperaturen gebruik ik voor quiche Lorraine en hoelang per stand?", "recipe_id": "quiche-lorraine", "evidence": [["20 minuten op 180 °C"], ["10 minuten op 150 °C"]]}
+]
