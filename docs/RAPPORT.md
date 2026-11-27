@@ -61,9 +61,34 @@ De route, MCP-controle en bewijsrang kwamen per vraag overeen met de [bewaarde r
 - `curry-water-stages` laat zien waarom de benchmark alle benodigde feiten controleert. De twee hoeveelheden moeten samen aanwezig zijn. Het volledige bewijs was beschikbaar na twee resultaten bij tokenchunks en na drie bij receptsecties.
 - De zes gecontroleerde schaaluitkomsten kwamen ook overeen met de getoonde hoeveelheden. Zo werd `2,5 g` van vier naar zes porties `3,75 g`. De begroeting haalde geen fragmenten op en startte geen MCP-tool.
 
-**Ragas.** Met gesimuleerde scores is gecontroleerd welke referenties, context en antwoorden de drie metrieken ontvangen en hoe de benchmark ontbrekende scores telt. Live Context Precision, Context Recall, Faithfulness en de inhoudelijke beoordeling van door Groq gegenereerde antwoorden staan open wegens de ontbrekende `GROQ_API_KEY`. Lokaal toont de agent bij zoekvragen de bronfragmenten. Dat levert bewijs voor de zoekvergelijking.
+**Voorbereiding Ragas.** Met gesimuleerde scores is gecontroleerd welke referenties, context en antwoorden de drie metrieken ontvangen en hoe de benchmark ontbrekende scores telt. Lokaal toont de agent bij zoekvragen de bronfragmenten. De live proef hieronder beoordeelt ook de gegenereerde antwoorden.
 
 **GenAI-vermelding.** Codex hielp bij de referentiecontrole, benchmarkcode, uitvoering en foutanalyse. Raouls eigen review en demo-oefening staan open.
+
+## 27 november 2026 | Live Groq- en Ragas-meting
+
+**Raoul.** Beide chunkmethodes draaiden via `evaluate_chef.py --ragas --output reports/ragas.json`, met top 3 en dezelfde recept- en vraagversies als bij de lokale benchmark. De agent gebruikte `openai/gpt-oss-20b` en de Ragas-beoordelaar gebruikte `openai/gpt-oss-120b`. De eerste proef leverde een leeg antwoord op omdat GPT-OSS het tokenbudget gebruikte voor redeneren. Met lage redeneerinspanning en een budget van 1024 tokens leverde de agent zichtbaar antwoord. De benchmark wachtte bij tijdelijke Groq-gebruikslimieten en rondde beide runs af. [Instellingen en keuzes](PROJECTKEUZES.md)
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 16/18 | 16/18 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 5/11 | 7/11 |
+| Alle benodigde broninformatie in de top 3 | 8/11 | 8/11 |
+| Context Precision | 0,7593 (9/11) | 0,7778 (9/11) |
+| Context Recall | 0,8889 (9/11) | 0,7778 (9/11) |
+| Faithfulness | 0,8889 (9/11) | 1,0000 (9/11) |
+
+Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd gerouteerde zoekvragen leverden geen receptcontext op. Per receptsectie lag de gemiddelde Context Precision iets hoger en lag de gemiddelde Context Recall lager. De vergelijking geldt voor deze proef met drie recepten.
+
+**Inhoudelijke controle.** Per methode zijn zeven van de elf zoekvragen volledig juist beantwoord. Bij één vraag gaf de agent terecht aan dat de opgehaalde fragmenten onvoldoende informatie bevatten. De overige drie antwoorden hadden een routerings- of antwoordfout.
+
+- `lasagne-ricotta` ging bij beide methodes naar `scale_quantity`. De agent vroeg het aantal porties in plaats van de 475 g ricotta uit het recept op te halen.
+- `pancakes-temperature` ging bij beide methodes naar `chat`. De agent gaf 90 °C zonder receptcontext. Het recept vermeldt 120 °C.
+- `curry-substitution` ging naar de zoekroute. Het bewijs viel bij beide methodes buiten de top 3. De agent meldde terecht dat de opgehaalde fragmenten de vervanging niet vermeldden.
+- `curry-water` haalde bij beide methodes de totale hoeveelheid van 420 ml op. De agent telde daar de 375 ml uit een bereidingsstap opnieuw bij en antwoordde 795 ml. Ragas gaf voor Faithfulness bij dit antwoord 0,0 met tokenchunks en 1,0 met receptsecties. De handmatige vergelijking met het recept blijft nodig om dit soort fout te vinden.
+
+**GenAI-vermelding.** Codex hielp bij het oplossen van de lege antwoorden, het uitvoeren van de benchmark en de vergelijking met de referenties.
 
 ## Volgende fasen
 

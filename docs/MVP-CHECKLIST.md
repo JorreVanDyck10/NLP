@@ -24,7 +24,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 - [x] Leg 18 controlevragen vast en controleer de referenties tegen de recepten en de portieberekeningen.
 - [x] Meet beide chunkmethodes lokaal en controleer per vraag de route, opgehaalde bronnen, tooluitkomst en het antwoord.
-- [ ] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de gegenereerde antwoorden met hun referenties. Hiervoor is een Groq-sleutel nodig.
+- [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de gegenereerde antwoorden met hun referenties. Beide methodes kregen scores voor dezelfde 9 van de 11 zoekvragen. De [foutanalyse](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting) beschrijft de twee routeringsfouten en de overige afwijkingen.
 
 ## 4. Inference, metingen en lokale interface · 10%
 
