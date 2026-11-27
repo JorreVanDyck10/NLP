@@ -24,16 +24,16 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 - [x] Leg 20 controlevragen vast en controleer de referenties tegen de recepten, de portieberekeningen en de g ↔ kg-conversie.
 - [x] Meet beide chunkmethodes lokaal en controleer per vraag de route, opgehaalde bronnen, tooluitkomst en het antwoord.
-- [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de antwoorden met de referenties. Ragas scoorde negen van de elf zoekvragen per methode op de drie proefrecepten. De [foutanalyse](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting) behandelt de overige vragen.
+- [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de antwoorden met de referenties. Ragas scoorde negen van de elf zoekvragen per methode op de drie proefrecepten. De [foutanalyse](RAPPORT.md#eerste-proef-met-drie-recepten) behandelt de overige vragen.
 - [x] Breid de agent-evaluatie uit met vragen over de nieuwe recepten. Controleer ook of de agent het juiste recept ophaalt als het gevraagde detail ontbreekt.
-- [x] Herhaal de live meting op de 36 recepten. Ragas scoorde tien van twaalf beantwoordbare zoekvragen per methode. Beide antwoorden meldden terecht dat de yoghurtcakebron geen bakvormmaat vermeldt. [Uitgebreide evaluatie](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
-- [x] Controleer de vier bekende fouten op de standaardmethode na de agentwijzigingen. [MVP-meting](RAPPORT.md#27-november-2026--mvp-oplevering)
+- [x] Herhaal de live meting op de 36 recepten. Ragas scoorde tien van twaalf beantwoordbare zoekvragen per methode. Beide antwoorden meldden terecht dat de yoghurtcakebron geen bakvormmaat vermeldt. [Uitgebreide evaluatie](RAPPORT.md#evaluatie-met-36-recepten)
+- [x] Controleer de vier bekende fouten op de standaardmethode na de agentwijzigingen. [MVP-meting](RAPPORT.md#mvp-oplevering)
 - [ ] Vul de ontbrekende Ragas-nameting aan zodra Groq-quotum beschikbaar is. Qwen scoorde 10/12 met tokenchunks en 0/12 met receptsecties voor elk van de drie metrieken. De live agentrun is volledig. [Nameting](RAPPORT.md#live-nameting-op-de-mvp)
 
 ## 4. Inference, metingen en lokale interface · 10%
 
 - [x] Sluit Groq aan met een beschikbaar model op het gratis plan. De live evaluatie gebruikte `openai/gpt-oss-20b`. [Projectkeuzes](PROJECTKEUZES.md)
-- [x] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT) in de live agentbenchmark. TTFT is gemeten voor de 22 gestreamde antwoorden. [Live meetverslag](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting)
+- [x] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT) in de live agentbenchmark. TTFT is gemeten voor de 22 gestreamde antwoorden. [Live meetverslag](RAPPORT.md#eerste-proef-met-drie-recepten)
 - [x] Maak een eenvoudige lokale interface met gesprekken, opgehaalde tekststukken, MCP-toolcalls en beschikbare live metingen.
   - [x] Bouw het scherm in `chef_ui.py` met vraag/antwoord, bronfragmenten, toolinvoer/-uitvoer en beschikbare metingen na afloop; zie [persoon 4](LOKALE-INTERFACE.md).
   - [x] Voeg expliciete meldingen voor ontbrekende metingen en een gemarkeerde gesimuleerde voorbeeldmodus toe; controleer die met AppTest.
@@ -49,5 +49,6 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 ## 5. Proces en GenAI · 10%
 
 - [ ] Vul het [projectrapport](RAPPORT.md) bij na elke fase en na feedback.
+  - [x] Herschrijf het rapport op basis van de opdracht-pdf, met keuzes, meetresultaten, foutanalyse en een korte AI-vermelding. Mijn bijdrage als persoon 4 staat in de ik-vorm; persoonlijke code-review en demo-oefening blijven open.
 - [ ] Controleer het GenAI-beleid van de opleiding en maak de verantwoording af.
 - [ ] Oefen de demo en code-uitleg zonder AI. Toon een foutgeval en leg uit hoe je vaststelde waar het misliep.

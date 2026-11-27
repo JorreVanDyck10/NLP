@@ -14,7 +14,7 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 - **Recepten zoeken.** `recipe_search.py` maakt met LlamaIndex en een meertalig FastEmbed-model twee lokale Qdrant-indexen. Splitsen op tokenlengte levert 17 fragmenten op. Splitsen per receptonderdeel levert 20 fragmenten op. Beide indexen geven fragmenten met een bronlink en een overeenkomstscore terug.
 - **Agent en MCP.** `chef_agent.py` gebruikt LangGraph voor de gespreksroute, receptzoekroute, directe rekentoolroute en de gecombineerde zoek- en rekentoolroute. `scale_server.py` biedt de MCP-tool `scale_ingredients` via stdio aan. De agent rekende onder meer 420 ml water voor vier porties om naar 735 ml voor zeven porties.
 - **Evaluatie.** Deze referentiemeting bevat 18 vragen met verwachte routes, referentieantwoorden en waar relevant controleerbare bronfragmenten of MCP-uitkomsten. `evaluate_chef.py` vergelijkt de twee chunkmethodes. De volledige lokale referentiemeting staat in `reports/baseline.json`.
-- **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De latere live Groq- en Ragas-proef op de drie proefrecepten staat in het [projectrapport](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting).
+- **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De latere live Groq- en Ragas-proef op de drie proefrecepten staat in het [projectrapport](RAPPORT.md#eerste-proef-met-drie-recepten).
 
 ### Lokale referentiemeting
 
@@ -55,7 +55,7 @@ $env:RAGAS_JUDGE_MODEL = 'qwen/qwen3.8-27b'
 .\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/mvp-ragas-qwen.json
 ```
 
-Het ingestelde beoordelaarsmodel is hetzelfde als bij de [nulmeting op 36 recepten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten). `scored` en `total` geven het aantal gescoorde en verwachte bronvragen per metriek aan. De benchmark bewaart voltooide resultaten als één vraag of Ragas-metriek faalt. Gebruik `--groq --case curry-water --case lasagne-ricotta` voor een korte live agentcontrole. De meetuitvoer blijft lokaal. [Groq-limieten](https://console.groq.com/docs/rate-limits)
+Het ingestelde beoordelaarsmodel is hetzelfde als bij de [nulmeting op 36 recepten](RAPPORT.md#evaluatie-met-36-recepten). `scored` en `total` geven het aantal gescoorde en verwachte bronvragen per metriek aan. De benchmark bewaart voltooide resultaten als één vraag of Ragas-metriek faalt. Gebruik `--groq --case curry-water --case lasagne-ricotta` voor een korte live agentcontrole. De meetuitvoer blijft lokaal. [Groq-limieten](https://console.groq.com/docs/rate-limits)
 
 ### Uitgebreide receptendataset
 
