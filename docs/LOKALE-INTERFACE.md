@@ -28,7 +28,7 @@ De **voorbeeldmodus** heeft geen agent, modellen, index of API-sleutel nodig. Hi
 - **Gesprek:** de vraag en het antwoord blijven per browsersessie zichtbaar. Eerdere berichten worden niet aan de agent doorgegeven: iedere vraag is zelfstandig. Noem het recept dus opnieuw bij een vervolgvraag. Gesprek wissen verwijdert de zichtbare geschiedenis.
 - **Gevolgde stappen:** de trace van de agent, bijvoorbeeld routering, opgehaalde fragmenten en MCP-tool. De interface krijgt na iedere afgeronde graph-stap de volledige state en werkt het scherm bij. Tijdens een langlopende stap blijft de status zichtbaar.
 - **Bronfragmenten:** titel, receptonderdeel, tekst, overeenkomstscore en bronlink. De score is geen zekerheid dat een antwoord klopt.
-- **MCP-aanroep:** toolnaam, exacte invoer en resultaat uit de agentstate. De tabel toont hoeveelheden vóór en na het schalen, afgerond tot maximaal zes decimalen. De ruwe gegevens zijn uitklapbaar. De live berekening gebeurt in `scale_server.py`.
+- **MCP-aanroep:** toolnaam, exacte invoer en resultaat uit de agentstate. De schaaltabel rondt af tot maximaal zes decimalen. Een conversie toont het oorspronkelijke en het omgerekende gewicht. De ruwe gegevens zijn uitklapbaar. De live berekeningen gebeuren in `scale_server.py`.
 - **Metingen:** verwerkingstijd, input- en outputtokens, TTFT en de afzonderlijke modelaanroepen. TTFT betekent de tijd tot het eerste zichtbare tekstfragment bij de antwoordaanroep. Die begint ná routering en zoeken, en is dus niet de tijd vanaf het indrukken van de knop. De verwerkingstijd omvat het agenttraject en de updates aan het scherm. Tokenmetingen verschijnen zodra de betreffende modelaanroep klaar is. Het modelantwoord wordt na de antwoordstap getoond; losse teksttokens worden nog niet op het scherm gestreamd.
 - **Fouten:** verkeerde sleutel, gebruikslimiet, ontbrekende index en andere uitval krijgen hersteladvies. Al voltooide bronnen, trace en modelmetingen blijven zichtbaar. Een mislukte modelaanroep levert geen verzonnen tokens op. **Opnieuw proberen** herhaalt de vraag met de huidige modus en sleutel; het eerdere foutbericht blijft in het gesprek staan.
 
@@ -38,9 +38,9 @@ In **Lokaal** kiest bestaande Python-logica de route en geeft een zoekvraag de b
 
 1. Kies **Groq**, controleer dat een sleutel beschikbaar is en klik **Zoekvraag**: “Voor hoeveel porties is de kikkererwtencurry bedoeld?” Toon de route `search`, het overzichtsfragment met **Porties: 4**, het modelantwoord **4 porties** en de modelmetingen. Leg uit dat de bron het antwoord moet ondersteunen.
 2. Klik **Schaalvraag**: “Schaal de curry van 4 naar 7 porties.” Controleer `scale_recipe`, de curryfragmenten en `scale_ingredients`. Open MCP-aanroep: de waterregel moet van **420 ml** naar **735 ml** gaan. Berekening: `420 × 7 / 4 = 735`. Controleer ook bloemkool: `500 × 7 / 4 = 875 ml`. TTFT antwoord staat hier terecht op Niet gemeten: de tool geeft het antwoord, zonder gestreamde modelantwoordaanroep.
-3. Kies **Lokaal** en voer een zoekvraag uit. De agent toont de bronfragmenten en een gemeten verwerkingstijd, maar geen genererend taalmodel en dus geen gemeten modeltokens of TTFT. Berichten uit Groq behouden hun oorspronkelijke modus en metingen.
-4. Klik **Broncontrole** voor “Hoeveel water gaat er in totaal in de curry?” De referentie is **420 ml**: 45 ml voor de pasta en later de resterende 375 ml. In de live controle antwoordde het model **795 ml** door de ingrediëntenhoeveelheid en een bereidingsstap dubbel te tellen. Open de juiste fragmenten en laat zien dat het bewijs wél is opgehaald: de fout zit bij het formuleren/rekenen van het modelantwoord. De interface bewaart dat antwoord en toont de controlebron; ze vervangt het modelantwoord niet stilzwijgend. Een volgende run kan anders antwoorden.
-5. Gebruik **Voorbeeld (gesimuleerd)** als reserve om dezelfde schermonderdelen met ingevulde modelmetingen te laten zien. Benoem tijdens je verdediging dat dit voorbeeldwaarden zijn.
+3. Typ “Reken 250 g om naar kg.” Controleer `convert_units` en het resultaat **0,25 kg**. Open MCP-aanroep om de invoer en uitvoer te tonen.
+4. Klik **Broncontrole** voor “Hoeveel water gaat er in totaal in de curry?” De referentie is **420 ml**. Daarvan gaat 45 ml in de pasta en blijft 375 ml over voor later. Gebruik de oude **795 ml** uit het [meetverslag](RAPPORT.md#evaluatie-met-36-recepten) voor de diagnose. De agent gebruikt nu de opgehaalde ingrediëntregel rechtstreeks bij deze expliciete totaalvraag. Open de fragmenten en wijs aan welke regel het totaal bevat.
+5. Gebruik **Lokaal** als terugvaloptie. Zoekvragen tonen opgehaalde bronfragmenten en de verwerkingstijd. Porties schalen en g ↔ kg omrekenen gebruiken dezelfde MCP-server.
 6. Toon de foutafhandeling met een ontbrekende of ongeldige sleutel en gebruik daarna Opnieuw proberen met een werkende sleutel. Test dit alleen als je de gewenste fout bewust wilt demonstreren; een gesimuleerde fout bewijst geen actuele storing bij Groq.
 7. Wis het gesprek en een eventueel ingevulde sessiesleutel na de demo.
 
@@ -61,7 +61,7 @@ python scripts/check_repository.py
 git diff --check
 ```
 
-De twaalf schermchecks gebruiken Streamlits AppTest en draaien ook in GitHub Actions, zonder modellen. Ze controleren onder meer ontbrekende/gedeeltelijke en nulmetingen, TTFT, sleutel wissen, broncontrole, geschiedenis en opnieuw proberen. De vijf aanvullende Groq-protocoltests gebruiken gesimuleerde HTTP-responsen met de echte agent en lokale MCP/zoekfunctie. Ze controleren tokens, TTFT, foutstatussen en het behouden van bronnen wanneer de antwoordaanroep mislukt. Deze tests vereisen de agentdependencies en de index. De installatie en basis van AppTest volgen de [officiële Streamlit-documentatie](https://docs.streamlit.io/develop/concepts/app-testing/get-started).
+De twaalf schermchecks gebruiken Streamlits AppTest en draaien ook in GitHub Actions zonder modellen. De zeven Groq-protocoltests gebruiken gesimuleerde HTTP-responsen met de echte agent en lokale zoekfunctie. Ze controleren tokens, TTFT, foutstatussen, routecorrectie en het behouden van bronnen bij Groq- of MCP-uitval. Deze tests vereisen de agentdependencies en de index. [AppTest-documentatie](https://docs.streamlit.io/develop/concepts/app-testing/get-started)
 
 Controleer de echte lokale keten van persoon 1, 2 en 4 met:
 
@@ -69,14 +69,14 @@ Controleer de echte lokale keten van persoon 1, 2 en 4 met:
 .\.venv\Scripts\python.exe scripts/test_integration.py
 ```
 
-Deze integratiecheck bouwt beide indexen indien nodig en kan het embeddingmodel downloaden. Vier tests controleren met de huidige dataset 51 scenario's: tien zoekvragen (inclusief de zeven nieuwe vragen van persoon 1), het herschalen van alle 36 recepten, een losse schaalvraag, een begroeting en drie ongeldige/onvolledige schaalvragen. De controles gebruiken de echte lokale zoekfunctie en MCP-server, zonder Groq. Bij herschalen worden alle ingrediënten gecontroleerd, inclusief eenheden, notities en hoeveelheden naar smaak. Nieuwe recepten vragen ook om representatieve nieuwe zoekvragen; dit is geen beoordeling van door een taalmodel geschreven antwoorden.
+Deze integratiecheck bouwt beide indexen indien nodig. Zes tests behandelen 58 scenario's, waaronder elf zoekvragen, het herschalen van alle 36 recepten, conversie in beide richtingen, ongeldige invoer en een onbekend recept. Ze gebruiken de lokale zoekfunctie en MCP-server. Bij schalen controleren ze alle hoeveelheden, eenheden, notities en ingrediënten naar smaak.
 
-Een echte live controle met de twee gewone demovragen kun je herhalen met:
+Een echte live controle van de drie demovragen kun je herhalen met:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/test_ui_live.py
 ```
 
-De sleutel wordt uit GROQ_API_KEY gelezen of verborgen gevraagd. De controle voert de twee demovragen via de interface uit met echte Groq-modelaanroepen en schrijft metingen zonder sleutel naar het genegeerde `reports/ui-live.json`. De controle verwacht 4 porties bij zoeken en 735 ml water bij schalen. Dit is een gerichte interfacecontrole; het vervangt de volledige benchmark van persoon 3 niet.
+De sleutel wordt uit `GROQ_API_KEY` gelezen of verborgen gevraagd. De controle verwacht **4 porties**, **735 ml water** en **0,25 kg**. Ze schrijft de metingen zonder sleutel naar het genegeerde `reports/ui-live.json`.
 
-Zie [het projectrapport](RAPPORT.md) voor uitgevoerde controles en de echte meetwaarden. De technische interface is getest met de dataset van 36 recepten en visueel in Chrome gecontroleerd. De opdracht-pdf en het GenAI-beleid zijn hier nog niet beschikbaar; de eisen voor dit werkpakket komen uit de aangeleverde taakverdeling. Persoon 4 moet de code, demonstratie en AI-verantwoording nog zelf nalopen.
+Zie [het projectrapport](RAPPORT.md) voor de uitgevoerde controles. De opdracht-pdf bepaalt de scope. De eigen code-review, demonstratie en controle van het opleidingsbeleid voor GenAI staan nog open.

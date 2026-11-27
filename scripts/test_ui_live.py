@@ -1,4 +1,4 @@
-"""Twee live demovragen via AppTest. Sleutel via omgeving of verborgen stdin."""
+"""Drie live demovragen via AppTest. Sleutel via omgeving of verborgen stdin."""
 
 import argparse
 import getpass
@@ -7,6 +7,7 @@ import os
 import re
 from pathlib import Path
 import sys
+from decimal import Decimal
 
 from streamlit.testing.v1 import AppTest
 
@@ -34,8 +35,11 @@ def main():
     try:
         app = AppTest.from_file(str(ROOT / "chef_ui.py"), default_timeout=90).run()
         app.radio[0].set_value("Groq").run()
-        for button in ("search", "scale"):
-            app.button(key=button).click().run(timeout=90)
+        for demo in ("search", "scale", "convert"):
+            if demo == "convert":
+                app.chat_input[0].set_value("Reken 250 g om naar kg.").run(timeout=90)
+            else:
+                app.button(key=demo).click().run(timeout=90)
             if app.exception:
                 raise RuntimeError("De interface gaf een niet-afgevangen fout.")
             state = app.session_state["messages"][-1]
@@ -47,20 +51,27 @@ def main():
                 "latency_ms": state.get("latency_ms"), "llm_calls": calls,
                 "displayed_metrics": [metric.value for metric in app.metric[-4:]],
             }
-            if button == "search":
+            if demo == "search":
                 row["checks"] = {
                     "search_route": state.get("route") == "search",
                     "source_has_4_servings": any("Porties: 4" in hit["text"] for hit in state.get("hits", [])),
-                    "answer_starts_with_correct_quantity": re.findall(r"\d+", state.get("answer", ""))[:1] == ["4"],
+                    "answer_has_correct_quantity": re.search(r"(?<!\d)4\s+porties", state.get("answer", "")) is not None,
                     "answer_ttft_measured": any(call.get("stage") == "answer" and call.get("ttft_ms") is not None for call in calls),
                 }
-            else:
+            elif demo == "scale":
                 water = next((item for item in state.get("tool_result", {}).get("ingredients", []) if item["name"] == "water"), {})
                 row["checks"] = {"scale_route": state.get("route") == "scale_recipe", "water_is_735_ml": water.get("quantity") == "735"}
+            else:
+                result = state.get("tool_result", {})
+                row["checks"] = {
+                    "convert_route": state.get("route") == "convert_quantity",
+                    "conversion_is_0_25_kg": result.get("unit") == "kg" and Decimal(result["amount"]) == Decimal("0.25"),
+                    "tool_is_convert_units": state.get("tool_name") == "convert_units",
+                }
             row["checks"]["tokens_measured"] = bool(calls) and all(call.get("prompt_tokens") is not None and call.get("completion_tokens") is not None for call in calls)
             row["checks"]["no_ui_error"] = not state.get("error")
             report["cases"].append(row)
-            print(f"Live {button}: {json.dumps(row['checks'])}", flush=True)
+            print(f"Live {demo}: {json.dumps(row['checks'])}", flush=True)
 
         report["passed"] = all(all(row["checks"].values()) for row in report["cases"])
         # De sleutel is nooit onderdeel van de te bewaren meetuitvoer.

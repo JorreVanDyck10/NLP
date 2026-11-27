@@ -6,12 +6,12 @@
 | --- | --- | --- |
 | [recipes.json](recipes.json) | `recipe_search.py` en de agent | 36 recepten met bronlinks, tijden, porties, ingrediënten, bereidingsstappen en dieettags |
 | [evaluation.json](evaluation.json) | `evaluate_chef.py` | 20 agentvragen met verwachte routes en referentieantwoorden |
-| [retrieval_checks.json](retrieval_checks.json) | `python -m scripts.compare_chunking` | Zeven extra zoekvragen over de uitgebreide receptenset |
+| [retrieval_checks.json](retrieval_checks.json) | `python -m scripts.compare_chunking` | Zeven aanvullende zoekvragen over de uitgebreide receptenset |
 | [demo_recipes.json](demo_recipes.json) | `flavor_chef.py` | Vijf eigen voorbeeldrecepten voor de Ollama-demo |
 
 De agent en de Ollama-demo gebruiken verschillende datastructuren. Voeg recepten toe aan het juiste bestand, behoud unieke ID's en vermeld de herkomst waar van toepassing. Controleer hoeveelheden en referentieantwoorden handmatig en bouw de bijbehorende zoekindex opnieuw na wijzigingen. De index zelf blijft buiten Git.
 
-De 20 agentvragen omvatten twaalf zoekvragen met positief bronbewijs, één zoekvraag over ontbrekende receptinformatie, zes schaalvragen en één begroeting. Bij `expected_missing_information` controleert de benchmark of de agent het juiste recept ophaalt. Lees het gegenereerde antwoord zelf om te zien of de agent terecht aangeeft dat de informatie ontbreekt. Ragas scoort de zoekvragen met positief bronbewijs.
+De 20 agentvragen omvatten twaalf zoekvragen met positief bronbewijs, één zoekvraag over ontbrekende receptinformatie, vijf schaalvragen, één g ↔ kg-conversie en één begroeting. Bij `expected_missing_information` controleert de benchmark of de agent het juiste recept ophaalt. Lees het antwoord zelf om te zien of de agent terecht aangeeft dat de informatie ontbreekt. Ragas scoort de twaalf bronvragen. De lokale integratiecheck behandelt ook een receptnaam die niet in de collectie staat.
 
 ## Herkomst van de agentrecepten
 

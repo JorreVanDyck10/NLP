@@ -45,6 +45,7 @@ class IntegrationTests(unittest.TestCase):
         app = self.app()
         cases = [
             {"question": "Hoeveel water gaat er in totaal in de curry?", "recipe_id": "kikkererwten-groentecurry", "evidence": [["420 ml water"]]},
+            {"question": "Waarmee kan ik de bloemkool in de curry vervangen?", "recipe_id": "kikkererwten-groentecurry", "evidence": [["wortel, aubergine, pompoen of broccoli"]]},
             {"question": "Hoeveel ricotta heb ik nodig voor de lasagne?", "recipe_id": "slowcooker-lasagne", "evidence": [["475 g magere ricotta"]]},
             {"question": "Hoeveel melk gaat er in de pannenkoeken?", "recipe_id": "aardbeienpannenkoeken", "evidence": [["375 ml magere melk"]]},
         ]
@@ -106,6 +107,36 @@ class IntegrationTests(unittest.TestCase):
                 self.assertFalse(state.get("tool_result"))
                 self.assertFalse(state.get("tool_input"))
                 self.assertTrue(state["answer"])
+
+    def test_mass_conversion_and_invalid_input(self):
+        app = self.app()
+        for question, to_unit, expected in (
+            ("Reken 250 g om naar kg.", "kg", Decimal("0.25")),
+            ("Hoeveel g is 0,25 kg?", "g", Decimal(250)),
+        ):
+            with self.subTest(question=question):
+                state = self.ask(app, question)
+                self.assertEqual(state["route"], "convert_quantity")
+                self.assertEqual(state["tool_name"], "convert_units")
+                self.assertEqual(state["tool_input"]["to_unit"], to_unit)
+                self.assertEqual(state["tool_result"]["unit"], to_unit)
+                self.assertEqual(Decimal(state["tool_result"]["amount"]), expected)
+                self.assertEqual(len(app.dataframe), 0)
+        for question in ("Reken 1 l om naar kg.", "Reken -2 kg om naar g.", "Converteer naar kg."):
+            with self.subTest(question=question):
+                state = self.ask(app, question)
+                self.assertEqual(state["route"], "convert_quantity")
+                self.assertFalse(state.get("tool_input"))
+                self.assertFalse(state.get("tool_result"))
+                self.assertIn("Geef een niet-negatieve hoeveelheid", state["answer"])
+
+    def test_quoted_unknown_recipe_rejects_unrelated_sources(self):
+        app = self.app()
+        state = self.ask(app, 'Staat het recept “Saffraan-venkelterrine” in jullie collectie?')
+        self.assertEqual(state["route"], "search")
+        self.assertEqual(state["answer"], "Ik vind dit recept niet in de collectie.")
+        self.assertFalse(state.get("hits"))
+        self.assertFalse(state.get("tool_result"))
 
 
 if __name__ == "__main__":

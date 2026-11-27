@@ -34,7 +34,9 @@ def main():
     args = parser.parse_args()
 
     cases = [case for case in json.loads(CASES.read_text(encoding="utf-8")) if "evidence" in case]
-    cases += json.loads((ROOT / "data" / "retrieval_checks.json").read_text(encoding="utf-8"))
+    case_ids = {case["id"] for case in cases}
+    additional = json.loads((ROOT / "data" / "retrieval_checks.json").read_text(encoding="utf-8"))
+    cases += [case for case in additional if case["id"] not in case_ids]
     store = RecipeSearch()
     try:
         report = {strategy: compare(store, cases, strategy) for strategy in STRATEGIES}

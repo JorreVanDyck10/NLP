@@ -2,7 +2,7 @@
 
 ## Wat we hebben gemaakt
 
-Flavor Chef is een kookassistent die recepten opzoekt en hoeveelheden aanpast aan het aantal porties. Bij een receptvraag zoekt de agent eerst informatie in onze dataset. Het taalmodel maakt daarna een antwoord op basis van die fragmenten. Berekeningen gebeuren in een aparte Python-tool.
+Flavor Chef is een kookassistent die recepten opzoekt en hoeveelheden aanpast aan het aantal porties en g en kg omrekent. Bij een receptvraag zoekt de agent eerst informatie in onze dataset. Het taalmodel maakt daarna een antwoord op basis van die fragmenten. Berekeningen gebeuren in een aparte Python-tool.
 
 We hebben het werk verdeeld over recepten en zoeken, de agent en rekentool, evaluatie en de interface. Mijn deel is **persoon 4: de lokale interface en demo**. Daarin breng ik de andere onderdelen samen en laat ik zien hoe een antwoord tot stand komt.
 
@@ -35,9 +35,9 @@ Deze vergelijking is uitgevoerd met `python -m scripts.compare_chunking --output
 
 ## Agent en rekentool
 
-De agent gebruikt LangGraph om te kiezen tussen zoeken, een losse hoeveelheid schalen, een recept zoeken en schalen, of gewoon antwoorden. In de Groq-modus kiest `openai/gpt-oss-20b` de route en formuleert het model de zoekantwoorden. De lokale modus werkt zonder taalmodel.
+De agent gebruikt LangGraph om te kiezen tussen zoeken, een losse hoeveelheid schalen, een recept zoeken en schalen, g en kg omrekenen, of gewoon antwoorden. In de Groq-modus stelt `openai/gpt-oss-20b` een route voor. De agent controleert die aan de hand van expliciete vraaggegevens. Het model formuleert de meeste zoekantwoorden. De lokale modus werkt zonder taalmodel.
 
-Voor schalen roept de agent via MCP de Python-tool `scale_ingredients` aan. MCP is hier de verbinding tussen de agent en de rekentool. De tool rekent met de verhouding tussen de oude en nieuwe porties. Voor water in de curry is dat **420 × 7 / 4 = 735 ml**. Zo hoeft het taalmodel de hoeveelheden niet zelf uit te rekenen.
+Voor schalen roept de agent via MCP de Python-tool `scale_ingredients` aan. MCP is hier de verbinding tussen de agent en de rekentool. De tool rekent met de verhouding tussen de oude en nieuwe porties. Voor water in de curry is dat **420 × 7 / 4 = 735 ml**. Dezelfde MCP-server biedt `convert_units` voor g en kg. Beide tools rekenen met `Decimal`.
 
 ## Mijn bijdrage: lokale interface en demo
 
@@ -54,7 +54,7 @@ Voor de live controle zijn deze twee vragen via de interface uitgevoerd met Groq
 | Invoer | Tussenstappen | Uitvoer |
 | --- | --- | --- |
 | Voor hoeveel porties is de kikkererwtencurry bedoeld? | Zoekroute, drie curryfragmenten en een modelantwoord | 4 porties |
-| Schaal de curry van 4 naar 7 porties. | Recept opzoeken en de ingrediënten met 4 en 7 porties naar MCP sturen | Onder andere water van 420 naar 735 ml en bloemkool van 500 naar 875 g |
+| Schaal de curry van 4 naar 7 porties. | Recept opzoeken en de ingrediënten met 4 en 7 porties naar MCP sturen | Onder andere water van 420 naar 735 ml en bloemkool van 500 naar 875 ml |
 
 | Live meting | Zoekvraag | Schaalvraag |
 | --- | ---: | ---: |
@@ -75,7 +75,7 @@ De interface bewaart het gesprek op het scherm, maar verwerkt elke vraag zelfsta
 
 ## Evaluatie met 36 recepten
 
-De teamtest bevat 20 vragen: twaalf zoekvragen met een bekend antwoord, één vraag naar ontbrekende informatie, zes schaalvragen en één begroeting. Beide chunkmethodes gebruiken dezelfde recepten, vragen, hetzelfde embeddingmodel en maximaal drie fragmenten. De referenties staan in [data/evaluation.json](../data/evaluation.json).
+De nulmeting van PR #7 gebruikte 20 vragen: twaalf zoekvragen met een bekend antwoord, één vraag naar ontbrekende informatie, zes schaalvragen en één begroeting. Beide chunkmethodes gebruiken dezelfde recepten, vragen, hetzelfde embeddingmodel en maximaal drie fragmenten. De referenties staan in [data/evaluation.json](../data/evaluation.json).
 
 ### Lokale meting
 
@@ -116,11 +116,11 @@ Bij een fout is eerst gecontroleerd of de juiste receptinformatie was opgehaald.
 - **Gemist fragment:** de vervanging voor bloemkool stond wel in de index, maar buiten de top 3. De agent kreeg die informatie dus niet mee.
 - **Verkeerd antwoord met de juiste bron:** bij de watervraag waren de juiste 420 ml opgehaald. Het model telde daar de 375 ml uit een bereidingsstap opnieuw bij en antwoordde 795 ml. Die 375 ml maken al deel uit van het totaal. Ragas gaf dit antwoord bij beide methodes toch Faithfulness 1,0.
 
-Ik heb de watervraag daarom als **Broncontrole** in mijn interface opgenomen. Het echte modelantwoord blijft zichtbaar naast de referentie van 420 ml. Daarmee kan ik tonen waarom bronnen bekijken en het antwoord narekenen nodig blijven. De gewone zoekdemo gebruikt de portievraag.
+Ik heb de watervraag daarom als **Broncontrole** in mijn interface opgenomen. Tijdens deze proef bleef het modelantwoord zichtbaar naast de referentie van 420 ml. Voor mijn verdediging gebruik ik de vastgelegde 795 ml om uit te leggen hoe bronnen bekijken en het antwoord narekenen helpen. De gewone zoekdemo gebruikt de portievraag.
 
 Op deze testset geven receptsecties vaker het bewijs op de eerste plek. In de live top 3 is er geen verschil. De rekentool geeft alle zes gecontroleerde uitkomsten juist terug.
 
-De volgende stap is gericht op de fouten: duidelijkere routevoorbeelden voor ingrediënt- en temperatuurvragen, een zoekvergelijking die vervangingen beter herkent en een antwoordregel die het ingrediëntentotaal scheidt van hoeveelheden per bereidingsstap. Of die aanpassingen helpen, moet met dezelfde vragen opnieuw worden gemeten.
+De [MVP-nameting](#live-nameting-op-de-mvp) toont wat de routecontrole, selectie van vervangingsfragmenten en antwoordregel voor ingrediënttotalen hebben veranderd.
 
 ### Eerste proef met drie recepten
 
@@ -136,6 +136,42 @@ De live proef gebruikte GPT-OSS 20B voor de agent en GPT-OSS 120B voor Ragas. Be
 
 De uitvoer stond in `reports/ragas.json`, met tokengegevens en tijden voor 58 agentaanroepen en TTFT voor 22 antwoordaanroepen. Deze eerdere proef heeft een andere dataset, vraagset en beoordelaar dan de meting met 36 recepten. De cijfers zijn daarom geen rechtstreekse voor-en-na-vergelijking.
 
+## MVP-oplevering
+
+**Uitgangspunt.** PR #6 leverde de live interface op. PR #7 leverde de live nulmeting op de uitgebreide dataset. De huidige testset bewaart negentien van de twintig vragen van PR #7, inclusief alle twaalf bronvragen, de vraag naar de bakvormmaat en de Quiche Lorraine-schaalvraag. De losse schaalvraag over 200 g maakte plaats voor **250 g → 0,25 kg**. De omgekeerde conversie en een expliciet onbekende recepttitel zitten in de integratietests. [Gebruikt en waarom](PROJECTKEUZES.md#27-november-2026--keuzes-voor-de-mvp-oplevering)
+
+**Gerichte live vergelijking.** Op de versie vóór de fixes koos Groq bij receptsecties twee maal de goede route. Het antwoord op de watervraag was **795 ml** ondanks het opgehaalde ingrediëntentotaal. Met de wijzigingen geeft dezelfde methode de juiste receptenroute en levert ze **475 g ricotta** en **120 °C**. De curryvervanging staat voortaan als derde fragment in beide strategieën. Het antwoord noemt wortel, aubergine, pompoen en broccoli. Bij de watervraag kwam de ingrediëntregel met **420 ml water** op plek 1 bij secties en plek 2 bij tokens. De agent gebruikt die regel rechtstreeks als totaal. Voor ricotta mist de tokenmethode nog het fragment en meldt het model dat de hoeveelheid ontbreekt. De sectiemethode haalt het bewijs op plek 3 op.
+
+**Lokale benchmark.** Beide methodes haalden 20/20 routes en 6/6 MCP-uitkomsten. In de top 3 kwam volledig bronbewijs bij 11/12 vragen met tokenchunks en bij 12/12 met receptsecties. De afzonderlijke zoekvergelijking zonder receptfilter mat 19 unieke vragen. Die haalde 14/19 met tokenchunks en 15/19 met receptsecties. Vergelijk de aantallen per methode binnen elke test, aangezien de vraagsets verschillen.
+
+### Live nameting op de MVP
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 20/20 | 20/20 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Volledig bronbewijs in top 3 | 11/12 | 12/12 |
+| Handmatig juiste antwoorden op beantwoordbare bronvragen | 11/12 | 12/12 |
+| Inputtokens voor 33 agentaanroepen | 9619 | 9100 |
+| Outputtokens voor 33 agentaanroepen | 1445 | 1350 |
+| Mediane antwoord-TTFT over 13 antwoordaanroepen | 368 ms | 264 ms |
+
+De live nulmeting uit PR #7 haalde voor beide methodes 18/20 routes en 9/12 met volledig bronbewijs in de top 3. De 19 gedeelde vragen, waaronder alle twaalf bronvragen, blijven vergelijkbaar. Bij yoghurtcake vonden beide strategieën het juiste recept en meldden ze terecht dat de afmetingen van de bakvorm ontbreken. De enige inhoudelijke misser bij de beantwoordbare vragen is de hoeveelheid ricotta in de tokenmethode. De agent onthoudt zich daar van een hoeveelheid omdat het relevante fragment ontbreekt.
+
+| Ragas met Qwen | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Context Precision | 0,6167 (10/12) | Geen score (0/12) |
+| Context Recall | 0,9000 (10/12) | Geen score (0/12) |
+| Faithfulness | 1,0000 (10/12) | Geen score (0/12) |
+
+De live agentrun leverde voor beide strategieën alle antwoorden en tussenresultaten op. De Qwen-beoordelaar bereikte zijn dagelijkse Groq-tokenlimiet na de eerste tien tokenvragen. Een poging met alleen ontbrekende beoordelingen werd ook na de door Groq opgegeven wachttijd begrensd. De bestaande scores en foutlog zijn bewaard. De actuele Ragas-dekking laat nog geen vergelijking tussen beide methodes toe. Voltooi de nameting zodra dezelfde Qwen-beoordelaar voldoende quotum heeft. De nulmeting op 36 recepten uit PR #7 blijft beschikbaar.
+
+**Reproduceerbaarheid.** De [meetcommando’s](VOORTGANG.md#live-benchmark-met-groq-en-ragas) bouwen beide Qdrant-indexen en gebruiken top 3. De beoordelaar voor vergelijking met PR #7 is `qwen/qwen3.8-27b`, met `openai/gpt-oss-20b` voor de agent. Een tussentijdse poging met de oude GPT-OSS 120B-beoordelaar liep tegen de gebruikslimiet aan. De JSON-rapporten zijn lokaal. Ze bevatten corpus- en testsethashes, bronfragmenten, gekozen route, tool- en antwoorduitvoer en de beschikbare metingen.
+
+**Demoketen.** Streamlits live controle testte het antwoord **4 porties**, de schaaluitkomst **735 ml** en `convert_units` met **0,25 kg**. De zoekvraag gebruikte 606 inputtokens en 108 outputtokens, met een antwoord-TTFT van 401 ms. De schaalvraag gebruikte 224 inputtokens en 38 outputtokens. De conversie gebruikte 219 inputtokens en 29 outputtokens. Bij die twee vragen komen de routetokens van Groq en de berekening van MCP. De conversie is ook via de browser uitgevoerd. Gebruik het vroegere antwoord van **795 ml** voor de diagnose tijdens de verdediging.
+
+**Regressie.** Twaalf schermtests, zeven Groq-protocoltests en zes integratietests met de echte lokale zoekfunctie en MCP-server slaagden. De gecombineerde lokale vraag “Zoek de curry en schaal die naar 7 porties” toont de route, drie fragmenten en `scale_ingredients` met **735 ml**.
+
 ## Gebruikt en waarom
 
 De gebruikte technieken, redenen en lesbronnen staan in [PROJECTKEUZES.md](PROJECTKEUZES.md). Voor mijn onderdeel is alleen PowerPoint 1 gebruikt. De opdrachtbron is *NLP & LLM Challenge: Agentic Culinary Assistant / Flavor Chef*, pagina's 1–3.
@@ -144,4 +180,4 @@ De gebruikte technieken, redenen en lesbronnen staan in [PROJECTKEUZES.md](PROJE
 
 Voor mijn deel heb ik Codex gebruikt bij de implementatie, de testcode, de technische controles en het herschrijven van dit rapport. Bij de andere werkpakketten is Codex ook gebruikt voor code, data, metingen en foutanalyse. De genoemde controles zijn met AI-hulp uitgevoerd.
 
-Mijn interface is technisch afgerond. Ik moet de code nog zelf nalopen en de demo en uitleg oefenen. Het precieze GenAI-beleid van de opleiding moet nog gecontroleerd worden; de opdracht verwijst daarvoor naar een apart beleid. De huidige evaluatie test porties herschalen. Een aparte test voor eenhedenconversie, die de opdracht ook noemt, is in deze gerapporteerde versie nog niet aangetoond.
+Mijn interface is technisch afgerond. Ik moet de code nog zelf nalopen en de demo en uitleg oefenen. Het precieze GenAI-beleid van de opleiding moet nog gecontroleerd worden; de opdracht verwijst daarvoor naar een apart beleid.

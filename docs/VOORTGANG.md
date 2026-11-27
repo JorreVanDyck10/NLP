@@ -36,12 +36,13 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe recipe_search.py build
 .\.venv\Scripts\python.exe chef_agent.py "Schaal de curry van 4 naar 7 porties" --trace --telemetry
+.\.venv\Scripts\python.exe chef_agent.py "Reken 250 g om naar kg" --trace
 .\.venv\Scripts\python.exe evaluate_chef.py --output reports/local.json
 ```
 
 `reports/local.json` blijft buiten Git. De bestaande `reports/baseline.json` is de bewaarde referentiemeting; vervang die alleen bewust volgens de [onderhoudsafspraken](../CONTRIBUTING.md).
 
-De meetuitvoer bevat per vraag de referentie, gekozen route, geordende bronfragmenten, MCP-uitkomst en het antwoord. `failure_stage` markeert de eerste vastgestelde foutstap. De automatische controle op `answer` signaleert ontbrekende tekst. Voor inhoudelijke beoordeling vergelijk je het antwoord met de referentie en de opgehaalde fragmenten.
+De meetuitvoer bevat per vraag de referentie, gekozen route, geordende bronfragmenten, MCP-uitkomst en het antwoord. `failure_stage` markeert de eerste vastgestelde foutstap. Voor de bekende regressies controleert de live benchmark ook enkele antwoordfeiten. Lees gegenereerde antwoorden naast de referentie en bronfragmenten om andere inhoudelijke afwijkingen te vinden.
 
 ### Live benchmark met Groq en Ragas
 
@@ -51,10 +52,10 @@ Stel `GROQ_API_KEY` lokaal in als omgevingsvariabele. Bij deze benchmark ontvang
 .\.venv\Scripts\python.exe -m pip install -r requirements-eval.txt
 .\.venv\Scripts\python.exe recipe_search.py build
 $env:RAGAS_JUDGE_MODEL = 'qwen/qwen3.8-27b'
-.\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/ragas-expanded.json
+.\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/mvp-ragas-qwen.json
 ```
 
-Het ingestelde beoordelaarsmodel hoort bij de actuele evaluatie op 36 recepten. `scored` en `total` geven het aantal gescoorde en verwachte zoekvragen per metriek aan. De meetuitvoer blijft lokaal. Bij tijdelijke Groq-gebruikslimieten wacht de benchmark voor een nieuwe poging, waardoor de meting langer kan duren. [Resultaten](RAPPORT.md#evaluatie-met-36-recepten) · [Groq-limieten](https://console.groq.com/docs/rate-limits)
+Het ingestelde beoordelaarsmodel is hetzelfde als bij de [nulmeting op 36 recepten](RAPPORT.md#evaluatie-met-36-recepten). `scored` en `total` geven het aantal gescoorde en verwachte bronvragen per metriek aan. De benchmark bewaart voltooide resultaten als één vraag of Ragas-metriek faalt. Gebruik `--groq --case curry-water --case lasagne-ricotta` voor een korte live agentcontrole. De meetuitvoer blijft lokaal. [Groq-limieten](https://console.groq.com/docs/rate-limits)
 
 ### Uitgebreide receptendataset
 
@@ -62,7 +63,5 @@ De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide inde
 
 ### Volgende stappen
 
-**Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert 51 echte lokale scenario's; `python scripts/test_chef_ui.py` controleert twaalf schermscenario's zonder modellen. De interface van persoon 4 is ook met echte Groq-aanroepen en visueel in Chrome gecontroleerd. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
-
-1. **Controleer de foutgevallen opnieuw bij agentwijzigingen.** Gebruik de 20 vragen om te zien of de routerings-, zoek- en antwoordfouten zich nog voordoen. [Evaluatie met 36 recepten](RAPPORT.md#evaluatie-met-36-recepten)
-2. **Oefen de opgeleverde interface-demo.** Gesprekken, bronfragmenten, exacte MCP-gegevens en echte Groq-metingen zijn gecontroleerd. Tussenstanden verschijnen na iedere afgeronde stap. Gebruik de portievraag en schaalvraag voor de gewone demo en Broncontrole om de bekende waterdubbeltelling te analyseren. Persoon 4 moet de demo zelf nog oefenen. Zie [de handleiding](LOKALE-INTERFACE.md).
+1. **Vul de Ragas-nameting aan zodra Groq-quotum beschikbaar is.** Gebruik dezelfde Qwen-beoordelaar en behoud de twaalf bronvragen voor de vergelijking met PR #7. De [MVP-meting](RAPPORT.md#live-nameting-op-de-mvp) bevat de live agentresultaten en de huidige scoredekking. Bouw na wijzigingen aan de chunks eerst beide indexen opnieuw.
+2. **Oefen de opgeleverde interface-demo.** Gebruik de portievraag, het herschalen van de curry, een eenheidsconversie en de Broncontrole. Neem de eigen code-review en GenAI-verantwoording mee. Zie [de handleiding](LOKALE-INTERFACE.md).

@@ -16,19 +16,19 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 ## 2. Agent en MCP · 35%
 
-- [ ] Bouw een LangGraph-workflow die de vraag en tussenresultaten bijhoudt. Laat het model kiezen tussen recepten opzoeken, een tool gebruiken en gewoon antwoorden.
-  - [x] De vier lokale routes werken samen met de interface, brondata en MCP-tool. De live Groq-proef op drie proefrecepten toont twee routeringsfouten. Zie het [projectrapport](RAPPORT.md#eerste-proef-met-drie-recepten).
-- [ ] Maak één lokale MCP-tool die hoeveelheden schaalt op basis van het aantal porties. Test de berekening en ongeldige invoer.
-- [ ] Test alle routes. Combineer ook beide stappen in één vraag, bijvoorbeeld “Zoek de chili en schaal het recept naar zes porties.”
-  - [x] Herhaalbare integratiecheck voor persoon 1 + 2 + 4: tien zoekvragen, alle 36 recepten herschalen, een losse schaalvraag, chat en drie ongeldige/onvolledige vragen.
+- [x] Bouw een LangGraph-workflow die de tussenresultaten bijhoudt. Laat Groq een route voorstellen voor zoeken, herschalen, omrekenen of conversatie. Controleer het voorstel tegen expliciete vraaggegevens.
+- [x] Test `scale_ingredients` en `convert_units` op de lokale MCP-server, inclusief ongeldige invoer en afhandeling van MCP-uitval.
+- [x] Test alle routes, inclusief zoeken en schalen in één vraag. De integratiecheck herschaalt alle 36 recepten en test beide conversierichtingen en een onbekend recept.
 
 ## 3. Evaluatie · 20%
 
-- [x] Leg 20 controlevragen vast en controleer de referenties tegen de recepten en de portieberekeningen.
+- [x] Leg 20 controlevragen vast en controleer de referenties tegen de recepten, de portieberekeningen en de g ↔ kg-conversie.
 - [x] Meet beide chunkmethodes lokaal en controleer per vraag de route, opgehaalde bronnen, tooluitkomst en het antwoord.
-- [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de antwoorden met de referenties. Ragas scoorde negen van de elf zoekvragen per methode op de drie proefrecepten. Dezelfde foutgevallen komen terug in de [foutanalyse op 36 recepten](RAPPORT.md#wat-er-fout-ging).
+- [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de antwoorden met de referenties. Ragas scoorde negen van de elf zoekvragen per methode op de drie proefrecepten. De [foutanalyse](RAPPORT.md#eerste-proef-met-drie-recepten) behandelt de overige vragen.
 - [x] Breid de agent-evaluatie uit met vragen over de nieuwe recepten. Controleer ook of de agent het juiste recept ophaalt als het gevraagde detail ontbreekt.
 - [x] Herhaal de live meting op de 36 recepten. Ragas scoorde tien van twaalf beantwoordbare zoekvragen per methode. Beide antwoorden meldden terecht dat de yoghurtcakebron geen bakvormmaat vermeldt. [Uitgebreide evaluatie](RAPPORT.md#evaluatie-met-36-recepten)
+- [x] Controleer de vier bekende fouten op de standaardmethode na de agentwijzigingen. [MVP-meting](RAPPORT.md#mvp-oplevering)
+- [ ] Vul de ontbrekende Ragas-nameting aan zodra Groq-quotum beschikbaar is. Qwen scoorde 10/12 met tokenchunks en 0/12 met receptsecties voor elk van de drie metrieken. De live agentrun is volledig. [Nameting](RAPPORT.md#live-nameting-op-de-mvp)
 
 ## 4. Inference, metingen en lokale interface · 10%
 
@@ -40,6 +40,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
   - [x] Controleer de echte lokale zoek- en schaalvraag via AppTest: curryfragment met 420 ml water, daarna MCP-resultaat 735 ml voor 7 porties.
   - [x] Controleer ook de 33 nieuwe recepten; de voorbeeldmodus kiest de curry op ID en blijft werken bij een andere datasetvolgorde.
   - [x] Controleer echte Groq-metingen en TTFT bij de zoekdemo (4 porties) en modeltokens bij de schaalvraag (735 ml water voor 7 porties).
+  - [x] Controleer g ↔ kg via MCP in de live interface, met exacte invoer, uitvoer en de beschikbare Groq-metingen.
   - [x] Toon afgeronde tussenstappen tijdens de aanvraag en bewaar voltooide bronnen/metingen bij fouten; voeg hersteladvies en opnieuw proberen toe.
   - [x] Controleer de interface visueel in Chrome; toon exacte toolinvoer/-uitvoer en maak een broncontrole voor de bekende dubbeltelling bij de watervraag.
   - [x] Leg de demostappen en uitleg voor de verdediging vast in [de handleiding](LOKALE-INTERFACE.md).

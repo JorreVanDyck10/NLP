@@ -62,6 +62,7 @@ def example_state(question):
     }
     if question == SCALE_QUESTION:
         state.update(route="scale_recipe", base=recipe["servings"], target=7)
+        state["tool_name"] = "scale_ingredients"
         ingredients = copy.deepcopy(recipe["ingredients"])
         for item in ingredients:
             quantity = item.get("quantity")
@@ -134,18 +135,23 @@ def render_result(state, *, in_progress=False):
             if url.startswith(("https://", "http://")):
                 st.link_button("Open receptbron", url)
     with st.expander("MCP-aanroep"):
-        if state.get("tool_result"):
-            st.write("**Tool: scale_ingredients**")
+        if result := state.get("tool_result"):
+            name = state.get("tool_name", "scale_ingredients")
+            arguments = state["tool_input"]
+            st.write(f"**Tool: {name}**")
             st.caption("Invoer en uitvoer uit de agentstate. In voorbeeldmodus zijn beide gesimuleerd.")
-            result = state["tool_result"]
-            st.write(f"Van **{result['from_servings']}** naar **{result['to_servings']}** porties")
-            st.dataframe([
-                {"Ingrediënt": original["name"], "Van": display_amount(original),
-                 "Naar": display_amount(scaled), "Opmerking": scaled.get("note") or ""}
-                for original, scaled in zip(state["tool_input"]["ingredients"], result["ingredients"], strict=True)
-            ], use_container_width=True, hide_index=True)
-            st.caption("Weergave afgerond tot maximaal zes decimalen. De ruwe toolgegevens hieronder bevatten de ontvangen waarden.")
-            st.json({"input": state["tool_input"], "output": result}, expanded=False)
+            if name == "convert_units":
+                st.write(f"Van **{arguments['amount']} {arguments['from_unit']}** "
+                         f"naar **{result['amount']} {result['unit']}**")
+            else:
+                st.write(f"Van **{result['from_servings']}** naar **{result['to_servings']}** porties")
+                st.dataframe([
+                    {"Ingrediënt": original["name"], "Van": display_amount(original),
+                     "Naar": display_amount(scaled), "Opmerking": scaled.get("note") or ""}
+                    for original, scaled in zip(arguments["ingredients"], result["ingredients"], strict=True)
+                ], use_container_width=True, hide_index=True)
+                st.caption("De tabel rondt af tot maximaal zes decimalen. Hieronder staan de ruwe waarden.")
+            st.json({"input": arguments, "output": result}, expanded=False)
         else:
             st.write("Voor deze vraag is geen geslaagde MCP-aanroep geregistreerd.")
     with st.expander("Tokens en responstijden", expanded=True):
@@ -196,6 +202,8 @@ def friendly_error(exc):
             return "De zoekindex ontbreekt of past niet bij de dataset. Voer python recipe_search.py build uit in de virtuele omgeving."
         if message.startswith("Groq gaf geen tekst terug"):
             return "Groq gaf een leeg antwoord terug. Probeer de vraag opnieuw of controleer het model en tokenbudget."
+        if message.startswith("De MCP-tool kon de berekening niet uitvoeren"):
+            return "De MCP-tool kon de berekening niet uitvoeren. Controleer de lokale MCP-server en probeer opnieuw."
     return "De agent kon de aanvraag niet afronden. Controleer de index, modelverbinding en MCP-server. Probeer daarna opnieuw."
 
 
@@ -210,7 +218,7 @@ def clear_key():
 def main():
     st.set_page_config(page_title="Flavor Chef", page_icon="🍲", layout="wide")
     st.title("Flavor Chef")
-    st.write("Zoek een recept op of schaal de ingrediënten naar jouw aantal porties.")
+    st.write("Zoek een recept op, schaal porties of reken gram en kilogram om.")
     api_key = None
     with st.sidebar:
         st.header("Demo instellen")
@@ -237,7 +245,7 @@ def main():
         question = SCALE_QUESTION
     if right.button("Broncontrole", key="source_check", use_container_width=True, disabled=mode == MODES[2]):
         question = WATER_QUESTION
-    st.caption("Democontrole: curry voor 4 porties; 420 ml water wordt 735 ml voor 7 porties. Broncontrole toont de vraag met een bekende kans op dubbeltelling.")
+    st.caption("Democontrole: curry voor 4 porties; 420 ml water wordt 735 ml voor 7 porties. Broncontrole vergelijkt het totaal met de bereidingsstappen.")
     for index, message in enumerate(st.session_state["messages"]):
         with st.chat_message("user"):
             st.write(message["question"])
