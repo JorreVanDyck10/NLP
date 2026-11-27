@@ -17,19 +17,21 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 ## 2. Agent en MCP · 35%
 
 - [ ] Bouw een LangGraph-workflow die de vraag en tussenresultaten bijhoudt. Laat het model kiezen tussen recepten opzoeken, een tool gebruiken en gewoon antwoorden.
-  - [x] De vier lokale routes werken samen met de interface, brondata en MCP-tool; modelroutering via Groq blijft nog live te controleren.
+  - [x] De vier lokale routes werken samen met de interface, brondata en MCP-tool. De live Groq-proef op drie proefrecepten toont twee routeringsfouten. Zie het [projectrapport](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting).
 - [ ] Maak één lokale MCP-tool die hoeveelheden schaalt op basis van het aantal porties. Test de berekening en ongeldige invoer.
 - [ ] Test alle routes. Combineer ook beide stappen in één vraag, bijvoorbeeld “Zoek de chili en schaal het recept naar zes porties.”
   - [x] Herhaalbare integratiecheck voor persoon 1 + 2 + 4: tien zoekvragen, alle 36 recepten herschalen, een losse schaalvraag, chat en drie ongeldige/onvolledige vragen.
 
 ## 3. Evaluatie · 20%
 
-- [ ] Maak 15–20 controlevragen met zelf nagekeken referentieantwoorden voor ingrediënten, vervangingen en conversies.
-- [ ] Meet Context Precision, Context Recall en Faithfulness met Ragas. Noteer of fouten ontstaan bij het ophalen van de bron of bij het maken van het antwoord.
+- [x] Leg 18 controlevragen vast en controleer de referenties tegen de recepten en de portieberekeningen.
+- [x] Meet beide chunkmethodes lokaal en controleer per vraag de route, opgehaalde bronnen, tooluitkomst en het antwoord.
+- [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de antwoorden met de referenties. Ragas scoorde negen van de elf zoekvragen per methode op de drie proefrecepten. De [foutanalyse](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting) behandelt de overige vragen.
+- [ ] Breid de agent-evaluatie uit met vragen over de nieuwe recepten en herhaal de live meting op de uitgebreide dataset.
 
 ## 4. Inference, metingen en lokale interface · 10%
 
-- [ ] Sluit Groq aan met een beschikbaar model op het gratis plan. De opdracht noemt Llama 3.1 8B als voorbeeld. Groq verwijst voor dat model nu naar `openai/gpt-oss-20b`. [Groq-modelwijzigingen](https://console.groq.com/docs/deprecations)
+- [x] Sluit Groq aan met een beschikbaar model op het gratis plan. De live evaluatie gebruikte `openai/gpt-oss-20b`. [Projectkeuzes](PROJECTKEUZES.md)
 - [ ] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT).
 - [ ] Maak een eenvoudige lokale interface met gesprekken, opgehaalde tekststukken, MCP-toolcalls en live metingen.
   - [x] Bouw het scherm in `chef_ui.py` met vraag/antwoord, bronfragmenten, toolinvoer/-uitvoer en beschikbare metingen na afloop; zie [persoon 4](LOKALE-INTERFACE.md).

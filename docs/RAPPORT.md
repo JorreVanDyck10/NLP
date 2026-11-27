@@ -1,12 +1,12 @@
 # Flavor Chef | Projectrapport
 
-[Terug naar de README](../README.md)
+[Terug naar de README](../README.md) · [Onderbouwing van de projectkeuzes](PROJECTKEUZES.md)
 
 **Projectauteur** Raoul
 
 **Doel:** een volledige MVP die Raoul zelf kan uitleggen. De rubric voorziet maximaal 85% voor een werkende MVP met goede analyse.
 
-**Huidige fase.** De agent met MCP-tool, 36 recepten en de lokale interface zijn geïntegreerd en samen getest. Beide chunkmethodes zijn op die set vergeleken. De Ollama-demo blijft een apart onderdeel. Zie de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
+**Huidige fase.** De agent met MCP-tool, 36 recepten, de lokale interface en de evaluatiecode zijn geïntegreerd. De lokale zoekvergelijking gebruikt 36 recepten. De live Ragas-cijfers komen uit de eerdere proef met drie recepten. De Ollama-demo blijft een apart onderdeel. Zie de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
 
 ## 19 november 2026 | Eerste RAG-demo
 
@@ -62,29 +62,12 @@ De lokale benchmark is opnieuw uitgevoerd naar het genegeerde `reports/integrati
 
 Ook de zoekvergelijking zonder receptfilter is op de geïntegreerde versie herhaald (`reports/chunking-integration.json`, buiten Git): **106 tokenchunks** en **133 sectiechunks**, met top-3-bewijs voor **13/18** en **14/18** vragen. Dit bevestigt de vergelijking van persoon 1. Deze ongerichte zoekvergelijking en de agentbenchmark met receptnaamherkenning meten verschillende stappen en mogen niet als dezelfde score worden gelezen.
 
-**Open.** Groq-routering, gegenereerde antwoorden, tokens en TTFT en live Ragas-evaluatie zijn niet gecontroleerd bij gebrek aan een sleutel. De evaluatiebranch van persoon 3 moet apart worden gereviewd en geïntegreerd; de volledige agenttestset moet ook de nieuwe recepten gaan omvatten. De bloemkoolvraag blijft een bekend rangschikkingsprobleem en vraagt verdere analyse. Visuele browsercontrole, persoonlijke demo-oefening, opdracht-pdf en GenAI-beleid blijven open. PowerPoint 2 en 3 zijn niet gebruikt.
+**Open na deze fase.** De live proef van persoon 3 volgde afzonderlijk op de drie proefrecepten en staat verderop in dit rapport. De volledige agenttestset moet ook de nieuwe recepten gaan omvatten. De bloemkoolvraag blijft een bekend rangschikkingsprobleem en vraagt verdere analyse. Voor de interface blijven live Groq-tokens, TTFT, visuele browsercontrole, persoonlijke demo-oefening en GenAI-beleid te controleren. PowerPoint 2 en 3 zijn niet gebruikt.
 
 ## Gebruikt en waarom
 
-Deze tabel is het gezamenlijke keuzeoverzicht en wordt bijgewerkt bij gewijzigde projectkeuzes. Fasedetails en meetresultaten blijven bij de gedateerde fase staan. AGENTS.md verplicht het bijhouden van deze sectie bij toekomstige werkzaamheden.
+De [projectkeuzes](PROJECTKEUZES.md) leggen vast wat we gebruiken, waarvoor en waarom. Fasedetails en meetresultaten staan bij de betrokken projectfase.
 
-| Techniek of hulpmiddel | Waarvoor gebruikt en waarom | Controle of beperking |
-| --- | --- | --- |
-| Python en JSON | Uitvoerbare logica en kleine leesbare datasets die we zelf kunnen nakijken. | 36 agentrecepten en vijf aparte Ollama-demorecepten; syntax, JSON en MCP-invoerformaat gecontroleerd. |
-| LlamaIndex-chunking | Vergelijkt knippen op tokens met knippen per receptonderdeel; zo kunnen we nagaan of betekenisvolle stukken beter worden gevonden. | Twee indexen op 36 recepten; vergelijking op dezelfde 18 zoekvragen. Zie de resultaten onder Receptendataset en chunking. |
-| FastEmbed met `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` | Zet vragen en tekst om in vergelijkbare getalvectoren voor zoeken op betekenis, lokaal en met ondersteuning voor meerdere talen. | Echte zoekvragen vanuit de interface, inclusief de nieuwe zoekvragen van persoon 1. |
-| Lokale Qdrant-vectorstore | Bewaart en doorzoekt die vectoren met cosinusovereenkomst; geen aparte gehoste database nodig. | Indexen blijven buiten Git. Een zoekscore is geen kans op een correct antwoord. |
-| LangGraph | Laat de gedeelde vraag/state door expliciete zoek-, reken- en antwoordstappen lopen; maakt de gekozen route zichtbaar. | Vier lokale routes getest. Groq-modelroutering nog niet live geverifieerd. Lesbasis: PowerPoint 1, slide 69. |
-| MCP via stdio en `scale_ingredients` | Laat de agent een aparte lokale Python-rekentool aanroepen via een vast protocol. Vaste berekeningen worden door code uitgevoerd. | Integratiecheck voor alle 36 recepten en losse hoeveelheden. Lesbasis: PowerPoint 1, slides 72–73. |
-| `Decimal` en Pydantic | Nauwkeurig met decimale hoeveelheden rekenen en invoer/uitvoer beschrijven en valideren. | Alle herschaalde ingrediënten vergeleken met de brondata; ongeldige portievragen voeren geen rekentool uit. |
-| Groq en HTTPX | Bestaande optionele koppeling voor modelroutering, geformuleerde antwoorden en modelmetingen; interface hergebruikt dezelfde agent. | Geen sleutel beschikbaar. Echte tokens, TTFT en modelantwoorden zijn nog niet geverifieerd. |
-| Streamlit | Bouwt gesprek, bronfragmenten, MCP-details en meetvelden direct vanuit Python, zodat de interface beperkt en uitlegbaar blijft. | Zeven schermchecks en een echte integratiecheck met 51 scenario's op de huidige dataset. Metingen verschijnen na afloop; elke vraag is zelfstandig. |
-| AppTest en unittest | Controleren de interface en de volledige lokale keten herhaalbaar, inclusief foutgevallen. | Snelle schermchecks draaien in CI; de modelafhankelijke integratiecheck draait lokaal. Visuele browsercontrole blijft open. |
-| Ragas | Voorziene evaluatie van bronkwaliteit en antwoordtrouw, naast controle van routes en berekeningen. | Bestaande optionele koppeling; live scores ontbreken. Werkpakket 3 blijft apart te integreren. |
-| Ollama | Aparte bestaande lokale RAG-demo met vijf voorbeeldrecepten; bruikbaar om lokaal embeddings en antwoorden te demonstreren. | Niet de backend van `chef_ui.py` en niet opnieuw functioneel getest bij deze integratie. |
-| Git, GitHub Actions en Codex | Versiebeheer en automatische controles houden de samenwerking herhaalbaar; Codex hielp bij implementatie, tests en documentatie. | Repositoryafspraken gelezen; AI-bijdragen staan per fase. Eigen review en opleidingsbeleid moeten nog worden nagegaan. |
-
-Lesbasis voor het zichtbaar controleren van tussenstappen: PowerPoint 1, slides 82–83. De keuze voor Streamlit/AppTest is een implementatiekeuze; deze tools worden hier niet als eis uit de slides of de ontbrekende opdracht-pdf voorgesteld.
 ## Receptendataset en chunking
 
 **27 november 2026.** De gebruiker koos taak 1 voor het team en gaf PowerPoint 1 als lesbasis. Codex hielp met de bronselectie, de Nederlandse bewerking, het vergelijkingsscript, de uitvoering en de documentatie. De drie bestaande recepten zijn behouden. De [33 nieuwe recepten](../data/README.md#herkomst-van-de-agentrecepten) zijn verspreid over acht categorieën, waaronder ontbijt, lunch, avondeten en dessert.
@@ -103,7 +86,7 @@ Dia's 29–36 behandelen hoe chunkgrenzen bepalen welk deel van een recept je ku
 
 Bij de vraag *Hoeveel water gaat er in totaal in de curry?* kwam bij splitsen per onderdeel eerst het ingrediëntenfragment met **420 ml water**. Bij splitsen op tokenlengte kwam eerst een bereidingsstap met **375 ml**, de hoeveelheid voor één stap. Het volledige antwoord stond daar op plek 2. Bij de bloemkoolvervanging kwam het juiste fragment bij beide methodes buiten de top 10. De sectiemethode zette bijvoorbeeld de kalkoenvervanging van de lasagne op plek 1. De vervanging stond wel in het curryrecept, dus de fout ontstond bij het rangschikken van de zoekresultaten.
 
-Splitsen per onderdeel gaf op deze vragen vaker het bewijs op plek 1. Bij enkele vragen gaf tokenlengte een beter resultaat. De vergelijking is klein en meet toegang tot broninformatie. De live Ragas-beoordeling en het GenAI-beleid van de opleiding vragen nog verificatie. De recepttijden zijn bronwaarden en de bereidingen zijn niet fysiek uitgeprobeerd.
+Splitsen per onderdeel gaf op deze vragen vaker het bewijs op plek 1. Bij enkele vragen gaf tokenlengte een beter resultaat. De vergelijking is klein en meet toegang tot broninformatie. Een live Ragas-meting met deze uitgebreide dataset en het GenAI-beleid van de opleiding vragen nog verificatie. De recepttijden zijn bronwaarden en de bereidingen zijn niet fysiek uitgeprobeerd.
 
 ### Drie of vijf zoekfragmenten
 
@@ -116,6 +99,62 @@ In een aanvullende test op dezelfde 18 vragen vond splitsen per receptonderdeel 
 - Beide Qdrant-indexen opnieuw opgebouwd. De repositorycontrole en `git diff --check` zijn uitgevoerd.
 - De bestaande lokale agentbenchmark opnieuw uitgevoerd. Beide methodes behouden 18/18 juiste routes en 6/6 correcte MCP-uitkomsten.
 - Nieuw recept via de bestaande agent getest. Bij *Schaal Quiche Lorraine van 6 naar 4 porties* vond RAG drie fragmenten en rekende de MCP-tool onder meer 300 g kruimeldeeg om naar 200 g.
+
+## 27 november 2026 | Werkpakket 3: evaluatie en foutanalyse
+
+**Raoul.** Deze lokale en de volgende live meting gebruikten de oorspronkelijke corpusversie met drie proefrecepten. Werkpakket 3 omvat de controle van 18 referenties en de vergelijking van beide chunkmethodes. De set bevat 11 zoekvragen, 6 schaalvragen en 1 begroeting. De zoekreferenties zijn vergeleken met de drie receptbronnen en de schaalaantallen zijn nagerekend. De mozzarellavraag beoordeelt het moment van toevoegen, zoals gevraagd. De kookstand is aanvullende informatie. [Curry](https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/chickpea-vegetable-curry.html), [lasagne](https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/slow-cooked-lasagna.html), [pannenkoeken](https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/strawberry-pancakes.html).
+
+**Meting.** Beide indexen zijn opgebouwd met `recipe_search.py build`. `evaluate_chef.py --output reports/local.json` mat dezelfde drie recepten en 18 vragen met top 3 en het embeddingmodel `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`. De run gebruikte Python 3.13.15 en de afhankelijkheden uit [requirements-eval.txt](../requirements-eval.txt). De SHA-256-hashes beginnen voor de recepten met `454c5734c1ee` en voor de vragen met `a1c698e33919`. De volledige hashes staan in de lokale uitvoer. De meetmethode volgt PowerPoint 1, slides 73–83.
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 18/18 | 18/18 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 5/11 | 8/11 |
+| Alle benodigde broninformatie in de top 3 | 9/11 | 10/11 |
+| Gemiddelde reciproke rang van het volledige bewijs in de top 3 | 0,6212 | 0,7879 |
+
+De route, MCP-controle en bewijsrang kwamen per vraag overeen met de [bewaarde referentiemeting](../reports/baseline.json). Per receptsectie werd het volledige bewijs bij één extra zoekvraag opgehaald. Dat verschil geldt voor deze kleine testset met drie recepten.
+
+**Foutanalyse.** Voor de gemiste zoekvragen is dezelfde zoekvraag met hetzelfde receptfilter opnieuw uitgevoerd over alle fragmenten van het recept.
+
+- `curry-substitution` koos op beide methodes de zoekroute. De top 3 bevatte ingrediënten- en bereidingsinformatie. Het fragment met de vervangingen stond op plek 6 van 6 bij tokenchunks en op plek 7 van 7 bij receptsecties. De broninformatie zat in beide indexen en viel buiten de drie fragmenten die de agent kreeg.
+- `lasagne-ricotta` miste bij tokenchunks de `475 g magere ricotta`. Het fragment stond op plek 5 van 6. Bij receptsecties stond het ingrediëntenfragment op plek 3 van 7. Een te toetsen hypothese is dat bij vragen naar hoeveelheden een extra gewicht voor het ingrediënt en de vermelde eenheid het juiste fragment hoger zet.
+- `curry-water-stages` laat zien waarom de benchmark alle benodigde feiten controleert. De twee hoeveelheden moeten samen aanwezig zijn. Het volledige bewijs was beschikbaar na twee resultaten bij tokenchunks en na drie bij receptsecties.
+- De zes gecontroleerde schaaluitkomsten kwamen ook overeen met de getoonde hoeveelheden. Zo werd `2,5 g` van vier naar zes porties `3,75 g`. De begroeting haalde geen fragmenten op en startte geen MCP-tool.
+
+**Voorbereiding Ragas.** Met gesimuleerde scores is gecontroleerd welke referenties, context en antwoorden de drie metrieken ontvangen en hoe de benchmark ontbrekende scores telt. Lokaal toont de agent bij zoekvragen de bronfragmenten. De live proef hieronder beoordeelt ook de gegenereerde antwoorden.
+
+**GenAI-vermelding.** Codex hielp bij de referentiecontrole, benchmarkcode, uitvoering en foutanalyse. Raouls eigen review en demo-oefening staan open.
+
+## 27 november 2026 | Live Groq- en Ragas-meting
+
+**Raoul.** Deze live meting gebruikt de oorspronkelijke drie proefrecepten. Beide chunkmethodes draaiden via `evaluate_chef.py --ragas --output reports/ragas.json`, met top 3 en dezelfde recept- en vraagversies als bij de lokale benchmark. De agent gebruikte `openai/gpt-oss-20b` en de Ragas-beoordelaar gebruikte `openai/gpt-oss-120b`. De eerste proef leverde een leeg antwoord op omdat GPT-OSS het tokenbudget gebruikte voor redeneren. Met lage redeneerinspanning en een budget van 1024 tokens leverde de agent zichtbaar antwoord. De benchmark wachtte bij tijdelijke Groq-gebruikslimieten en rondde beide runs af. [Instellingen en keuzes](PROJECTKEUZES.md)
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 16/18 | 16/18 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 5/11 | 7/11 |
+| Alle benodigde broninformatie in de top 3 | 8/11 | 8/11 |
+| Context Precision | 0,7593 (9/11) | 0,7778 (9/11) |
+| Context Recall | 0,8889 (9/11) | 0,7778 (9/11) |
+| Faithfulness | 0,8889 (9/11) | 1,0000 (9/11) |
+
+Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd gerouteerde zoekvragen leverden geen receptcontext op. Per receptsectie lag de gemiddelde Context Precision iets hoger en lag de gemiddelde Context Recall lager. De vergelijking geldt voor deze proef met drie recepten.
+
+**Inhoudelijke controle.** Per methode zijn zeven van de elf zoekvragen volledig juist beantwoord. Bij één vraag gaf de agent terecht aan dat de opgehaalde fragmenten onvoldoende informatie bevatten. De overige drie antwoorden hadden een routerings- of antwoordfout.
+
+- `lasagne-ricotta` ging bij beide methodes naar `scale_quantity`. De agent vroeg het aantal porties in plaats van de 475 g ricotta uit het recept op te halen.
+- `pancakes-temperature` ging bij beide methodes naar `chat`. De agent gaf 90 °C zonder receptcontext. Het recept vermeldt 120 °C.
+- `curry-substitution` ging naar de zoekroute. Het bewijs viel bij beide methodes buiten de top 3. De agent meldde terecht dat de opgehaalde fragmenten de vervanging niet vermeldden.
+- `curry-water` haalde bij beide methodes de totale hoeveelheid van 420 ml op. De agent telde daar de 375 ml uit een bereidingsstap opnieuw bij en antwoordde 795 ml. Ragas gaf voor Faithfulness bij dit antwoord 0,0 met tokenchunks en 1,0 met receptsecties. De handmatige vergelijking met het recept blijft nodig om dit soort fout te vinden.
+
+**GenAI-vermelding.** Codex hielp bij het oplossen van de lege antwoorden, het uitvoeren van de benchmark en de vergelijking met de referenties.
+
+## 27 november 2026 | Integratie van werkpakket 3
+
+De evaluatiecode, de foutanalyse en het keuzeoverzicht zijn samengevoegd met de versie met 36 recepten en de lokale interface. Codex hielp bij het samenvoegen en testen. De zeven schermtests en de vier integratietests, inclusief herschalen van alle 36 recepten, slaagden lokaal. De lokale benchmark met het uitgebreide corpus haalde per methode 18/18 routes en 6/6 MCP-uitkomsten. De top 3 bevatte het volledige bewijs bij 9/11 zoekvragen met tokenchunks en 10/11 met receptsecties. Deze herhaling gebruikte de bestaande 18 agentvragen. De live Ragas-meting hierboven blijft de referentie op drie proefrecepten.
 
 ## Volgende fasen
 

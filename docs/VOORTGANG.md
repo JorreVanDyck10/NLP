@@ -10,13 +10,13 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 
 ### Eerste referentiemeting met drie proefrecepten
 
-- **Receptendataset.** `data/recipes.json` bevat drie proefrecepten van Health Canada met bronlinks, porties, tijden, ingrediënten, bereidingsstappen en dieettags. Het gaat om kikkererwten-groentecurry, lasagne uit de slowcooker en aardbeienpannenkoeken.
+- **Receptendataset.** Deze referentiemeting gebruikte de eerste drie proefrecepten van Health Canada. Het gaat om kikkererwten-groentecurry, lasagne uit de slowcooker en aardbeienpannenkoeken.
 - **Recepten zoeken.** `recipe_search.py` maakt met LlamaIndex en een meertalig FastEmbed-model twee lokale Qdrant-indexen. Splitsen op tokenlengte levert 17 fragmenten op. Splitsen per receptonderdeel levert 20 fragmenten op. Beide indexen geven fragmenten met een bronlink en een overeenkomstscore terug.
 - **Agent en MCP.** `chef_agent.py` gebruikt LangGraph voor de gespreksroute, receptzoekroute, directe rekentoolroute en de gecombineerde zoek- en rekentoolroute. `scale_server.py` biedt de MCP-tool `scale_ingredients` via stdio aan. De agent rekende onder meer 420 ml water voor vier porties om naar 735 ml voor zeven porties.
 - **Evaluatie.** `data/evaluation.json` bevat 18 vragen met verwachte routes, referentieantwoorden en waar relevant controleerbare bronfragmenten of MCP-uitkomsten. `evaluate_chef.py` vergelijkt de twee chunkmethodes. De volledige lokale meetuitvoer staat in `reports/baseline.json`.
-- **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De Groq- en Ragas-koppelingen zijn met gesimuleerde API-antwoorden getest. Live Ragas-scores staan nog open omdat er tijdens de bouw geen `GROQ_API_KEY` beschikbaar was.
+- **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De latere live Groq- en Ragas-proef op de drie proefrecepten staat in het [projectrapport](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting).
 
-### Lokale benchmark
+### Lokale referentiemeting
 
 | Meting | Op tokenlengte | Per receptonderdeel |
 | --- | ---: | ---: |
@@ -41,6 +41,20 @@ python -m venv .venv
 
 `reports/local.json` blijft buiten Git. De bestaande `reports/baseline.json` is de bewaarde referentiemeting; vervang die alleen bewust volgens de [onderhoudsafspraken](../CONTRIBUTING.md).
 
+De meetuitvoer bevat per vraag de referentie, gekozen route, geordende bronfragmenten, MCP-uitkomst en het antwoord. `failure_stage` markeert de eerste vastgestelde foutstap. De automatische controle op `answer` signaleert ontbrekende tekst. Voor inhoudelijke beoordeling vergelijk je het antwoord met de referentie en de opgehaalde fragmenten.
+
+### Live benchmark met Groq en Ragas
+
+Stel `GROQ_API_KEY` lokaal in als omgevingsvariabele. Bij deze benchmark ontvangen de Groq-modellen de testvragen, opgehaalde receptfragmenten, referenties en gegenereerde antwoorden die nodig zijn voor de metrieken.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-eval.txt
+.\.venv\Scripts\python.exe recipe_search.py build
+.\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/ragas.json
+```
+
+`scored` en `total` geven het aantal gescoorde en verwachte zoekvragen per metriek aan. De meetuitvoer blijft lokaal. Bij tijdelijke Groq-gebruikslimieten wacht de benchmark voor een nieuwe poging, waardoor de meting langer kan duren. [Groq-limieten](https://console.groq.com/docs/rate-limits)
+
 ### Uitgebreide receptendataset
 
 De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide indexen opnieuw met `recipe_search.py build`. Voer `python -m scripts.compare_chunking --output reports/chunking-local.json` uit in de virtuele omgeving om de lokale zoekvergelijking te herhalen. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de [resultaten](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
@@ -49,6 +63,5 @@ De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide inde
 
 **Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
 
-1. **Voer de live Ragas-benchmark uit.** Installeer `requirements-eval.txt`, stel `GROQ_API_KEY` in als omgevingsvariabele en voer `python evaluate_chef.py --ragas --output reports/ragas.json` uit in de virtuele omgeving. Vergelijk Context Precision, Context Recall en Faithfulness per strategie. Controleer ook de token- en tijdmetingen.
-2. **Breid de volledige agent-evaluatie uit voor de nieuwe recepten.** De zoekvergelijking heeft zeven nieuwe vragen, maar `data/evaluation.json` bevat nog de oorspronkelijke 18 agentvragen. Neem ook zoeken, herschalen en onbekende vragen over de nieuwe recepten op.
-3. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via Groq blijven open; de interface toont metingen na afloop en streamt nog geen tussenstappen. Zie [de handleiding](LOKALE-INTERFACE.md).
+1. **Breid de volledige agent-evaluatie uit voor de nieuwe recepten.** De zoekvergelijking heeft zeven nieuwe vragen. Voeg aan de 18 agentvragen ook zoeken, herschalen en onbekende vragen over de nieuwe recepten toe. Herhaal daarna de live Ragas-meting op de uitgebreide dataset.
+2. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via de interface blijven te controleren. De interface toont metingen na afloop. Zie [de handleiding](LOKALE-INTERFACE.md).
