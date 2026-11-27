@@ -1,6 +1,6 @@
 # Flavor Chef | Projectrapport
 
-[Terug naar de README](../README.md)
+[Terug naar de README](../README.md) · [Onderbouwing van de projectkeuzes](PROJECTKEUZES.md)
 
 **Projectauteur** Raoul
 

@@ -22,7 +22,7 @@ NLP/
 - Houd de root beperkt tot bovenstaande bestanden en mappen. Nieuwe uitleg hoort in `docs/`, met een link vanuit de documentatiewegwijzer. Geef een nieuw onderdeel een duidelijke plek; pas bij een bewuste structuurwijziging ook deze afspraken en de repositorycontrole aan.
 - Behoud de huidige Python-entrypoints en requirements-bestanden zolang de startcommando's daarvan afhangen. Een verhuizing vereist aanpassing en controle van imports, datapaden en alle commando's.
 - Geef nieuwe bestanden duidelijke namen. Maak geen varianten zoals `final`, `final2`, `nieuw` of `backup`; Git bewaart versies. Volg de bestaande taal en naamgeving van het onderdeel.
-- Houd iedere uitleg op één hoofdplek. De README verwijst naar installatiehandleidingen; het rapport bevat projectkeuzes en resultaten; de checklist bevat open opleverpunten. Historische resultaten blijven herkenbaar als historisch.
+- Houd iedere uitleg op één hoofdplek. De README verwijst naar installatiehandleidingen. [PROJECTKEUZES.md](docs/PROJECTKEUZES.md) bevat de onderbouwing van gebruikte technieken en bronnen. Het rapport bevat uitgevoerde fasen en resultaten. De checklist bevat open opleverpunten. Historische resultaten blijven herkenbaar als historisch.
 
 ## Wat wel en niet in Git hoort
 
