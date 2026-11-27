@@ -12,7 +12,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 - [x] Maak vijf voorbeeldrecepten en een lokale LlamaIndex-vectorindex.
 - [ ] Breid uit naar 30–50 gevarieerde recepten met ingrediënten, stappen, kooktijd en dieetlabels. Houd de herkomst per recept bij.
-- [ ] Vergelijk tokengebaseerde chunking met splitsen per receptsectie. Gebruik dezelfde vragen en leg uit welke antwoorden beter worden opgehaald en waarom.
+- [x] Vergelijk tokengebaseerde chunking met splitsen per receptsectie op dezelfde 18 vragen en verklaar de zoekmissers met de drie proefrecepten. Zie het [projectrapport](RAPPORT.md#27-november-2026--werkpakket-3-evaluatie-en-foutanalyse).
 
 ## 2. Agent en MCP · 35%
 
@@ -22,8 +22,9 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 ## 3. Evaluatie · 20%
 
-- [ ] Maak 15–20 controlevragen met zelf nagekeken referentieantwoorden voor ingrediënten, vervangingen en conversies.
-- [ ] Meet Context Precision, Context Recall en Faithfulness met Ragas. Noteer of fouten ontstaan bij het ophalen van de bron of bij het maken van het antwoord.
+- [x] Leg 18 controlevragen vast en controleer de referenties tegen de recepten en de portieberekeningen.
+- [x] Meet beide chunkmethodes lokaal en controleer per vraag de route, opgehaalde bronnen, tooluitkomst en het antwoord.
+- [ ] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de gegenereerde antwoorden met hun referenties. Hiervoor is een Groq-sleutel nodig.
 
 ## 4. Inference, metingen en lokale interface · 10%
 

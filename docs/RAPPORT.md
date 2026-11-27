@@ -38,6 +38,33 @@ De onderhoudsafspraken staan in [CONTRIBUTING.md](../CONTRIBUTING.md). [AGENTS.m
 
 **Controle.** De repositorycontrole en whitespacecontrole zijn lokaal uitgevoerd. Ook de ignore-regels zijn nagegaan. Voor deze documentatie- en onderhoudswijziging is geen nieuwe modelbenchmark uitgevoerd. Voor de documentatie en controles is Codex gebruikt.
 
+## 27 november 2026 | Werkpakket 3: evaluatie en foutanalyse
+
+**Raoul.** Werkpakket 3 omvat de controle van 18 referenties en de vergelijking van beide chunkmethodes. De set bevat 11 zoekvragen, 6 schaalvragen en 1 begroeting. De zoekreferenties zijn vergeleken met de drie receptbronnen en de schaalaantallen zijn nagerekend. De mozzarellavraag beoordeelt het moment van toevoegen, zoals gevraagd. De kookstand is aanvullende informatie. [Curry](https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/chickpea-vegetable-curry.html), [lasagne](https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/slow-cooked-lasagna.html), [pannenkoeken](https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/strawberry-pancakes.html).
+
+**Meting.** Beide indexen zijn opgebouwd met `recipe_search.py build`. `evaluate_chef.py --output reports/local.json` mat dezelfde drie recepten en 18 vragen met top 3 en het embeddingmodel `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`. De run gebruikte Python 3.13.15 en de afhankelijkheden uit [requirements-eval.txt](../requirements-eval.txt). De SHA-256-hashes beginnen voor de recepten met `454c5734c1ee` en voor de vragen met `a1c698e33919`. De volledige hashes staan in de lokale uitvoer. De meetmethode volgt PowerPoint 1, slides 73–83.
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 18/18 | 18/18 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 5/11 | 8/11 |
+| Alle benodigde broninformatie in de top 3 | 9/11 | 10/11 |
+| Gemiddelde reciproke rang van het volledige bewijs in de top 3 | 0,6212 | 0,7879 |
+
+De route, MCP-controle en bewijsrang kwamen per vraag overeen met de [bewaarde referentiemeting](../reports/baseline.json). Per receptsectie werd het volledige bewijs bij één extra zoekvraag opgehaald. Dat verschil geldt voor deze kleine testset met drie recepten.
+
+**Foutanalyse.** Voor de gemiste zoekvragen is dezelfde zoekvraag met hetzelfde receptfilter opnieuw uitgevoerd over alle fragmenten van het recept.
+
+- `curry-substitution` koos op beide methodes de zoekroute. De top 3 bevatte ingrediënten- en bereidingsinformatie. Het fragment met de vervangingen stond op plek 6 van 6 bij tokenchunks en op plek 7 van 7 bij receptsecties. De broninformatie zat in beide indexen en viel buiten de drie fragmenten die de agent kreeg.
+- `lasagne-ricotta` miste bij tokenchunks de `475 g magere ricotta`. Het fragment stond op plek 5 van 6. Bij receptsecties stond het ingrediëntenfragment op plek 3 van 7. Een te toetsen hypothese is dat bij vragen naar hoeveelheden een extra gewicht voor het ingrediënt en de vermelde eenheid het juiste fragment hoger zet.
+- `curry-water-stages` laat zien waarom de benchmark alle benodigde feiten controleert. De twee hoeveelheden moeten samen aanwezig zijn. Het volledige bewijs was beschikbaar na twee resultaten bij tokenchunks en na drie bij receptsecties.
+- De zes gecontroleerde schaaluitkomsten kwamen ook overeen met de getoonde hoeveelheden. Zo werd `2,5 g` van vier naar zes porties `3,75 g`. De begroeting haalde geen fragmenten op en startte geen MCP-tool.
+
+**Ragas.** Met gesimuleerde scores is gecontroleerd welke referenties, context en antwoorden de drie metrieken ontvangen en hoe de benchmark ontbrekende scores telt. Live Context Precision, Context Recall, Faithfulness en de inhoudelijke beoordeling van door Groq gegenereerde antwoorden staan open wegens de ontbrekende `GROQ_API_KEY`. Lokaal toont de agent bij zoekvragen de bronfragmenten. Dat levert bewijs voor de zoekvergelijking.
+
+**GenAI-vermelding.** Codex hielp bij de referentiecontrole, benchmarkcode, uitvoering en foutanalyse. Raouls eigen review en demo-oefening staan open.
+
 ## Volgende fasen
 
 Noteer per fase de datum, het projectwerk onder de naam van de projectauteur, de gemaakte keuze en het testresultaat. Vermeld eventueel GenAI-gebruik apart en werk de MVP-checklist bij.

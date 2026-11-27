@@ -16,7 +16,7 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 - **Evaluatie.** `data/evaluation.json` bevat 18 vragen met verwachte routes, referentieantwoorden en waar relevant controleerbare bronfragmenten of MCP-uitkomsten. `evaluate_chef.py` vergelijkt de twee chunkmethodes. De volledige lokale meetuitvoer staat in `reports/baseline.json`.
 - **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De Groq- en Ragas-koppelingen zijn met gesimuleerde API-antwoorden getest. Live Ragas-scores staan nog open omdat er tijdens de bouw geen `GROQ_API_KEY` beschikbaar was.
 
-### Lokale benchmark
+### Lokale referentiemeting
 
 | Meting | Op tokenlengte | Per receptonderdeel |
 | --- | ---: | ---: |
@@ -26,6 +26,8 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 | Al het benodigde bewijs op plek 1 | 5/11 | 8/11 |
 
 De vervanging voor bloemkool was aanwezig in beide indexen. Het fragment kwam op plek 6 bij splitsen op tokenlengte en op plek 7 bij splitsen per receptonderdeel. Dat is een concreet voorbeeld van een rangschikkingsprobleem.
+
+De resultaten van de herhaling, inclusief de controle van de 18 referenties en de foutanalyse per methode, staan in het [projectrapport](RAPPORT.md#27-november-2026--werkpakket-3-evaluatie-en-foutanalyse).
 
 ### Uitvoeren met de projectbestanden
 
@@ -40,6 +42,8 @@ python -m venv .venv
 ```
 
 `reports/local.json` blijft buiten Git. De bestaande `reports/baseline.json` is de bewaarde referentiemeting; vervang die alleen bewust volgens de [onderhoudsafspraken](../CONTRIBUTING.md).
+
+De lokale uitvoer bevat per vraag de referentie, de gekozen route, de geordende bronfragmenten, de MCP-uitkomst en het antwoord. `failure_stage` markeert de eerste vastgestelde foutstap. De controle op `answer` signaleert een ontbrekend antwoord. Voor inhoudelijke beoordeling vergelijk je het gegenereerde antwoord met de referentie en de opgehaalde fragmenten. Bij een live Ragas-run geven `scored` en `total` het aantal gescoorde en verwachte zoekvragen per metriek aan.
 
 ### Volgende stappen
 
