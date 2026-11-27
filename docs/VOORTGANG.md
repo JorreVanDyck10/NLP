@@ -59,6 +59,16 @@ Stel `GROQ_API_KEY` lokaal in als omgevingsvariabele. Bij deze benchmark ontvang
 
 De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide indexen opnieuw met `recipe_search.py build`. Voer `python -m scripts.compare_chunking --output reports/chunking-local.json` uit in de virtuele omgeving om de lokale zoekvergelijking te herhalen. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de [resultaten](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
 
+Voor de vergelijking met parent-child chunking bouw je ook de experimentele index. Gebruik dezelfde virtuele omgeving en voer de commando's uit vanuit de repository-root.
+
+```powershell
+python recipe_search.py build
+python recipe_search.py build --strategy parent-child
+python -m scripts.compare_chunking --parent-child --output reports/parent-child-local.json
+```
+
+Met `python recipe_search.py search "Hoe wordt het water verdeeld over de kerriepasta en de rest van de curry?" --strategy parent-child` zie je de gevonden kleine fragmenten en de bijbehorende volledige secties. Zie de [meetresultaten](RAPPORT.md#parent-child-chunking).
+
 ### Volgende stappen
 
 **Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).

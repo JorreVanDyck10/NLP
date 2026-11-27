@@ -158,6 +158,28 @@ Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd ger
 
 De evaluatiecode, de foutanalyse en het keuzeoverzicht zijn samengevoegd met de versie met 36 recepten en de lokale interface. Codex hielp bij het samenvoegen en testen. De zeven schermtests en de vier integratietests, inclusief herschalen van alle 36 recepten, slaagden lokaal. De lokale benchmark met het uitgebreide corpus haalde per methode 18/18 routes en 6/6 MCP-uitkomsten. De top 3 bevatte het volledige bewijs bij 9/11 zoekvragen met tokenchunks en 10/11 met receptsecties. Deze herhaling gebruikte de bestaande 18 agentvragen. De live Ragas-meting hierboven blijft de referentie op drie proefrecepten.
 
+## Parent-child chunking
+
+**27 november 2026.** De gebruiker koos parent-child als derde te testen methode. Codex hielp met implementatie, controlevragen, uitvoering en rapportering. PowerPoint 1, dia 33, gaf het principe. Per ingrediënt, bereidingsstap, vervanging of overzicht bewaren we een klein zoekfragment. Qdrant groepeert resultaten per receptsectie. Elk van de maximaal drie resultaten geeft de volledige sectie terug, met het best passende kleine fragment als uitleg van de match.
+
+### Meting en resultaat
+
+De [herhaalcommando's](VOORTGANG.md#uitgebreide-receptendataset) gebruiken alle 36 recepten, het bestaande embeddingmodel en Qdrant. De drie methodes kregen dezelfde 18 oorspronkelijke vragen en daarna [zes vragen over meerdere stappen](../data/parent_child_checks.json). Beide tests zochten zonder receptfilter. De score telt vragen waarvoor de fragmenten samen al het afgesproken bewijs bevatten. Contextlengte is het gemiddelde aantal tekens van de teruggegeven tekst. De zoektijd is de mediaan van drie herhalingen per vraag en daarna de mediaan over de vragen. Die tijd omvat query-embedding en zoeken in een warme index.
+
+| Methode | Indexfragmenten | Bestaande vragen met bewijs in top 3 | Meerstapsvragen met bewijs in top 3 | Contexttekens per vraag, bestaand / meerstaps | Zoektijd, bestaand / meerstaps |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Op tokenlengte | 106 | 13/18 | 3/6 | 772 / 743 | 20,51 / 29,37 ms |
+| Per receptonderdeel | 133 | 14/18 | 3/6 | 548 / 536 | 20,28 / 30,41 ms |
+| Parent-child | 423 | 16/18 | 5/6 | 816 / 801 | 40,39 / 44,80 ms |
+
+Bij *Hoe lang rust het deeg voor de koulourakia, en op welke temperatuur bak ik de koekjes?* vond parent-child eerst stap 2 met **60 minuten rusttijd**. Het resultaat gaf de volledige bereidingssectie terug, inclusief stap 3 met **150 °C**. Zo stond het volledige bewijs op plek 1. Met receptsecties kwam al het bewijs pas samen op plek 3 en met tokenchunks op plek 4.
+
+De vraag naar de twee waterhoeveelheden in de curry kreeg met parent-child pas op plek 5 het volledige bewijs als de zoeker alle recepten mocht doorzoeken. Met het bestaande receptfilter in de agent gaf de gevonden bereidingssectie wel **45 ml en 375 ml** terug. Ook bij parent-child bleef de bloemkoolvervanging buiten de top 10 van de zoektest zonder filter.
+
+**Keuze.** Receptsecties blijven de standaard. Parent-child is lokaal beschikbaar als experiment. De extra zoekdekking gaat samen met gemiddeld ongeveer 49% meer tekst. Deze test meet bronbewijs en lokale zoektijd. Een live vergelijking van de gegenereerde antwoorden, prompttokens en Ragas-scores staat nog open.
+
+**Gecontroleerd.** Alle drie de indexen zijn opgebouwd. Iedere oudersectie komt maximaal één keer in de resultaten voor. Het receptfilter beperkt de resultaten, een onbekende recept-ID geeft een lege lijst en de bestaande MCP-route schaalt 420 ml water nog steeds naar 735 ml. De repositorycontrole en `git diff --check` zijn uitgevoerd.
+
 ## Volgende fasen
 
 Noteer per fase de datum, het projectwerk onder de naam van de projectauteur, de gemaakte keuze en het testresultaat. Vermeld eventueel GenAI-gebruik apart en werk de MVP-checklist bij.

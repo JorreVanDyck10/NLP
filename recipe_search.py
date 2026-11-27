@@ -14,6 +14,8 @@ RECIPES_PATH = ROOT / "data" / "recipes.json"
 INDEX_PATH = ROOT / ".recipe-index"
 MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 STRATEGIES = ("tokens", "sections")
+PARENT_CHILD = "parent-child"
+SEARCH_STRATEGIES = (*STRATEGIES, PARENT_CHILD)
 
 
 def load_recipes(path=RECIPES_PATH):
@@ -56,7 +58,8 @@ def recipe_sections(recipe):
 class RecipeSearch:
     def __init__(self, recipes_path=RECIPES_PATH, index_path=INDEX_PATH):
         splitter = TokenTextSplitter(chunk_size=96, chunk_overlap=16, separator="\n")
-        self.chunks = {strategy: [] for strategy in STRATEGIES}
+        self.chunks = {strategy: [] for strategy in SEARCH_STRATEGIES}
+        self.parent_sections = {}
         for recipe in load_recipes(recipes_path):
             sections = {name: text for name, text in recipe_sections(recipe).items() if text}
             full_text = "\n\n".join(f"{name}\n{text}" for name, text in sections.items())
@@ -69,6 +72,20 @@ class RecipeSearch:
                             "source_url": recipe["source_url"],
                             "section": label,
                             "text": f"{recipe['title']} | {label}\n{part}",
+                        })
+            for label, block in sections.items():
+                parent_id = f"{recipe['id']}/{label}"
+                heading = f"{recipe['title']} | {label}\n"
+                self.parent_sections[parent_id] = heading + block
+                for line in block.splitlines():
+                    for part in splitter.split_text(line):
+                        self.chunks[PARENT_CHILD].append({
+                            "recipe_id": recipe["id"],
+                            "title": recipe["title"],
+                            "source_url": recipe["source_url"],
+                            "section": label,
+                            "parent_id": parent_id,
+                            "text": heading + part,
                         })
 
         self.client = QdrantClient(path=str(index_path))
@@ -122,9 +139,28 @@ class RecipeSearch:
             recipe_filter = models.Filter(must=[
                 models.FieldCondition(key="recipe_id", match=models.MatchValue(value=recipe_id))
             ])
+        name = self.collection_name(strategy)
+        vector = next(self.model().query_embed(question)).tolist()
+        if strategy == PARENT_CHILD:
+            groups = self.client.query_points_groups(
+                name, query=vector, group_by="parent_id", group_size=1,
+                limit=top_k, query_filter=recipe_filter, with_payload=True,
+            ).groups
+            hits = []
+            for group in groups:
+                child = group.hits[0]
+                payload = child.payload
+                hits.append({
+                    **payload,
+                    "score": child.score,
+                    "matched_child": payload["text"],
+                    "text": self.parent_sections[payload["parent_id"]],
+                })
+            return hits
+
         results = self.client.query_points(
-            self.collection_name(strategy),
-            query=next(self.model().query_embed(question)).tolist(),
+            name,
+            query=vector,
             limit=top_k,
             with_payload=True,
             query_filter=recipe_filter,
@@ -133,26 +169,29 @@ class RecipeSearch:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Bouw en vergelijk twee lokale receptenindexen.")
+    parser = argparse.ArgumentParser(description="Bouw en vergelijk lokale receptenindexen.")
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("build", help="Indexeer de recepten met beide chunkmethodes.")
+    build = commands.add_parser("build", help="Indexeer de recepten.")
+    build.add_argument("--strategy", choices=(*SEARCH_STRATEGIES, "both"), default="both")
     search = commands.add_parser("search", help="Toon de meest relevante tekstfragmenten.")
     search.add_argument("question")
-    search.add_argument("--strategy", choices=(*STRATEGIES, "both"), default="both")
+    search.add_argument("--strategy", choices=(*SEARCH_STRATEGIES, "both"), default="both")
     search.add_argument("--top-k", type=int, default=3)
     args = parser.parse_args()
 
     store = RecipeSearch()
     try:
+        strategies = STRATEGIES if args.strategy == "both" else (args.strategy,)
         if args.command == "build":
-            for strategy in STRATEGIES:
+            for strategy in strategies:
                 print(f"{strategy}: {store.build(strategy)} chunks in de lokale vectorstore")
             return
 
-        strategies = STRATEGIES if args.strategy == "both" else (args.strategy,)
         for strategy in strategies:
             print(f"\n{strategy}")
             for rank, hit in enumerate(store.search(args.question, strategy, args.top_k), 1):
+                if "matched_child" in hit:
+                    print(f"\nGevonden deel: {hit['matched_child']}")
                 print(f"\n{rank}. [{hit['score']:.3f}] {hit['text']}\nBron: {hit['source_url']}")
     except ValueError as exc:
         parser.error(str(exc))

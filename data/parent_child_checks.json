@@ -1,0 +1,8 @@
+[
+  {"id": "curry-kerriepasta-erwten", "question": "Hoe lang bak ik de kerriepasta en wanneer voeg ik de erwten toe aan de kikkererwten-groentecurry?", "recipe_id": "kikkererwten-groentecurry", "evidence": [["Bak de kerriepasta een halve minuut"], ["erwten op het laatst"]]},
+  {"id": "lasagne-passata-mozzarella", "question": "Wanneer gaan de passata en de mozzarella in de lasagne uit de slowcooker?", "recipe_id": "slowcooker-lasagne", "evidence": [["Voeg passata en water toe"], ["15 minuten vóór het serveren mozzarella"]]},
+  {"id": "pannenkoeken-oven-omdraaien", "question": "Hoe warm zet ik de oven en na hoeveel tijd draai ik de aardbeienpannenkoeken om in de pan?", "recipe_id": "aardbeienpannenkoeken", "evidence": [["120 °C"], ["Draai na circa 2 minuten om"]]},
+  {"id": "marmitako-paprika-tonijn", "question": "Hoelang bak ik de paprika mee en hoelang gaart de tonijn in de marmitako?", "recipe_id": "marmitako-met-tonijn-en-aardappel", "evidence": [["paprika 3–5 minuten mee"], ["gaar de vis nog ongeveer 5 minuten"]]},
+  {"id": "broccoliroomsoep-zeven-pureren", "question": "Hoe lang kook ik de broccoliroomsoep met vleesbouillon afgedekt, en waarmee pureer ik de broccoli na het afgieten?", "recipe_id": "broccoliroomsoep-met-vleesbouillon", "evidence": [["kook afgedekt 5 minuten"], ["Pureer broccoli met zure room"]]},
+  {"id": "koulourakia-rusten-bakken", "question": "Hoe lang rust het deeg voor de koulourakia, en op welke temperatuur bak ik de koekjes?", "recipe_id": "koulourakia-boterkoekjes", "evidence": [["60 minuten in de koelkast"], ["150 °C"]]}
+]
