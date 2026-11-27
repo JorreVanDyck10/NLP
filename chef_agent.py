@@ -28,9 +28,22 @@ SUBSTITUTION = re.compile(r"\b(?:vervang\w*|in plaats van|alternatie\w*)\b", re.
 RECIPE_TITLE = re.compile(r'''\brecept\s+["“'‘]([^"”'’]+)["”'’]''', re.I)
 TOTAL_INGREDIENT = re.compile(r"^\s*hoeveel\s+(.+?)\s+(?:gaat er|zit er|heb ik|is er)\s+in totaal\b", re.I)
 CONVERSION = re.compile(r"(?<![\w.,+-])(-?\d+(?:[.,]\d+)?)\s*([a-zµ]+)\s+(?:om\s+)?(?:naar|in|tot)\s+([a-zµ]+)\b", re.I)
-CONVERSION_QUESTION = re.compile(r"^\s*hoeveel\s+([a-zµ]+)\s+is\s+(-?\d+(?:[.,]\d+)?)\s*([a-zµ]+)\b", re.I)
+CONVERSION_QUESTION = re.compile(r"^\s*hoeveel\s+([a-zµ]+)\s+(?:is|zijn)\s+(-?\d+(?:[.,]\d+)?)\s*([a-zµ]+)\b", re.I)
 CONVERSION_INTENT = re.compile(r"\b(?:converteer|converteren|omreken\w*|reken\b.+\bom|zet\b.+\bom)\b", re.I)
 MASS_UNITS = {"g", "kg"}
+MASS_ALIASES = {"gram": "g", "grammen": "g", "kilo": "kg", "kilogram": "kg", "kilogrammen": "kg"}
+RECIPE_COLLECTION = re.compile(r"\b(?:recepten?|gerechten?)\b", re.I)
+DIET_FILTERS = (
+    (re.compile(r"\b(?:zuivelvrij(?:e)?|melkvrij(?:e)?|(?:geen|zonder)\s+(?:zuivel|melk))\b", re.I), "zuivelvrij"),
+    (re.compile(r"\bvegan(?:istisch(?:e)?)?\b", re.I), "veganistisch"),
+    (re.compile(r"\bvegetarisch(?:e)?\b", re.I), "vegetarisch"),
+)
+NEGATED_DIET = re.compile(r"\b(?:niet|geen)\s+(?:vegan|vegetarisch)\w*\b", re.I)
+DIET_TAGS = {
+    "zuivelvrij": ("veganistisch",),
+    "veganistisch": ("veganistisch",),
+    "vegetarisch": ("vegetarisch", "veganistisch"),
+}
 UNKNOWN_RECIPE = "Ik vind dit recept niet in de collectie."
 MCP_ERROR = "De MCP-tool kon de berekening niet uitvoeren."
 
@@ -44,6 +57,7 @@ class ChefState(TypedDict, total=False):
     quantity: str
     unit: str
     conversion: dict
+    diet: str
     unknown_recipe: bool
     hits: list[dict]
     tool_name: str
@@ -67,7 +81,9 @@ def conversion_input(question):
         amount, from_unit, to_unit = match.groups()
     else:
         return {}
-    return {"amount": amount.replace(",", "."), "from_unit": from_unit.lower(), "to_unit": to_unit.lower()}
+    from_unit, to_unit = from_unit.lower(), to_unit.lower()
+    return {"amount": amount.replace(",", "."), "from_unit": MASS_ALIASES.get(from_unit, from_unit),
+            "to_unit": MASS_ALIASES.get(to_unit, to_unit)}
 
 
 def format_amount(amount):
@@ -194,6 +210,9 @@ def build_agent(groq=None, strategy="sections"):
         converting = not scaling and (CONVERSION_INTENT.search(question) or (
             conversion and {conversion["from_unit"], conversion["to_unit"]} <= MASS_UNITS
         ))
+        diet = None
+        if not matches and not unknown_recipe and RECIPE_COLLECTION.search(question) and not NEGATED_DIET.search(question):
+            diet = next((label for pattern, label in DIET_FILTERS if pattern.search(question)), None)
         llm_calls = []
         if groq is not None:
             content, metrics = await groq_reply(
@@ -228,7 +247,7 @@ def build_agent(groq=None, strategy="sections"):
             route = "scale_quantity"
         elif recipe_id and scaling:
             route = "scale_recipe"
-        elif (matches or unknown_recipe) and not scaling:
+        elif (matches or unknown_recipe or diet) and not scaling:
             route = "search"
         trace = [f"router ({'Groq' if groq else 'lokaal'}): {proposed}"]
         if route != proposed:
@@ -246,10 +265,13 @@ def build_agent(groq=None, strategy="sections"):
             update["unknown_recipe"] = True
         if conversion:
             update["conversion"] = conversion
+        if diet and route == "search":
+            update["diet"] = diet
         return update
 
     def retrieve(state):
         recipe_id = state.get("recipe_id")
+        diet = state.get("diet")
         if state.get("unknown_recipe"):
             return {"answer": UNKNOWN_RECIPE, "trace": ["recept ontbreekt"]}
         if state["route"] == "scale_recipe" and not recipe_id:
@@ -262,10 +284,12 @@ def build_agent(groq=None, strategy="sections"):
             hits = store.search(
                 query, strategy=strategy, recipe_id=recipe_id,
                 prefer_substitutions=state["route"] == "search" and bool(SUBSTITUTION.search(query)),
+                dietary_tags=DIET_TAGS.get(diet, ()),
             )
         finally:
             store.close()
-        return {"hits": hits, "trace": [f"RAG: {len(hits)} fragmenten"]}
+        trace = [f"Dieetfilter: {diet}"] if diet else []
+        return {"hits": hits, "trace": [*trace, f"RAG: {len(hits)} fragmenten"]}
 
     async def scale(state):
         base = state.get("base")
@@ -320,11 +344,18 @@ def build_agent(groq=None, strategy="sections"):
 
         hits = state.get("hits", [])
         if not hits:
-            return {"answer": "Ik heb geen receptfragmenten gevonden."}
+            message = ("Ik vind geen recepten met dit dieetlabel in de collectie." if state.get("diet")
+                       else "Ik heb geen receptfragmenten gevonden.")
+            return {"answer": message}
         evidence = "\n\n".join(hit["text"] for hit in hits)
         llm_calls = []
-        total = sourced_total(state["question"], recipes.get(state.get("recipe_id")), hits)
-        if total is not None:
+        if diet := state.get("diet"):
+            titles = "\n".join(f"- {hit['title']}" for hit in hits)
+            intro = ("Voor een vraag zonder zuivel toon ik recepten met het label veganistisch. "
+                     "Controleer ook de ingrediënten van verpakte producten." if diet == "zuivelvrij"
+                     else f"Dit zijn suggesties op basis van het dieetlabel {diet}.")
+            answer = f"{intro}\n\n{titles}"
+        elif (total := sourced_total(state["question"], recipes.get(state.get("recipe_id")), hits)) is not None:
             answer = total
         elif groq is not None:
             answer, metrics = await groq_reply(

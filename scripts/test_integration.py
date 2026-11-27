@@ -1,10 +1,11 @@
 """Echte lokale keten 1 + 2 + 4; vereist requirements-ui.txt en embeddingmodel."""
 
-from decimal import Decimal
+import asyncio
 import json
-from pathlib import Path
 import sys
 import unittest
+from decimal import Decimal
+from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
@@ -12,6 +13,7 @@ from streamlit.testing.v1 import AppTest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from chef_agent import build_agent, invoke_agent
 from recipe_search import RecipeSearch, STRATEGIES, load_recipes
 
 
@@ -113,6 +115,8 @@ class IntegrationTests(unittest.TestCase):
         for question, to_unit, expected in (
             ("Reken 250 g om naar kg.", "kg", Decimal("0.25")),
             ("Hoeveel g is 0,25 kg?", "g", Decimal(250)),
+            ("Hoeveel kilogram is 250 gram?", "kg", Decimal("0.25")),
+            ("Hoeveel gram zijn 1,5 kilogram?", "g", Decimal(1500)),
         ):
             with self.subTest(question=question):
                 state = self.ask(app, question)
@@ -129,6 +133,30 @@ class IntegrationTests(unittest.TestCase):
                 self.assertFalse(state.get("tool_input"))
                 self.assertFalse(state.get("tool_result"))
                 self.assertIn("Geef een niet-negatieve hoeveelheid", state["answer"])
+
+    def test_dietary_questions_use_three_distinct_recipes_with_matching_tags(self):
+        cases = (
+            ("Welke recepten bevatten geen zuivel?", "zuivelvrij", {"veganistisch"}),
+            ("Welke gerechten zijn veganistisch?", "veganistisch", {"veganistisch"}),
+            ("Welke vegetarische recepten hebben jullie?", "vegetarisch", {"vegetarisch", "veganistisch"}),
+        )
+        for strategy in STRATEGIES:
+            agent = build_agent(strategy=strategy)
+            for question, diet, tags in cases:
+                with self.subTest(strategy=strategy, diet=diet):
+                    state = asyncio.run(invoke_agent(agent, question))
+                    self.assertEqual(state["route"], "search")
+                    self.assertIn(f"Dieetfilter: {diet}", state["trace"])
+                    self.assertEqual(len({hit["recipe_id"] for hit in state["hits"]}), 3)
+                    for hit in state["hits"]:
+                        recipe = self.recipes[hit["recipe_id"]]
+                        self.assertTrue(tags.intersection(recipe["dietary_tags"]))
+                        self.assertIn(hit["title"], state["answer"])
+                        self.assertIn(recipe["source_url"], state["answer"])
+            with self.subTest(strategy=strategy, diet="recipe-specific"):
+                state = asyncio.run(invoke_agent(agent, "Is het recept voor yoghurtcake veganistisch?"))
+                self.assertNotIn("diet", state)
+                self.assertEqual({hit["recipe_id"] for hit in state["hits"]}, {"yoghurtcake"})
 
     def test_quoted_unknown_recipe_rejects_unrelated_sources(self):
         app = self.app()

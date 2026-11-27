@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | [recipes.json](recipes.json) | `recipe_search.py` en de agent | 36 recepten met bronlinks, tijden, porties, ingrediënten, bereidingsstappen en dieettags |
 | [evaluation.json](evaluation.json) | `evaluate_chef.py` | 20 agentvragen met verwachte routes en referentieantwoorden |
-| [retrieval_checks.json](retrieval_checks.json) | `python -m scripts.compare_chunking` | Zeven aanvullende zoekvragen over de uitgebreide receptenset |
+| [retrieval_checks.json](retrieval_checks.json) | `python -m scripts.compare_chunking` en de integratiecheck | Elf aanvullende zoekvragen, waaronder vier vragen over recepten buiten de vaste agentbenchmark |
 | [demo_recipes.json](demo_recipes.json) | `flavor_chef.py` | Vijf eigen voorbeeldrecepten voor de Ollama-demo |
 
 De agent en de Ollama-demo gebruiken verschillende datastructuren. Voeg recepten toe aan het juiste bestand, behoud unieke ID's en vermeld de herkomst waar van toepassing. Controleer hoeveelheden en referentieantwoorden handmatig en bouw de bijbehorende zoekindex opnieuw na wijzigingen. De index zelf blijft buiten Git.

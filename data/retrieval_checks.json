@@ -5,5 +5,9 @@
   {"id": "tzatziki-knoflook", "question": "Hoeveel knoflook gaat er in de tzatziki met tijm?", "recipe_id": "tzatziki-met-tijm", "evidence": [["4 teen knoflook"]]},
   {"id": "broccoliroomsoep-bouillon", "question": "Wat voor bouillon gebruik je voor de broccoliroomsoep en hoeveel?", "recipe_id": "broccoliroomsoep-met-vleesbouillon", "evidence": [["750 ml vleesbouillon"]]},
   {"id": "rodekoolsalade-kooktijd", "question": "Hoe lang moet ik de rodekoolsalade met appel koken?", "recipe_id": "rodekoolsalade-met-appel", "evidence": [["Kooktijd: 0 minuten"]]},
-  {"id": "quiche-oven", "question": "Welke twee oventemperaturen gebruik ik voor quiche Lorraine en hoelang per stand?", "recipe_id": "quiche-lorraine", "evidence": [["20 minuten op 180 °C"], ["10 minuten op 150 °C"]]}
+  {"id": "quiche-oven", "question": "Welke twee oventemperaturen gebruik ik voor quiche Lorraine en hoelang per stand?", "recipe_id": "quiche-lorraine", "evidence": [["20 minuten op 180 °C"], ["10 minuten op 150 °C"]]},
+  {"id": "wentelteefjes-melk", "question": "Hoeveel melk gaat er bij het ei voor de hartige wentelteefjes?", "recipe_id": "hartige-wentelteefjes", "evidence": [["50 ml melk"]]},
+  {"id": "forel-marinade", "question": "Hoelang moet ik de forel in folie eerst marineren in de koelkast?", "recipe_id": "forel-in-folie", "evidence": [["60 minuten in de marinade"]]},
+  {"id": "rasam-mosterdzaad", "question": "Hoeveel mosterdzaad bevat rasam met tomaat en mosterdzaad?", "recipe_id": "rasam-met-tomaat-en-mosterdzaad", "evidence": [["1 tl mosterdzaad"]]},
+  {"id": "patatas-oven", "question": "Op welke temperatuur rooster ik de patatas bravas uit de oven en hoelang?", "recipe_id": "patatas-bravas-uit-de-oven", "evidence": [["90 minuten op 175 °C"]]}
 ]

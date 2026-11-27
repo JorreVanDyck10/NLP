@@ -32,13 +32,13 @@ De **voorbeeldmodus** heeft geen agent, modellen, index of API-sleutel nodig. Hi
 - **Metingen:** verwerkingstijd, input- en outputtokens, TTFT en de afzonderlijke modelaanroepen. TTFT betekent de tijd tot het eerste zichtbare tekstfragment bij de antwoordaanroep. Die begint ná routering en zoeken, en is dus niet de tijd vanaf het indrukken van de knop. De verwerkingstijd omvat het agenttraject en de updates aan het scherm. Tokenmetingen verschijnen zodra de betreffende modelaanroep klaar is. Het modelantwoord wordt na de antwoordstap getoond; losse teksttokens worden nog niet op het scherm gestreamd.
 - **Fouten:** verkeerde sleutel, gebruikslimiet, ontbrekende index en andere uitval krijgen hersteladvies. Al voltooide bronnen, trace en modelmetingen blijven zichtbaar. Een mislukte modelaanroep levert geen verzonnen tokens op. **Opnieuw proberen** herhaalt de vraag met de huidige modus en sleutel; het eerdere foutbericht blijft in het gesprek staan.
 
-In **Lokaal** kiest bestaande Python-logica de route en geeft een zoekvraag de bronfragmenten terug. Er is geen genererend taalmodel: tokens en TTFT staan op **Niet gemeten**, niet op nul. Het embeddingmodel wordt wel gebruikt voor zoeken. In **Groq** worden de vraag en geselecteerde fragmenten naar Groq gestuurd. De interface gebruikt dezelfde modelinstellingen als de agent. Ontbrekende of gedeeltelijke modelmetingen worden zichtbaar gemeld. Bij een schaalvraag kan Groq alleen de route kiezen en geeft de rekentool het eindantwoord: dan zijn er routetokens, maar is een TTFT voor een modelantwoord niet van toepassing.
+In **Lokaal** kiest Python de route. Gewone zoekvragen tonen de bronfragmenten en expliciete dieetvragen geven suggesties op basis van tags. De lokale modus gebruikt een embeddingmodel voor zoeken. Modeltokens en TTFT staan op **Niet gemeten**. In **Groq** ontvangt het taalmodel de vraag en bij het formuleren van zoekantwoorden ook de geselecteerde fragmenten. De interface gebruikt dezelfde modelinstellingen als de agent. Ontbrekende of gedeeltelijke modelmetingen worden zichtbaar gemeld. Bij schaalvragen en dieetselecties levert de agent het antwoord na de routekeuze zonder een modelantwoordaanroep. De routetokens verschijnen dan met TTFT op **Niet gemeten**.
 
 ## Demo van begin tot eind
 
 1. Kies **Groq**, controleer dat een sleutel beschikbaar is en klik **Zoekvraag**: “Voor hoeveel porties is de kikkererwtencurry bedoeld?” Toon de route `search`, het overzichtsfragment met **Porties: 4**, het modelantwoord **4 porties** en de modelmetingen. Leg uit dat de bron het antwoord moet ondersteunen.
 2. Klik **Schaalvraag**: “Schaal de curry van 4 naar 7 porties.” Controleer `scale_recipe`, de curryfragmenten en `scale_ingredients`. Open MCP-aanroep: de waterregel moet van **420 ml** naar **735 ml** gaan. Berekening: `420 × 7 / 4 = 735`. Controleer ook bloemkool: `500 × 7 / 4 = 875 ml`. TTFT antwoord staat hier terecht op Niet gemeten: de tool geeft het antwoord, zonder gestreamde modelantwoordaanroep.
-3. Typ “Reken 250 g om naar kg.” Controleer `convert_units` en het resultaat **0,25 kg**. Open MCP-aanroep om de invoer en uitvoer te tonen.
+3. Typ “Hoeveel kilogram is 250 gram?” Controleer `convert_units` en het resultaat **0,25 kg**. Open MCP-aanroep om de genormaliseerde invoer `g` en `kg` en de uitvoer te tonen.
 4. Klik **Broncontrole** voor “Hoeveel water gaat er in totaal in de curry?” De referentie is **420 ml**. Daarvan gaat 45 ml in de pasta en blijft 375 ml over voor later. Gebruik de oude **795 ml** uit het [meetverslag](RAPPORT.md#evaluatie-met-36-recepten) voor de diagnose. De agent gebruikt nu de opgehaalde ingrediëntregel rechtstreeks bij deze expliciete totaalvraag. Open de fragmenten en wijs aan welke regel het totaal bevat.
 5. Gebruik **Lokaal** als terugvaloptie. Zoekvragen tonen opgehaalde bronfragmenten en de verwerkingstijd. Porties schalen en g ↔ kg omrekenen gebruiken dezelfde MCP-server.
 6. Toon de foutafhandeling met een ontbrekende of ongeldige sleutel en gebruik daarna Opnieuw proberen met een werkende sleutel. Test dit alleen als je de gewenste fout bewust wilt demonstreren; een gesimuleerde fout bewijst geen actuele storing bij Groq.
@@ -47,6 +47,8 @@ In **Lokaal** kiest bestaande Python-logica de route en geeft een zoekvraag de b
 Bij een verkeerd antwoord kijk je eerst naar Bronfragmenten. Ontbreekt de juiste informatie daar, dan ligt het probleem vóór het formuleren van het antwoord. De interface repareert die zoekfout niet; geef het voorbeeld door aan persoon 1 of 3. Problemen in routering, Groq of de rekentool horen bij persoon 2.
 
 ## Zelf kunnen uitleggen
+
+Oefen met het [draaiboek en de vragen voor de verdediging](VERDEDIGING.md).
 
 “Mijn interface gebruikt dezelfde agent als de terminal en krijgt na iedere afgeronde stap de tussenstand. Daardoor kan ik zien of een fout bij zoeken, rekenen of antwoorden ontstaat. De rekentool vermenigvuldigt hoeveelheden met het nieuwe aantal porties gedeeld door het oude aantal. De tokens komen uit de modelrespons. TTFT meet alleen hoe lang het antwoordmodel op zijn eerste tekstfragment liet wachten. Zonder zo'n modelaanroep toon ik ‘Niet gemeten’. Met het watervoorbeeld kan ik aantonen dat juiste bronnen toch een fout modelantwoord kunnen opleveren.”
 
@@ -69,14 +71,14 @@ Controleer de echte lokale keten van persoon 1, 2 en 4 met:
 .\.venv\Scripts\python.exe scripts/test_integration.py
 ```
 
-Deze integratiecheck bouwt beide indexen indien nodig. Zes tests behandelen 58 scenario's, waaronder elf zoekvragen, het herschalen van alle 36 recepten, conversie in beide richtingen, ongeldige invoer en een onbekend recept. Ze gebruiken de lokale zoekfunctie en MCP-server. Bij schalen controleren ze alle hoeveelheden, eenheden, notities en ingrediënten naar smaak.
+Deze integratiecheck bouwt beide indexen indien nodig. Zeven tests behandelen onder andere vijftien zoekvragen, dieetvragen bij beide chunkmethodes, het herschalen van alle 36 recepten, uitgeschreven eenheidsconversies in beide richtingen, ongeldige invoer en een onbekend recept. Ze gebruiken de lokale zoekfunctie en MCP-server. Bij schalen controleren ze alle hoeveelheden, eenheden, notities en ingrediënten naar smaak.
 
-Een echte live controle van de drie demovragen kun je herhalen met:
+Een echte live controle van de vier demovragen kun je herhalen met:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/test_ui_live.py
 ```
 
-De sleutel wordt uit `GROQ_API_KEY` gelezen of verborgen gevraagd. De controle verwacht **4 porties**, **735 ml water** en **0,25 kg**. Ze schrijft de metingen zonder sleutel naar het genegeerde `reports/ui-live.json`.
+De sleutel wordt uit `GROQ_API_KEY` gelezen of verborgen gevraagd. De controle verwacht **4 porties**, **735 ml water**, **0,25 kg** en drie verschillende veganistische receptsuggesties voor de vraag naar recepten zonder zuivel. Ze schrijft de metingen zonder sleutel naar het genegeerde `reports/ui-live.json`.
 
-Zie [het projectrapport](RAPPORT.md) voor de uitgevoerde controles. De opdracht-pdf bepaalt de scope. De eigen code-review, demonstratie en controle van het opleidingsbeleid voor GenAI staan nog open.
+Zie [het projectrapport](RAPPORT.md) voor de uitgevoerde controles en de GenAI-verantwoording volgens het gevonden cursusbeleid. De persoonlijke code-review en demo-oefening blijven onderdeel van de voorbereiding.
