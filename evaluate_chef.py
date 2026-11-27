@@ -70,6 +70,10 @@ def failure_stage(case, row):
         return "routing"
     if "evidence" in case and row["evidence_rank"] is None:
         return "retrieval"
+    if case.get("expected_missing_information") and not any(
+        hit["recipe_id"] == case["recipe_id"] for hit in row["retrieved"]
+    ):
+        return "retrieval"
     if case["route"] == "scale_recipe":
         hits = row["retrieved"]
         if not hits or hits[0]["recipe_id"] != case["recipe_id"]:
@@ -131,6 +135,8 @@ async def evaluate(cases, strategy, groq=None, metrics=None):
         }
         if "recipe_id" in case:
             row["expected_recipe_id"] = case["recipe_id"]
+        if case.get("expected_missing_information"):
+            row["expected_missing_information"] = True
         if "evidence" in case:
             row["expected_evidence"] = case["evidence"]
             row["evidence_rank"] = evidence_rank(case, hits)

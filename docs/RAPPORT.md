@@ -6,7 +6,7 @@
 
 **Doel:** een volledige MVP die Raoul zelf kan uitleggen. De rubric voorziet maximaal 85% voor een werkende MVP met goede analyse.
 
-**Huidige fase.** De agent met MCP-tool, 36 recepten, de lokale interface en de evaluatiecode zijn geïntegreerd. De lokale zoekvergelijking gebruikt 36 recepten. De live Ragas-cijfers komen uit de eerdere proef met drie recepten. De Ollama-demo blijft een apart onderdeel. Zie de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
+**Huidige fase.** De agent met MCP-tool, 36 recepten, de lokale interface en de evaluatiecode zijn geïntegreerd. De actuele lokale en live agentevaluatie gebruikt 20 vragen op 36 recepten. De Ollama-demo is een apart onderdeel. Zie de [projectoverdracht](PROJECTKEUZES.md), de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
 
 ## 19 november 2026 | Eerste RAG-demo
 
@@ -143,7 +143,7 @@ De route, MCP-controle en bewijsrang kwamen per vraag overeen met de [bewaarde r
 
 Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd gerouteerde zoekvragen leverden geen receptcontext op. Per receptsectie lag de gemiddelde Context Precision iets hoger en lag de gemiddelde Context Recall lager. De vergelijking geldt voor deze proef met drie recepten.
 
-**Telemetrie.** De ruwe live-uitvoer bevat inputtokens, outputtokens en duur voor alle 58 Groq-aanroepen van de agent. De 22 gestreamde antwoordaanroepen bevatten ook TTFT. De 36 routeaanroepen geven in één keer JSON terug. De weergave van live metingen in de Streamlit-interface blijft te controleren.
+**Telemetrie.** De ruwe live-uitvoer bevat inputtokens, outputtokens en duur voor alle 58 Groq-aanroepen van de agent. De 22 gestreamde antwoordaanroepen bevatten ook TTFT. De 36 routeaanroepen geven in één keer JSON terug. De aparte weergavecontrole staat bij de [oplevering van de Streamlit-interface](#27-november-2026--persoon-4-technisch-opgeleverd).
 
 **Inhoudelijke controle.** Per methode zijn zeven van de elf zoekvragen volledig juist beantwoord. Bij één vraag gaf de agent terecht aan dat de opgehaalde fragmenten onvoldoende informatie bevatten. De overige drie antwoorden hadden een routerings- of antwoordfout.
 
@@ -178,6 +178,56 @@ De zoekvraag gebruikte twee modelaanroepen en de schaalvraag één. Tokens zijn 
 **Foutvoorbeeld voor de verdediging.** Bij de aanvullende watervraag antwoordde Groq opnieuw **795 ml** door 420 en 375 ml op te tellen. De juiste 420 ml zat wel in de opgehaalde bronnen. Dit is een bestaande fout in de formulering/berekening door het model, niet een ontbrekend fragment. De knop Broncontrole bewaart het echte modelantwoord en toont de bronreferentie om de fout te kunnen uitleggen. De gewone zoekdemo gebruikt daarom de portievraag. De ruwe controle van de watervraag staat lokaal in `reports/ui-water-control.json` met de inhoudelijke afwijking gemarkeerd. Deze modelcorrectie blijft werk voor persoon 2.
 
 **Regressie en beperkingen.** Twaalf schermtests en vijf aanvullende protocoltests met gesimuleerde Groq-HTTP-responsen slagen. De protocoltests controleren ook 401/429/503, time-out, ontbrekende usage en het bewaren van bronnen wanneer een antwoordaanroep mislukt. Vier echte lokale integratietests met 51 scenario's, inclusief alle 36 recepten herschalen via MCP, slagen opnieuw. Dependency-, repository- en whitespacecontroles slagen. Een tweede volledige Ragas-meting is voor dit werkpakket niet uitgevoerd. Eerdere berichten worden nog niet aan het model doorgegeven; elke vraag is zelfstandig. Het modelantwoord verschijnt na de antwoordstap, niet token voor token. Alleen PowerPoint 1 is gebruikt; de opdracht-pdf en het GenAI-beleid zijn nog niet beschikbaar.
+
+## 27 november 2026 | Evaluatie met 36 recepten
+
+**Raoul.** De agenttestset bevat nu 20 vragen, binnen de 15–20 uit de opdracht. Er zijn twaalf zoekvragen met beantwoordbare referenties, één vraag over ontbrekende receptinformatie, zes schaalvragen en één begroeting. De schaalvraag waarbij het aantal porties gelijk bleef, maakte plaats voor het herschalen van Quiche Lorraine van zes naar vier porties. De extra zoekvragen gaan over de 75 ml olijfolie voor marmitako en de ontbrekende bakvormmaat bij yoghurtcake. De nieuwe referenties zijn tegen de vastgelegde bron gecontroleerd. [Evaluatievragen](../data/evaluation.json) · [Corpusversie](https://github.com/Rippy1911/open-recipe-corpus/tree/86102603bac07d79b94bc35cba5b50346798cc09)
+
+**Methode.** Beide chunkmethodes gebruikten dezelfde 36 recepten, 20 vragen, top 3 en het meertalige MiniLM-embeddingmodel. `recipe_search.py build` controleerde of de actuele indexen klaarstonden. De receptenhash begint met `cfe4adba054de` en de vragenhash met `70c673ccf1d1`. De volledige hashes staan in de lokale JSON-uitvoer. De toets op ontbrekende informatie controleert of de agent het juiste recept ophaalt. De inhoud van het gegenereerde antwoord wordt handmatig gecontroleerd. De drie Ragas-metrieken zijn bestemd voor de twaalf zoekvragen met positief bronbewijs. [Meetinstructies](VOORTGANG.md#live-benchmark-met-groq-en-ragas)
+
+### Lokale agentbenchmark met 20 vragen
+
+Uitgevoerd met `evaluate_chef.py --output reports/evaluation-expanded.json` in Python 3.13.15.
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Fragmenten in de index | 106 | 133 |
+| Verwachte route | 20/20 | 20/20 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 6/12 | 9/12 |
+| Alle benodigde broninformatie in de top 3 | 10/12 | 11/12 |
+
+De route, bewijsrang en toolcontrole voor de zeventien gedeelde vragen kwamen overeen met de vorige lokale run op 36 recepten. De 75 ml olijfolie stond bij beide methodes in het eerste fragment. Voor Quiche Lorraine leverde MCP bij beide methodes 200 g hartig kruimeldeeg, vier plakken gerookt spek en twee eieren. Bij de vraag naar een bakvormmaat haalden beide methodes alleen fragmenten uit het juiste yoghurtcakerecept op. De lokale agent geeft deze fragmenten terug.
+
+De zoekcontrole met hetzelfde receptfilter over alle fragmenten van het recept plaatste de bloemkoolvervanging op plek 6 bij tokenchunks en plek 7 bij receptsecties. De ricotta stond op plek 5 met tokens en plek 3 met secties. De broninformatie staat in beide indexen. Bij de missers valt het benodigde fragment buiten de top 3 die de agent ontvangt.
+
+### Live evaluatie met Groq en Ragas op 36 recepten
+
+De eerste poging met `openai/gpt-oss-120b` als beoordelaar stopte door de dagelijkse tokenlimiet. Voor de herhaling staat `RAGAS_JUDGE_MODEL` op `qwen/qwen3.8-27b`. Beide chunkmethodes gebruiken diezelfde beoordelaar. De agent gebruikt opnieuw `openai/gpt-oss-20b`. De eerdere live proef verschilt zowel in testset als in beoordelaar. Vergelijk de chunkmethodes binnen dezelfde meetrun. [Herhalen](VOORTGANG.md#live-benchmark-met-groq-en-ragas) · [Groq-limieten](https://console.groq.com/docs/rate-limits)
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 18/20 | 18/20 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 6/12 | 8/12 |
+| Alle benodigde broninformatie in de top 3 | 9/12 | 9/12 |
+| Context Precision | 0,6833 (10/12) | 0,8000 (10/12) |
+| Context Recall | 0,9000 (10/12) | 0,8000 (10/12) |
+| Faithfulness | 1,0000 (10/12) | 0,9000 (10/12) |
+
+Ragas scoorde dezelfde tien zoekvragen per methode. Twee zoekvragen kregen door een routeringsfout geen broncontext. Met receptsecties stond het volledige bewijs vaker in het eerste fragment. De methodes haalden evenveel volledig bewijs in de top 3. Context Precision was hoger bij receptsecties en Context Recall hoger bij tokenchunks.
+
+**Inhoudelijke controle.** Met beide methodes was het antwoord op acht van de twaalf beantwoordbare zoekvragen volledig juist. Bij de ontbrekende bakvormmaat meldde de agent bij beide methodes dat de opgehaalde yoghurtcakefragmenten die informatie missen. De nieuwe marmitakovraag gaf 75 ml olijfolie en de schaalvraag over Quiche Lorraine gaf alle gecontroleerde hoeveelheden correct terug.
+
+- **Routering.** `lasagne-ricotta` ging naar `scale_quantity`. `pancakes-temperature` ging naar `chat` en kreeg 90 °C als antwoord, terwijl het recept 120 °C vermeldt. Beide fouten kwamen voor bij beide chunkmethodes.
+- **Zoeken.** Bij `curry-substitution` stond het bewijs buiten de top 3. De agent meldde terecht dat de opgehaalde fragmenten onvoldoende informatie gaven. Ragas gaf die melding bij receptsecties Faithfulness 0,0.
+- **Antwoord.** Bij `curry-water` haalde de agent 420 ml uit het recept en telde de 375 ml uit een bereidingsstap opnieuw mee. Beide antwoorden van 795 ml kregen van Ragas Faithfulness 1,0. De vergelijking met de referentie bracht de rekenfout aan het licht.
+
+De aantallen tonen wat op deze 20 vragen is gemeten. De zes gecontroleerde MCP-uitkomsten waren bij beide methodes correct. De live JSON-uitvoer staat lokaal in `reports/ragas-expanded.json`.
+
+Na de integratie met persoon 4 is de volledige lokale benchmark herhaald. Alle routerings-, schaal- en zoekuitkomsten kwamen overeen. De drie nieuwe vragen zijn voor beide chunkmethodes opnieuw live via Groq gecontroleerd, inclusief de exacte MCP-invoer bij het herschalen. De twaalf schermtests slaagden ook.
+
+**GenAI-vermelding.** Codex hielp met het uitbreiden en controleren van de testset, het uitvoeren van de metingen en de foutanalyse.
 
 ## Volgende fasen
 
