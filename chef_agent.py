@@ -35,6 +35,7 @@ class ChefState(TypedDict, total=False):
     quantity: str
     unit: str
     hits: list[dict]
+    tool_input: dict
     tool_result: dict
     answer: str
     trace: Annotated[list[str], operator.add]
@@ -201,7 +202,8 @@ def build_agent(groq=None, strategy="sections"):
             ingredients = [{"name": "ingrediënt", "quantity": quantity, "unit": state["unit"]}]
 
         result = await call_scale_tool(base, target, ingredients)
-        return {"tool_result": result, "trace": ["MCP: scale_ingredients"]}
+        return {"tool_input": {"from_servings": base, "to_servings": target, "ingredients": ingredients},
+                "tool_result": result, "trace": ["MCP: scale_ingredients"]}
 
     async def respond(state):
         if "answer" in state:
@@ -255,9 +257,16 @@ def build_agent(groq=None, strategy="sections"):
     return graph.compile()
 
 
-async def invoke_agent(agent, question):
+async def invoke_agent(agent, question, on_update=None):
     start = perf_counter()
-    state = await agent.ainvoke({"question": question, "trace": [], "llm_calls": []})
+    initial = {"question": question, "trace": [], "llm_calls": []}
+    if on_update is None:
+        state = await agent.ainvoke(initial)
+    else:
+        # Dezelfde graph en reducers als ainvoke; values geeft de volledige state
+        # na elke stap, zonder lijsten met trace/modelmetingen zelf samen te voegen.
+        async for state in agent.astream(initial, stream_mode="values"):
+            on_update({**state, "latency_ms": round((perf_counter() - start) * 1000, 2)})
     state["latency_ms"] = round((perf_counter() - start) * 1000, 2)
     return state
 
@@ -271,11 +280,11 @@ def groq_client(api_key, *, transport=None):
     )
 
 
-async def run(question, api_key):
+async def run(question, api_key, on_update=None):
     if api_key is None:
-        return await invoke_agent(build_agent(), question)
+        return await invoke_agent(build_agent(), question, on_update)
     async with groq_client(api_key) as client:
-        return await invoke_agent(build_agent(client), question)
+        return await invoke_agent(build_agent(client), question, on_update)
 
 
 def main():

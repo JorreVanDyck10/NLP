@@ -158,6 +158,27 @@ Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd ger
 
 De evaluatiecode, de foutanalyse en het keuzeoverzicht zijn samengevoegd met de versie met 36 recepten en de lokale interface. Codex hielp bij het samenvoegen en testen. De zeven schermtests en de vier integratietests, inclusief herschalen van alle 36 recepten, slaagden lokaal. De lokale benchmark met het uitgebreide corpus haalde per methode 18/18 routes en 6/6 MCP-uitkomsten. De top 3 bevatte het volledige bewijs bij 9/11 zoekvragen met tokenchunks en 10/11 met receptsecties. Deze herhaling gebruikte de bestaande 18 agentvragen. De live Ragas-meting hierboven blijft de referentie op drie proefrecepten.
 
+## 27 november 2026 | Persoon 4 technisch opgeleverd
+
+**Vraag en bijdrage.** De gebruiker vroeg alle open technische punten van de lokale interface en demo af te werken en leverde een sleutel voor de echte Groq-controle. Codex werkte de interface, gerichte testcode, handleiding en overdracht bij. De sleutel is alleen tijdens de tests in het geheugen gebruikt en is niet in broncode, berichten, Git of meetuitvoer opgeslagen. De eigen code-review, demo-oefening en GenAI-verantwoording van de gebruiker blijven persoonlijk af te ronden.
+
+**Uitvoering en keuzes.** De interface krijgt nu na iedere afgeronde LangGraph-stap de volledige state. Daardoor verschijnen route, bronfragmenten en beschikbare metingen tijdens de aanvraag. De callback is optioneel; de CLI en benchmark behouden hun uitvoerpad. De agent bewaart de exacte MCP-invoer, zodat een tabel de hoeveelheden vóór en na schalen kan vergelijken. Ruwe payloads blijven uitklapbaar. Foutmeldingen behouden afgeronde bronnen en metingen en bieden opnieuw proberen. Een gemaskeerd sleutelveld werkt per browsersessie en kan gewist worden. Tokens, verwerkingstijd en TTFT staan afzonderlijk zichtbaar. Bij alleen routering plus rekentool is er geen gestreamd modelantwoord en dus geen antwoord-TTFT.
+
+**Gerichte live controle op 36 recepten.** `scripts/test_ui_live.py` voerde twee echte demovragen uit via Streamlits AppTest met `openai/gpt-oss-20b`. De meetuitvoer staat lokaal in het genegeerde `reports/ui-live.json` en bevat geen sleutel. Dit is een interfacecontrole, geen vervanging van de volledige Ragas-benchmark.
+
+| Vraag | Antwoord/route | Inputtokens | Outputtokens | Verwerkingstijd | TTFT antwoord |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Voor hoeveel porties is de kikkererwtencurry bedoeld? | 4 porties; `search`, drie bronfragmenten en modelantwoord | 524 | 68 | 3003 ms | 348 ms |
+| Schaal de curry van 4 naar 7 porties. | `scale_recipe`, RAG en echte MCP; 420 ml water wordt 735 ml | 183 | 32 | 4493 ms | Niet van toepassing: alleen modelroutering, daarna toolantwoord |
+
+De zoekvraag gebruikte twee modelaanroepen en de schaalvraag één. Tokens zijn opgeteld over afgeronde modelaanroepen. TTFT begint bij de antwoordaanroep, na zoeken. Verwerkingstijd omvat het agenttraject en de updates aan het scherm. Dit zijn afzonderlijke metingen op deze pc; timings kunnen per run verschillen.
+
+**Visueel gecontroleerd in Chrome.** De echte zoek- en schaalvraag zijn bekeken met routes, bronfragmenten en meetvelden. De nieuwe tabel toont onder meer 420 ml en 735 ml naast elkaar; de voorbeeldmodus is zichtbaar als gesimuleerd gemarkeerd. Ook een bewust ongeldige testsleutel is via de browser gecontroleerd: de foutmelding geeft hersteladvies en toont geen verzonnen tokens. Na wissen van de testsleutel slaagde Opnieuw proberen met de werkende omgevingssleutel, terwijl het eerdere foutbericht in de geschiedenis bleef staan. Het eigen controletabblad en de tijdelijke previewserver zijn na de controle gesloten.
+
+**Foutvoorbeeld voor de verdediging.** Bij de aanvullende watervraag antwoordde Groq opnieuw **795 ml** door 420 en 375 ml op te tellen. De juiste 420 ml zat wel in de opgehaalde bronnen. Dit is een bestaande fout in de formulering/berekening door het model, niet een ontbrekend fragment. De knop Broncontrole bewaart het echte modelantwoord en toont de bronreferentie om de fout te kunnen uitleggen. De gewone zoekdemo gebruikt daarom de portievraag. De ruwe controle van de watervraag staat lokaal in `reports/ui-water-control.json` met de inhoudelijke afwijking gemarkeerd. Deze modelcorrectie blijft werk voor persoon 2.
+
+**Regressie en beperkingen.** Twaalf schermtests en vijf aanvullende protocoltests met gesimuleerde Groq-HTTP-responsen slagen. De protocoltests controleren ook 401/429/503, time-out, ontbrekende usage en het bewaren van bronnen wanneer een antwoordaanroep mislukt. Vier echte lokale integratietests met 51 scenario's, inclusief alle 36 recepten herschalen via MCP, slagen opnieuw. Dependency-, repository- en whitespacecontroles slagen. Een tweede volledige Ragas-meting is voor dit werkpakket niet uitgevoerd. Eerdere berichten worden nog niet aan het model doorgegeven; elke vraag is zelfstandig. Het modelantwoord verschijnt na de antwoordstap, niet token voor token. Alleen PowerPoint 1 is gebruikt; de opdracht-pdf en het GenAI-beleid zijn nog niet beschikbaar.
+
 ## Volgende fasen
 
 Noteer per fase de datum, het projectwerk onder de naam van de projectauteur, de gemaakte keuze en het testresultaat. Vermeld eventueel GenAI-gebruik apart en werk de MVP-checklist bij.
