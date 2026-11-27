@@ -164,7 +164,7 @@ De live nulmeting uit PR #7 haalde voor beide methodes 18/20 routes en 9/12 met 
 | Context Recall | 0,9000 (10/12) | Geen score (0/12) |
 | Faithfulness | 1,0000 (10/12) | Geen score (0/12) |
 
-De live agentrun leverde voor beide strategieën alle antwoorden en tussenresultaten op. De Qwen-beoordelaar bereikte zijn dagelijkse Groq-tokenlimiet na de eerste tien tokenvragen. Een poging met alleen ontbrekende beoordelingen werd ook na de door Groq opgegeven wachttijd begrensd. De bestaande scores en foutlog zijn bewaard. De actuele Ragas-dekking laat nog geen vergelijking tussen beide methodes toe. Voltooi de nameting zodra dezelfde Qwen-beoordelaar voldoende quotum heeft. De nulmeting op 36 recepten uit PR #7 blijft beschikbaar.
+De live agentrun leverde voor beide strategieën alle antwoorden en tussenresultaten op. De Qwen-beoordelaar bereikte zijn dagelijkse Groq-tokenlimiet na de eerste tien tokenvragen. Een poging met alleen ontbrekende beoordelingen werd ook na de door Groq opgegeven wachttijd begrensd. De gedeeltelijke resultaten en foutlog zijn bewaard. Voor een vergelijking met volledige dekking gebruiken we de [lokale Ragas-beoordeling na de MVP-review](#volledige-ragas-beoordeling-met-ollama).
 
 **Reproduceerbaarheid.** De [meetcommando’s](VOORTGANG.md#live-benchmark-met-groq-en-ragas) bouwen beide Qdrant-indexen en gebruiken top 3. De beoordelaar voor vergelijking met PR #7 is `qwen/qwen3.8-27b`, met `openai/gpt-oss-20b` voor de agent. Een tussentijdse poging met de oude GPT-OSS 120B-beoordelaar liep tegen de gebruikslimiet aan. De JSON-rapporten zijn lokaal. Ze bevatten corpus- en testsethashes, bronfragmenten, gekozen route, tool- en antwoorduitvoer en de beschikbare metingen.
 
@@ -176,8 +176,39 @@ De live agentrun leverde voor beide strategieën alle antwoorden en tussenresult
 
 De gebruikte technieken, redenen en lesbronnen staan in [PROJECTKEUZES.md](PROJECTKEUZES.md). Voor mijn onderdeel is alleen PowerPoint 1 gebruikt. De opdrachtbron is *NLP & LLM Challenge: Agentic Culinary Assistant / Flavor Chef*, pagina's 1–3.
 
-## Gebruik van AI en wat ik nog moet doen
+## Afwerking na de MVP-review
 
-Voor mijn deel heb ik Codex gebruikt bij de implementatie, de testcode, de technische controles en het herschrijven van dit rapport. Bij de andere werkpakketten is Codex ook gebruikt voor code, data, metingen en foutanalyse. De genoemde controles zijn met AI-hulp uitgevoerd.
+**Nieuwe foutgevallen.** De vrije vraag naar recepten zonder zuivel haalde aanvankelijk drie recepten op met het label `bevat zuivel`. Bij “Hoeveel kilogram is 250 gram?” koos de lokale agent de zoekroute. De index gebruikt nu bij expliciete dieetvragen een Qdrant-filter op de bestaande dieettags. Bij een vraag zonder zuivel gebruiken we de veganistische labels als beperkte selectie. De agent herleidt uitgeschreven massa-eenheden tot `g` en `kg` voordat hij de MCP-tool aanroept. Een vraag over één herkend recept gebruikt de gewone bronzoekroute.
 
-Mijn interface is technisch afgerond. Ik moet de code nog zelf nalopen en de demo en uitleg oefenen. Het precieze GenAI-beleid van de opleiding moet nog gecontroleerd worden; de opdracht verwijst daarvoor naar een apart beleid.
+**Zoekvergelijking.** De 36 recepten en de vaste 20 agentvragen zijn behouden. De zoekvergelijking zonder receptfilter kreeg vier vragen over andere recepten. Receptsecties vonden volledig bewijs in de top drie bij 19/23 vragen. Bij tokenchunks was dat 17/23. Op de vier nieuwe vragen was het 4/4 met secties en 3/4 met tokens. Voor de melk in de wentelteefjes leverden tokenchunks binnen de opgehaalde tien fragmenten geen volledig bewijs. Het resultaat zegt iets over deze vraagset en over de keuze van chunking bij gelijkblijvende embeddings.
+
+**Lokale en live controle.** Beide methodes haalden lokaal en live 20/20 verwachte routes en 6/6 verwachte MCP-uitkomsten. Volledig bewijs in de top drie bleef 11/12 met tokens en 12/12 met secties. De verse Groq-antwoorden zijn met Codex naast de referenties gelegd. Bij secties kwamen de gevraagde kernfeiten bij alle twaalf vragen overeen. Bij tokenchunks bleef de ricottahoeveelheid buiten de top drie en het model meldde dat de gevonden informatie ontoereikend was. Op de watervraag gebruikten beide methodes de bronregel met 420 ml. Alle twaalf schermtests, zeven gesimuleerde Groq-protocoltests en zeven lokale integratietests slaagden. De vier echte Groq-schermcontroles gaven 4 porties, 735 ml water, 0,25 kg en drie verschillende veganistische receptsuggesties. De ruwe uitkomsten staan lokaal in `reports/mvp-afwerking-*.json`.
+
+### Volledige Ragas-beoordeling met Ollama
+
+We legden de 20 live agentantwoorden per methode vast met `openai/gpt-oss-20b` op Groq. De beoordelaars op Groq bereikten hun tokenlimiet. Daarom beoordeelden we de bewaarde antwoorden en bronfragmenten lokaal met Ragas 0.4.4 en `qwen3.5:4b-q4_K_M` via Ollama. Voor beide chunkmethodes gebruikten we dezelfde twaalf bronvragen, dezelfde referenties en dezelfde beoordelaar. De [meetprocedure](VOORTGANG.md#live-benchmark-met-groq-en-ragas) hervatte de laatste vraag en bewaarde alle eerdere scores.
+
+| Ragas-metriek | Tokenchunks | Receptsecties |
+| --- | ---: | ---: |
+| Context Precision | 0,7222 (12/12) | 0,8055 (12/12) |
+| Context Recall | 0,9167 (12/12) | 1,0000 (12/12) |
+| Faithfulness | 0,8542 (12/12) | 0,8750 (12/12) |
+
+Receptsecties scoren in deze run hoger op alle drie de metrieken. De verschillen horen bij deze twaalf bronvragen en deze lokale beoordelaar. De eerdere Groq-run gebruikte een ander beoordelaarsmodel en had gedeeltelijke dekking. De bron- en antwoordcontrole blijft belangrijk naast de modelscore. Bij de marmitakovraag komt **75 ml olijfolie** bijvoorbeeld rechtstreeks uit de ingrediëntenlijst. Het volledige lokale meetbestand is `reports/mvp-afwerking-ragas-ollama.json`.
+
+## GenAI Disclosure
+
+De opleiding vraagt in *GenAI Policy*, pp. 1–2, om het functionele gebruik en de schrijfondersteuning afzonderlijk te vermelden, echte prompts op te nemen en de controles en eigen keuzes toe te lichten. Deze verantwoording gaat over Flavor Chef. De teamleden dragen samen de verantwoordelijkheid voor de ingediende code, cijfers en uitleg.
+
+**Code en data.** Ik heb Codex gebruikt bij de implementatie van de Streamlit-interface, de weergave van agentstate en de tests en demo voor werkpakket 4. Binnen het groepswerk heeft Codex ook voorstellen en code geleverd voor de eerste RAG-demo, dataverwerking, delen van de agent, evaluatiehulpen en foutanalyse. Bij deze afwerking hielp Codex met het dieetfilter, de eenheidsherkenning, het hervatten van Ragas en de nieuwe regressiegevallen. De concrete keuzes en bijdragen zijn per werkpakket beschreven in [de projectoverdracht](PROJECTKEUZES.md). Ieder teamlid licht bij de eindcontrole ook zijn eigen rechtstreeks geschreven en nagekeken onderdelen toe.
+
+**Tekst.** Ik heb Codex gebruikt om de voortgangstekst en testresultaten te structureren, het projectrapport en de handleiding te herschrijven en de [oefenvragen](VERDEDIGING.md) op te stellen. De cijfers in de technische secties zijn uit uitgevoerde tests en bewaarde meetbestanden overgenomen. De voorbeeldmodus is als simulatie gemarkeerd.
+
+**Representatieve prompts uit het project.**
+
+1. “alles moet volgens de powerpoints zijn. Het is belangrijk simpele dingen te gebruiken want ik moet ze kunnen uitleggen.” Dit fragment stuurde het ontwerp naar de vrijgegeven lesstof en korte, verdedigbare stappen.
+2. “Belangrijk, maak een markdown document met wat er gebeurd is en wat in totaal volgens de opdracht nog moet gebeuren. We gaan voor die 85 procent mvp zoda we alles goed kunnen uitleggen. Ook is het belangrijk een overzichtelijk rapport te maken. Dat moet duidelijk zijn en niet te ingewikkeld. Ook niet met heel veel tekst gwn duidelijk” Dit stuurde de scope en vorm van het rapport.
+3. “voor de mvp, bekijk ons project nu. Is dat goed? hoeveel gaan we halen dan? Bekijk het grondig” Dit leidde tot een audit van de actuele versie en gerichte vragen buiten de vaste testset.
+4. “doe alles nu” Dit verwees naar drie voorgestelde vervolgstappen uit die audit, namelijk Ragas afwerken, de gevonden regressies aanpakken en de verdediging voorbereiden.
+
+**Kritische controle en scope.** We behouden de scope van de MVP en gebruiken PowerPoint 1 als lesbasis. De bestaande agent blijft deterministisch rekenen via MCP. De eerdere Ragas-beoordeling gaf het antwoord van 795 ml een hoge Faithfulness-score. De vergelijking met 420 ml in de ingrediëntenlijst maakte de fout zichtbaar. We controleerden ook dat de vaste testset 20 vragen behoudt en dat resultaten met verschillende beoordelaars hun dekking en herkomst tonen. Ik doe voor de verdediging de persoonlijke code-review en oefen de demo nog zelf. Tijdens die controle houdt ieder teamlid bij welke wijzigingen het zelfstandig kan uitleggen en verifiëren.

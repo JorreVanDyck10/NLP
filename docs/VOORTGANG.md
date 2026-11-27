@@ -51,17 +51,24 @@ Stel `GROQ_API_KEY` lokaal in als omgevingsvariabele. Bij deze benchmark ontvang
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-eval.txt
 .\.venv\Scripts\python.exe recipe_search.py build
+.\.venv\Scripts\python.exe evaluate_chef.py --groq --output reports/mvp-afwerking-groq.json
 $env:RAGAS_JUDGE_MODEL = 'qwen/qwen3.8-27b'
-.\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/mvp-ragas-qwen.json
+.\.venv\Scripts\python.exe evaluate_chef.py --score-report reports/mvp-afwerking-groq.json --output reports/mvp-afwerking-ragas.json
 ```
 
-Het ingestelde beoordelaarsmodel is hetzelfde als bij de [nulmeting op 36 recepten](RAPPORT.md#evaluatie-met-36-recepten). `scored` en `total` geven het aantal gescoorde en verwachte bronvragen per metriek aan. De benchmark bewaart voltooide resultaten als één vraag of Ragas-metriek faalt. Gebruik `--groq --case curry-water --case lasagne-ricotta` voor een korte live agentcontrole. De meetuitvoer blijft lokaal. [Groq-limieten](https://console.groq.com/docs/rate-limits)
+Het ingestelde beoordelaarsmodel is hetzelfde als bij de [nulmeting op 36 recepten](RAPPORT.md#evaluatie-met-36-recepten). `scored` en `total` geven het aantal gescoorde en verwachte bronvragen per metriek aan. De eerste stap bewaart de live antwoorden, bronnen en agentmetingen. De tweede beoordeelt de bewaarde vragen voor beide strategieën om beurten en schrijft na elke beoordeling de voortgang. Bij onvolledige dekking eindigt ze met code 2. Herneem met hetzelfde beoordelaarsmodel en geef het Ragas-bestand als invoer én uitvoer mee. De opgeslagen scores, antwoorden en bronfragmenten blijven behouden. Gebruik `--groq --case curry-water --case lasagne-ricotta` voor een korte live agentcontrole. De meetuitvoer blijft lokaal. [Groq-limieten](https://console.groq.com/docs/rate-limits)
+
+Bij een Groq-limiet kan dezelfde agentuitvoer lokaal worden beoordeeld met Ragas. Start Ollama en zorg dat `qwen3.5:4b-q4_K_M` beschikbaar is. Gebruik een eigen scorebestand per beoordelaar. Voor de lokale beoordelingsstap volstaat de eerder opgeslagen Groq-uitvoer. [Ollama-compatibiliteit](https://docs.ollama.com/api/openai-compatibility)
+
+```powershell
+$env:RAGAS_JUDGE_MODEL = 'qwen3.5:4b-q4_K_M'
+.\.venv\Scripts\python.exe evaluate_chef.py --score-report reports/mvp-afwerking-groq.json --ollama-judge --output reports/mvp-afwerking-ragas-ollama.json
+```
 
 ### Uitgebreide receptendataset
 
-De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide indexen opnieuw met `recipe_search.py build`. De [actuele agentbenchmark](../data/evaluation.json) bevat 20 vragen. `python -m scripts.compare_chunking --output reports/chunking-local.json` meet met de huidige testset alleen de 12 zoekvragen met positief bronbewijs en de 7 aanvullende zoekvragen. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de resultaten van de [eerdere zoekvergelijking](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
+De agent gebruikt 36 recepten. Bouw de zoekindexen opnieuw met `recipe_search.py build` wanneer de recepten of de indexindeling wijzigen. De [vaste agentbenchmark](../data/evaluation.json) bevat 20 vragen. `python -m scripts.compare_chunking --output reports/chunking-local.json` vergelijkt de 12 zoekvragen met positief bronbewijs en 11 aanvullende zoekvragen, zonder recept- of dieetfilter. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de [eerdere zoekvergelijking](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
 
 ### Volgende stappen
 
-1. **Vul de Ragas-nameting aan zodra Groq-quotum beschikbaar is.** Gebruik dezelfde Qwen-beoordelaar en behoud de twaalf bronvragen voor de vergelijking met PR #7. De [MVP-meting](RAPPORT.md#live-nameting-op-de-mvp) bevat de live agentresultaten en de huidige scoredekking. Bouw na wijzigingen aan de chunks eerst beide indexen opnieuw.
-2. **Oefen de opgeleverde interface-demo.** Gebruik de portievraag, het herschalen van de curry, een eenheidsconversie en de Broncontrole. Neem de eigen code-review en GenAI-verantwoording mee. Zie [de handleiding](LOKALE-INTERFACE.md).
+Oefen de portievraag, het herschalen van de curry, een uitgeschreven eenheidsconversie en de Broncontrole. Neem de eigen code-review en de [GenAI-verantwoording](RAPPORT.md#genai-disclosure) mee. [Draaiboek en oefenvragen](VERDEDIGING.md)

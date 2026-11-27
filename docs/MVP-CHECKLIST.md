@@ -19,6 +19,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 - [x] Bouw een LangGraph-workflow die de tussenresultaten bijhoudt. Laat Groq een route voorstellen voor zoeken, herschalen, omrekenen of conversatie. Controleer het voorstel tegen expliciete vraaggegevens.
 - [x] Test `scale_ingredients` en `convert_units` op de lokale MCP-server, inclusief ongeldige invoer en afhandeling van MCP-uitval.
 - [x] Test alle routes, inclusief zoeken en schalen in één vraag. De integratiecheck herschaalt alle 36 recepten en test beide conversierichtingen en een onbekend recept.
+- [x] Controleer vrije dieetvragen met het metadatafilter en uitgeschreven g ↔ kg-vragen via de echte MCP-server.
 
 ## 3. Evaluatie · 20%
 
@@ -28,7 +29,8 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 - [x] Breid de agent-evaluatie uit met vragen over de nieuwe recepten. Controleer ook of de agent het juiste recept ophaalt als het gevraagde detail ontbreekt.
 - [x] Herhaal de live meting op de 36 recepten. Ragas scoorde tien van twaalf beantwoordbare zoekvragen per methode. Beide antwoorden meldden terecht dat de yoghurtcakebron geen bakvormmaat vermeldt. [Uitgebreide evaluatie](RAPPORT.md#evaluatie-met-36-recepten)
 - [x] Controleer de vier bekende fouten op de standaardmethode na de agentwijzigingen. [MVP-meting](RAPPORT.md#mvp-oplevering)
-- [ ] Vul de ontbrekende Ragas-nameting aan zodra Groq-quotum beschikbaar is. Qwen scoorde 10/12 met tokenchunks en 0/12 met receptsecties voor elk van de drie metrieken. De live agentrun is volledig. [Nameting](RAPPORT.md#live-nameting-op-de-mvp)
+- [x] Test vier aanvullende bronvragen over recepten buiten de vaste benchmark. [Afwerking](RAPPORT.md#afwerking-na-de-mvp-review)
+- [x] Beoordeel alle twaalf bronvragen van de live MVP per chunkmethode met dezelfde beoordelaar. De volledige Ragas-run gebruikte Ollama nadat de Groq-beoordelaars hun quotum bereikten. [Resultaten van de nameting](RAPPORT.md#volledige-ragas-beoordeling-met-ollama)
 
 ## 4. Inference, metingen en lokale interface · 10%
 
@@ -44,11 +46,10 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
   - [x] Toon afgeronde tussenstappen tijdens de aanvraag en bewaar voltooide bronnen/metingen bij fouten; voeg hersteladvies en opnieuw proberen toe.
   - [x] Controleer de interface visueel in Chrome; toon exacte toolinvoer/-uitvoer en maak een broncontrole voor de bekende dubbeltelling bij de watervraag.
   - [x] Leg de demostappen en uitleg voor de verdediging vast in [de handleiding](LOKALE-INTERFACE.md).
-  - [ ] Oefen de demo en code-uitleg zelf en rond de eigen review/GenAI-verantwoording af. Het modelantwoord verschijnt na de antwoordstap; losse teksttokens worden niet op het scherm gestreamd.
+  - [ ] Oefen de demo en code-uitleg zelf. Het modelantwoord verschijnt na de antwoordstap. [Oefendraaiboek](VERDEDIGING.md)
 
 ## 5. Proces en GenAI · 10%
 
-- [ ] Vul het [projectrapport](RAPPORT.md) bij na elke fase en na feedback.
-  - [x] Herschrijf het rapport op basis van de opdracht-pdf, met keuzes, meetresultaten, foutanalyse en een korte AI-vermelding. Mijn bijdrage als persoon 4 staat in de ik-vorm; persoonlijke code-review en demo-oefening blijven open.
-- [ ] Controleer het GenAI-beleid van de opleiding en maak de verantwoording af.
-- [ ] Oefen de demo en code-uitleg zonder AI. Toon een foutgeval en leg uit hoe je vaststelde waar het misliep.
+- [x] Werk het [projectrapport](RAPPORT.md) bij met de uitkomsten van de MVP-review en de controles.
+- [x] Lees het GenAI-beleid van de opleiding en documenteer de AI-bijdrage, prompts, controles en scopekeuzes. [GenAI Disclosure](RAPPORT.md#genai-disclosure)
+- [ ] Controleer de eigen bijdrage en oefen de demo en code-uitleg zonder AI. Toon een foutgeval en leg uit waar het misliep. [Oefendraaiboek](VERDEDIGING.md)

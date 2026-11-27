@@ -62,13 +62,16 @@ class RecipeSearch:
             full_text = "\n\n".join(f"{name}\n{text}" for name, text in sections.items())
             for strategy, blocks in (("tokens", {"Volledige recept": full_text}), ("sections", sections)):
                 for label, block in blocks.items():
-                    for part in splitter.split_text(block):
+                    for part_number, part in enumerate(splitter.split_text(block)):
                         normalized = " ".join(part.split())
                         self.chunks[strategy].append({
                             "recipe_id": recipe["id"],
                             "title": recipe["title"],
                             "source_url": recipe["source_url"],
                             "section": label,
+                            "dietary_tags": recipe["dietary_tags"] if (
+                                part_number == 0 and label in {"Overzicht", "Volledige recept"}
+                            ) else [],
                             "has_substitution": label == "Vervangingen" or (
                                 strategy == "tokens" and any(
                                     " ".join(line.split()) in normalized
@@ -118,7 +121,8 @@ class RecipeSearch:
         ])
         return len(chunks)
 
-    def search(self, question, strategy="sections", top_k=3, recipe_id=None, *, prefer_substitutions=False):
+    def search(self, question, strategy="sections", top_k=3, recipe_id=None, *,
+               prefer_substitutions=False, dietary_tags=()):
         if not question.strip() or top_k < 1:
             raise ValueError("Geef een vraag op en kies minstens één resultaat.")
         if not self.is_built(strategy):
@@ -127,6 +131,8 @@ class RecipeSearch:
         conditions = []
         if recipe_id is not None:
             conditions.append(models.FieldCondition(key="recipe_id", match=models.MatchValue(value=recipe_id)))
+        if dietary_tags:
+            conditions.append(models.FieldCondition(key="dietary_tags", match=models.MatchAny(any=list(dietary_tags))))
         name = self.collection_name(strategy)
         query = next(self.model().query_embed(question)).tolist()
         results = self.client.query_points(

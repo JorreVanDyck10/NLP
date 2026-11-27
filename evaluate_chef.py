@@ -19,20 +19,27 @@ from recipe_search import MODEL_NAME, RECIPES_PATH, ROOT, STRATEGIES
 
 CASES = ROOT / "data" / "evaluation.json"
 GROQ_URL = "https://api.groq.com/openai/v1/"
+OLLAMA_URL = "http://127.0.0.1:11434/v1/"
+OLLAMA_JUDGE = "qwen3.5:4b-q4_K_M"
 
 
 class GroqBenchmarkTransport(httpx.AsyncHTTPTransport):
+    blocked_retry_after: float | None = None
+
     async def handle_async_request(self, request):
         for attempt in range(4):
             response = await super().handle_async_request(request)
-            if response.status_code != 429 or attempt == 3:
+            if response.status_code != 429:
                 return response
 
             try:
                 delay = float(response.headers.get("retry-after", ""))
             except ValueError:
                 return response
-            if not 0 <= delay <= 120:
+            if not math.isfinite(delay) or delay < 0:
+                return response
+            if delay > 120 or attempt == 3:
+                self.blocked_retry_after = delay
                 return response
 
             await response.aclose()
@@ -93,25 +100,25 @@ def failure_stage(case, row):
     return None
 
 
-async def score_ragas(metrics, case, state):
+async def score_ragas(metrics, row):
     inputs = {
-        "user_input": case["question"],
-        "retrieved_contexts": [hit["text"] for hit in state.get("hits", [])],
+        "user_input": row["question"],
+        "retrieved_contexts": row["retrieved_text"],
     }
-    if state.get("route") != case["route"] or not inputs["retrieved_contexts"]:
+    if not row["route_ok"] or not inputs["retrieved_contexts"]:
         return dict.fromkeys(metrics), {}
 
     scores = {}
     errors = {}
     for name, metric in metrics.items():
         if name == "faithfulness":
-            response = (state.get("answer") or "").partition("\n\nBronnen\n")[0].strip()
+            response = (row["answer"] or "").partition("\n\nBronnen\n")[0].strip()
             if not response:
                 scores[name] = None
                 continue
             extra = {"response": response}
         else:
-            extra = {"reference": case["reference"]}
+            extra = {"reference": row["reference"]}
         try:
             value = float((await metric.ascore(**inputs, **extra)).value)
             scores[name] = round(value, 4) if math.isfinite(value) else None
@@ -119,6 +126,16 @@ async def score_ragas(metrics, case, state):
             scores[name] = None
             errors[name] = type(exc).__name__
     return scores, errors
+
+
+def ragas_summary(rows, metric_names):
+    summary = {}
+    for name in metric_names:
+        scores = [row.get("ragas", {}).get(name) for row in rows]
+        scores = [score for score in scores if score is not None]
+        summary[name] = {"mean": round(mean(scores), 4) if scores else None, "scored": len(scores),
+                         "total": sum("evidence_rank" in row for row in rows)}
+    return summary
 
 
 async def evaluate(cases, strategy, groq=None, metrics=None):
@@ -173,7 +190,7 @@ async def evaluate(cases, strategy, groq=None, metrics=None):
             row["expected_evidence"] = case["evidence"]
             row["evidence_rank"] = evidence_rank(case, hits)
             if metrics:
-                scores, errors = await score_ragas(metrics, case, state)
+                scores, errors = await score_ragas(metrics, row)
                 row["ragas"] = scores
                 if errors:
                     row["ragas_errors"] = errors
@@ -211,16 +228,90 @@ async def evaluate(cases, strategy, groq=None, metrics=None):
         ttft = [call["ttft_ms"] for call in calls if call.get("ttft_ms") is not None]
         summary["answer_ttft"] = {"median_ms": round(median(ttft), 2) if ttft else None, "measured_calls": len(ttft)}
     if metrics:
-        summary["ragas"] = {}
-        for name in metrics:
-            scores = [row.get("ragas", {}).get(name) for row in rows]
-            scores = [score for score in scores if score is not None]
-            summary["ragas"][name] = {
-                "mean": round(mean(scores), 4) if scores else None,
-                "scored": len(scores),
-                "total": len(retrieval),
-            }
+        summary["ragas"] = ragas_summary(rows, metrics)
     return {"summary": summary, "cases": rows}
+
+
+def make_ragas_metrics(judge_model, judge, **model_settings):
+    from ragas.llms import llm_factory
+    from ragas.metrics.collections import ContextPrecision, ContextRecall, Faithfulness
+
+    llm = llm_factory(judge_model, client=judge, temperature=0, **model_settings)
+    return {"context_precision": ContextPrecision(llm=llm), "context_recall": ContextRecall(llm=llm),
+            "faithfulness": Faithfulness(llm=llm)}
+
+
+def write_report(path, report):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+async def score_existing_report(report, api_key, output, *, local_judge=False):
+    from openai import AsyncOpenAI
+
+    judge_provider = "ollama" if local_judge else "groq"
+    judge_model = os.environ.get("RAGAS_JUDGE_MODEL", OLLAMA_JUDGE if local_judge else "openai/gpt-oss-120b")
+    if (not isinstance(report, dict) or report.get("mode") not in {"groq", "groq_ragas"}
+            or report.get("recipes_sha256") != sha256(RECIPES_PATH.read_bytes()).hexdigest()
+            or report.get("evaluation_sha256") != sha256(CASES.read_bytes()).hexdigest()
+            or report.get("embedding_model") != MODEL_NAME):
+        raise ValueError("Gebruik een Groq-rapport van de huidige dataset, vragen en embeddinginstellingen.")
+    if "judge_model" in report and (report["judge_model"] != judge_model
+                                    or report.get("judge_provider", "groq") != judge_provider):
+        raise ValueError("Gebruik dezelfde Ragas-beoordelaar als in het bestaande rapport.")
+
+    strategies = [report["strategies"][strategy] for strategy in STRATEGIES]
+    cases = json.loads(CASES.read_bytes())
+    if "case_ids" in report:
+        cases = [case for case in cases if case["id"] in report["case_ids"]]
+    fields = ("id", "question", "reference")
+    expected = [tuple(case[field] for field in fields) + (case["route"],) for case in cases]
+    if not expected or any(
+        [tuple(row[field] for field in fields) + (row["expected_route"],) for row in result["cases"]] != expected
+        or result["summary"]["execution_errors"] for result in strategies
+    ):
+        raise ValueError("Gebruik een afgerond Groq-rapport met beide chunkmethodes en zonder uitvoeringsfouten.")
+
+    transport = None if local_judge else GroqBenchmarkTransport()
+    judge_http = httpx.AsyncClient(transport=transport)
+    endpoint = OLLAMA_URL if local_judge else GROQ_URL
+    model_settings = {"reasoning_effort": "none"} if local_judge else {}
+    async with AsyncOpenAI(base_url=endpoint, api_key="ollama" if local_judge else api_key,
+                           timeout=120 if local_judge else 60, max_retries=0, http_client=judge_http) as judge:
+        metrics = make_ragas_metrics(judge_model, judge, **model_settings)
+        report.update(mode="groq_ragas", ragas_executed=True,
+                      judge_model=judge_model, judge_provider=judge_provider)
+        for result in strategies:
+            result["summary"]["ragas"] = ragas_summary(result["cases"], metrics)
+        write_report(output, report)
+
+        # Score both chunk methods per question so a quota interruption preserves matched pairs.
+        for pair in zip(*(result["cases"] for result in strategies), strict=True):
+            for strategy, result, row in zip(STRATEGIES, strategies, pair, strict=True):
+                if "evidence_rank" not in row or not row["route_ok"] or not row["retrieved_text"]:
+                    continue
+                scores = row.setdefault("ragas", {})
+                pending = {name: metric for name, metric in metrics.items() if scores.get(name) is None}
+                if not pending:
+                    continue
+                print(f"Ragas: {strategy} / {row['id']} ({len(pending)} metrieken)", flush=True)
+                values, errors = await score_ragas(pending, row)
+                scores.update(values)
+                previous_errors = row.get("ragas_errors", {})
+                remaining_errors = {name: error for name, error in previous_errors.items() if name not in pending}
+                remaining_errors.update(errors)
+                if remaining_errors:
+                    row["ragas_errors"] = remaining_errors
+                else:
+                    row.pop("ragas_errors", None)
+                result["summary"]["ragas"] = ragas_summary(result["cases"], metrics)
+                write_report(output, report)
+                if transport is not None and transport.blocked_retry_after is not None:
+                    print(f"Groq beperkt verdere beoordeling. Probeer opnieuw over {math.ceil(transport.blocked_retry_after)} s.")
+                    return report
+    return report
 
 
 async def benchmark(api_key, *, with_ragas=True, case_ids=None):
@@ -250,9 +341,6 @@ async def benchmark(api_key, *, with_ragas=True, case_ids=None):
         return report
 
     from openai import AsyncOpenAI
-    from ragas.llms import llm_factory
-    from ragas.metrics.collections import ContextPrecision, ContextRecall, Faithfulness
-
     judge_model = os.environ.get("RAGAS_JUDGE_MODEL", "openai/gpt-oss-120b")
     report["judge_model"] = judge_model
     judge_http = httpx.AsyncClient(transport=GroqBenchmarkTransport())
@@ -260,12 +348,7 @@ async def benchmark(api_key, *, with_ragas=True, case_ids=None):
         AsyncOpenAI(base_url=GROQ_URL, api_key=api_key, timeout=60, http_client=judge_http) as judge,
         groq_client(api_key, transport=GroqBenchmarkTransport()) as agent_client,
     ):
-        llm = llm_factory(judge_model, client=judge, temperature=0)
-        metrics = {
-            "context_precision": ContextPrecision(llm=llm),
-            "context_recall": ContextRecall(llm=llm),
-            "faithfulness": Faithfulness(llm=llm),
-        }
+        metrics = make_ragas_metrics(judge_model, judge)
         for strategy in STRATEGIES:
             print(f"Ragas-benchmark: {strategy}", flush=True)
             report["strategies"][strategy] = await evaluate(cases, strategy, agent_client, metrics)
@@ -277,21 +360,39 @@ def main():
     live = parser.add_mutually_exclusive_group()
     live.add_argument("--ragas", action="store_true", help="Gebruik Groq voor generatie en evaluatie met Ragas.")
     live.add_argument("--groq", action="store_true", help="Gebruik Groq alleen voor de agent.")
+    live.add_argument("--score-report", type=Path, help="Scoor ontbrekende Ragas-metrieken in een bestaande Groq-meting.")
+    parser.add_argument("--ollama-judge", action="store_true", help="Gebruik bij --score-report de lokale Ollama-beoordelaar.")
     parser.add_argument("--case", action="append", choices=[case["id"] for case in json.loads(CASES.read_bytes())],
                         help="Draai alleen deze vraag. Mag herhaald worden.")
     parser.add_argument("--output", type=Path, help="Schrijf de resultaten per vraag naar dit JSON-bestand.")
     args = parser.parse_args()
-    key = os.environ.get("GROQ_API_KEY") if args.ragas or args.groq else None
-    if (args.ragas or args.groq) and not key:
+    if args.ollama_judge and not args.score_report:
+        parser.error("Gebruik --ollama-judge samen met --score-report.")
+    live_mode = args.ragas or args.groq or (args.score_report and not args.ollama_judge)
+    key = os.environ.get("GROQ_API_KEY") if live_mode else None
+    if live_mode and not key:
         parser.error("Stel GROQ_API_KEY in voor een live benchmark.")
-    report = asyncio.run(benchmark(key, with_ragas=args.ragas, case_ids=args.case))
+    if args.score_report:
+        if not args.output or args.case:
+            parser.error("Gebruik --score-report met --output. De invoer bepaalt de vragen.")
+        try:
+            source_report = json.loads(args.score_report.read_bytes())
+            report = asyncio.run(score_existing_report(source_report, key, args.output, local_judge=args.ollama_judge))
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            parser.error(str(exc))
+    else:
+        report = asyncio.run(benchmark(key, with_ragas=args.ragas, case_ids=args.case))
+        if args.output:
+            write_report(args.output, report)
     for strategy, results in report["strategies"].items():
         print(f"{strategy}: {json.dumps(results['summary'])}")
-    if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if any(results["summary"]["execution_errors"] for results in report["strategies"].values()):
         raise SystemExit(1)
+    if args.score_report and any(score["scored"] < score["total"]
+                                 for result in report["strategies"].values()
+                                 for score in result["summary"]["ragas"].values()):
+        print("Ragas-dekking is onvolledig. Gebruik het uitvoerbestand als invoer om te hervatten.")
+        raise SystemExit(2)
 
 
 if __name__ == "__main__":
