@@ -2,7 +2,9 @@
 
 [Terug naar de README](../README.md)
 
-Dit werkpakket toont de bestaande agent in een lokale Streamlit-interface. De code staat in `chef_ui.py`; routering, zoeken en de MCP-rekentool blijven in hun bestaande bestanden. Streamlit is gekozen omdat invoer, gespreksberichten en uitklapbare details vanuit Python kunnen worden getoond, zonder een aparte JavaScript-app.
+Dit werkpakket toont de bestaande agent in een lokale Streamlit-interface. De code staat in `chef_ui.py`. De agent biedt daarnaast een optionele callback voor de volledige state na iedere stap en bewaart de exacte MCP-invoer. Routering, zoeken en rekenen blijven dezelfde agentfuncties gebruiken. Streamlit is gekozen omdat invoer, gespreksberichten en uitklapbare details vanuit Python kunnen worden getoond, zonder een aparte JavaScript-app.
+
+De technische oplevering omvat een zoekdemo, een schaalvraag, echte Groq-metingen, zichtbare tussenstappen, foutmeldingen en een broncontrole als foutvoorbeeld. Het zelf oefenen en mondeling verdedigen blijft werk van persoon 4.
 
 ## Installeren en starten
 
@@ -17,31 +19,36 @@ python -m venv .venv
 
 Open de lokale URL die Streamlit afdrukt, normaal `http://127.0.0.1:8501`. Sluit af met Ctrl+C in de terminal. De eerste indexbouw downloadt het embeddingmodel. Bouw de index opnieuw na receptwijzigingen. Voer indexbouw, benchmark en integratiecheck na elkaar uit en laat tijdens die controles geen andere aanvraag dezelfde lokale index gebruiken: Qdrant local laat één proces tegelijk toe.
 
-De **voorbeeldmodus** heeft geen agent, modellen, index of API-sleutel nodig. Hiervoor volstaat een omgeving met `streamlit==1.45.0`; sla de indexbouw dan over. Gebruik de knoppen Zoekvraag en Schaalvraag. Antwoorden komen uit vaste voorbeelden en de tijden, scores en tokens zijn uitdrukkelijk **gesimuleerd**. Deze modus bewijst de schermwerking, niet de werking van RAG, Groq of MCP.
+Voor een volledige modeldemo kies je **Groq**. Vul je sleutel in het gemaskeerde veld in de zijbalk in, of stel `GROQ_API_KEY` vóór het starten in als omgevingsvariabele. Een ingevulde sleutel blijft alleen in die browsersessie, wordt niet in berichten of meetrapporten gezet en kan met **Ingevulde sleutel wissen** worden verwijderd. Een omgevingssleutel blijft beschikbaar totdat de server wordt gestopt. `.env` en `.env.*` zijn al uitgesloten van Git; de interface leest een `.env`-bestand niet automatisch.
+
+De **voorbeeldmodus** heeft geen agent, modellen, index of API-sleutel nodig. Hiervoor volstaat een omgeving met `streamlit==1.45.0`; sla de indexbouw dan over. Gebruik de knoppen Zoekvraag en Schaalvraag. Antwoorden komen uit vaste voorbeelden en de tijden, scores en tokens zijn uitdrukkelijk **gesimuleerd**. Deze modus bewijst de schermwerking, niet de werking van RAG, Groq of MCP. Broncontrole is in deze modus uitgeschakeld.
 
 ## Wat het scherm toont
 
 - **Gesprek:** de vraag en het antwoord blijven per browsersessie zichtbaar. Eerdere berichten worden niet aan de agent doorgegeven: iedere vraag is zelfstandig. Noem het recept dus opnieuw bij een vervolgvraag. Gesprek wissen verwijdert de zichtbare geschiedenis.
-- **Gevolgde stappen:** de trace van de agent, bijvoorbeeld routering, opgehaalde fragmenten en MCP-tool.
+- **Gevolgde stappen:** de trace van de agent, bijvoorbeeld routering, opgehaalde fragmenten en MCP-tool. De interface krijgt na iedere afgeronde graph-stap de volledige state en werkt het scherm bij. Tijdens een langlopende stap blijft de status zichtbaar.
 - **Bronfragmenten:** titel, receptonderdeel, tekst, overeenkomstscore en bronlink. De score is geen zekerheid dat een antwoord klopt.
-- **MCP-aanroep:** toolnaam en resultaat. De getoonde invoer wordt afgeleid uit dezelfde vraag/state en brondata als de agent; er wordt geen netwerk- of protocol-log onderschept. De live berekening gebeurt in `scale_server.py`.
-- **Metingen:** agenttijd, input- en outputtokens en de afzonderlijke modelaanroepen. TTFT betekent de tijd tot het eerste zichtbare tekstfragment van het model. De router streamt geen tekst en heeft daarom geen TTFT-meting. De interface toont de metingen na afloop, en streamt de tussenstappen nog niet tijdens het uitvoeren.
+- **MCP-aanroep:** toolnaam, exacte invoer en resultaat uit de agentstate. De tabel toont hoeveelheden vóór en na het schalen, afgerond tot maximaal zes decimalen. De ruwe gegevens zijn uitklapbaar. De live berekening gebeurt in `scale_server.py`.
+- **Metingen:** verwerkingstijd, input- en outputtokens, TTFT en de afzonderlijke modelaanroepen. TTFT betekent de tijd tot het eerste zichtbare tekstfragment bij de antwoordaanroep. Die begint ná routering en zoeken, en is dus niet de tijd vanaf het indrukken van de knop. De verwerkingstijd omvat het agenttraject en de updates aan het scherm. Tokenmetingen verschijnen zodra de betreffende modelaanroep klaar is. Het modelantwoord wordt na de antwoordstap getoond; losse teksttokens worden nog niet op het scherm gestreamd.
+- **Fouten:** verkeerde sleutel, gebruikslimiet, ontbrekende index en andere uitval krijgen hersteladvies. Al voltooide bronnen, trace en modelmetingen blijven zichtbaar. Een mislukte modelaanroep levert geen verzonnen tokens op. **Opnieuw proberen** herhaalt de vraag met de huidige modus en sleutel; het eerdere foutbericht blijft in het gesprek staan.
 
-In **Lokaal** kiest bestaande Python-logica de route en geeft een zoekvraag de bronfragmenten terug. Er is geen genererend taalmodel: tokens en TTFT staan op **Niet gemeten**, niet op nul. Het embeddingmodel wordt wel gebruikt voor zoeken. In **Groq** worden de vraag en geselecteerde fragmenten naar Groq gestuurd. Stel `GROQ_API_KEY` buiten Git in als omgevingsvariabele vóór het starten. De interface leest dezelfde instellingen als de agent; ze slaat de sleutel niet op in de chat. Ontbrekende of gedeeltelijke modelmetingen worden zichtbaar gemeld.
+In **Lokaal** kiest bestaande Python-logica de route en geeft een zoekvraag de bronfragmenten terug. Er is geen genererend taalmodel: tokens en TTFT staan op **Niet gemeten**, niet op nul. Het embeddingmodel wordt wel gebruikt voor zoeken. In **Groq** worden de vraag en geselecteerde fragmenten naar Groq gestuurd. De interface gebruikt dezelfde modelinstellingen als de agent. Ontbrekende of gedeeltelijke modelmetingen worden zichtbaar gemeld. Bij een schaalvraag kan Groq alleen de route kiezen en geeft de rekentool het eindantwoord: dan zijn er routetokens, maar is een TTFT voor een modelantwoord niet van toepassing.
 
 ## Demo van begin tot eind
 
-1. Kies **Lokaal** en klik **Zoekvraag**: “Hoeveel water gaat er in totaal in de curry?” Controleer de route `search` en open Bronfragmenten. Zoek naar **420 ml water** in het juiste curryrecept. De lokale agent toont fragmenten; voor een geformuleerd modelantwoord kies je Groq zodra een sleutel beschikbaar is.
-2. Klik **Schaalvraag**: “Schaal de curry van 4 naar 7 porties.” Controleer `scale_recipe`, de curryfragmenten en `scale_ingredients`. De invoer bevat 4 en 7 porties en 420 ml water; de tooluitvoer hoort **735 ml water** te bevatten. Berekening: `420 × 7 / 4 = 735`. Controleer ook bloemkool: `500 × 7 / 4 = 875 ml`.
-3. Controleer bij beide antwoorden de agenttijd en de uitleg over ontbrekende tokens. Een echt uitgevoerde lokale aanvraag heeft een gemeten tijd, maar geen modeltokenmetingen.
-4. Gebruik **Voorbeeld (gesimuleerd)** om dezelfde schermonderdelen met ingevulde modelmetingen te laten zien. Benoem tijdens je verdediging dat dit voorbeeldwaarden zijn.
-5. Kies Groq zonder sleutel om de foutmelding te controleren. Test een echte Groq-aanvraag pas met een beschikbare sleutel. Controleer dan tokenvelden en de afzonderlijke modelaanroepen; verzin geen ontbrekende metingen.
+1. Kies **Groq**, controleer dat een sleutel beschikbaar is en klik **Zoekvraag**: “Voor hoeveel porties is de kikkererwtencurry bedoeld?” Toon de route `search`, het overzichtsfragment met **Porties: 4**, het modelantwoord **4 porties** en de modelmetingen. Leg uit dat de bron het antwoord moet ondersteunen.
+2. Klik **Schaalvraag**: “Schaal de curry van 4 naar 7 porties.” Controleer `scale_recipe`, de curryfragmenten en `scale_ingredients`. Open MCP-aanroep: de waterregel moet van **420 ml** naar **735 ml** gaan. Berekening: `420 × 7 / 4 = 735`. Controleer ook bloemkool: `500 × 7 / 4 = 875 ml`. TTFT antwoord staat hier terecht op Niet gemeten: de tool geeft het antwoord, zonder gestreamde modelantwoordaanroep.
+3. Kies **Lokaal** en voer een zoekvraag uit. De agent toont de bronfragmenten en een gemeten verwerkingstijd, maar geen genererend taalmodel en dus geen gemeten modeltokens of TTFT. Berichten uit Groq behouden hun oorspronkelijke modus en metingen.
+4. Klik **Broncontrole** voor “Hoeveel water gaat er in totaal in de curry?” De referentie is **420 ml**: 45 ml voor de pasta en later de resterende 375 ml. In de live controle antwoordde het model **795 ml** door de ingrediëntenhoeveelheid en een bereidingsstap dubbel te tellen. Open de juiste fragmenten en laat zien dat het bewijs wél is opgehaald: de fout zit bij het formuleren/rekenen van het modelantwoord. De interface bewaart dat antwoord en toont de controlebron; ze vervangt het modelantwoord niet stilzwijgend. Een volgende run kan anders antwoorden.
+5. Gebruik **Voorbeeld (gesimuleerd)** als reserve om dezelfde schermonderdelen met ingevulde modelmetingen te laten zien. Benoem tijdens je verdediging dat dit voorbeeldwaarden zijn.
+6. Toon de foutafhandeling met een ontbrekende of ongeldige sleutel en gebruik daarna Opnieuw proberen met een werkende sleutel. Test dit alleen als je de gewenste fout bewust wilt demonstreren; een gesimuleerde fout bewijst geen actuele storing bij Groq.
+7. Wis het gesprek en een eventueel ingevulde sessiesleutel na de demo.
 
 Bij een verkeerd antwoord kijk je eerst naar Bronfragmenten. Ontbreekt de juiste informatie daar, dan ligt het probleem vóór het formuleren van het antwoord. De interface repareert die zoekfout niet; geef het voorbeeld door aan persoon 1 of 3. Problemen in routering, Groq of de rekentool horen bij persoon 2.
 
 ## Zelf kunnen uitleggen
 
-“Mijn interface roept dezelfde agent aan als de terminal. Ik bewaar per vraag het antwoord en de tussenresultaten. Daardoor kan ik zien of een fout bij zoeken, rekenen of antwoorden ontstaat. De rekentool vermenigvuldigt hoeveelheden met het nieuwe aantal porties gedeeld door het oude aantal. Zonder modelaanroep zijn er geen gemeten modeltokens. Ik toon daarom ‘Niet gemeten’. De gesimuleerde modus dient om de schermen te demonstreren en is geen bewijs van een werkende modelkoppeling.”
+“Mijn interface gebruikt dezelfde agent als de terminal en krijgt na iedere afgeronde stap de tussenstand. Daardoor kan ik zien of een fout bij zoeken, rekenen of antwoorden ontstaat. De rekentool vermenigvuldigt hoeveelheden met het nieuwe aantal porties gedeeld door het oude aantal. De tokens komen uit de modelrespons. TTFT meet alleen hoe lang het antwoordmodel op zijn eerste tekstfragment liet wachten. Zonder zo'n modelaanroep toon ik ‘Niet gemeten’. Met het watervoorbeeld kan ik aantonen dat juiste bronnen toch een fout modelantwoord kunnen opleveren.”
 
 Lesbasis: PowerPoint 1, slide 69 over de gedeelde workflow-state, slides 72–73 over MCP en de rekentool, en slides 82–83 over het verschil tussen een demo en evaluatie en het controleren van de hele keten. Deze slides zijn visueel bekeken omdat de tekstextractie vooral afbeeldingen opleverde. PowerPoint 2 en 3 zijn niet gebruikt.
 
@@ -49,11 +56,12 @@ Lesbasis: PowerPoint 1, slide 69 over de gedeelde workflow-state, slides 72–73
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/test_chef_ui.py
+.\.venv\Scripts\python.exe scripts/test_ui_groq.py
 python scripts/check_repository.py
 git diff --check
 ```
 
-De zeven interfacechecks gebruiken Streamlits AppTest en controleren voorbeelden, geschiedenis wissen, herkomst bij moduswissels, een ontbrekende sleutel, ontbrekende/gedeeltelijke tokenmetingen, een mislukte agentaanroep en een andere volgorde van de recepten. Ze downloaden geen modellen en draaien ook in GitHub Actions. De installatie en basis van AppTest volgen de [officiële Streamlit-documentatie](https://docs.streamlit.io/develop/concepts/app-testing/get-started).
+De twaalf schermchecks gebruiken Streamlits AppTest en draaien ook in GitHub Actions, zonder modellen. Ze controleren onder meer ontbrekende/gedeeltelijke en nulmetingen, TTFT, sleutel wissen, broncontrole, geschiedenis en opnieuw proberen. De vijf aanvullende Groq-protocoltests gebruiken gesimuleerde HTTP-responsen met de echte agent en lokale MCP/zoekfunctie. Ze controleren tokens, TTFT, foutstatussen en het behouden van bronnen wanneer de antwoordaanroep mislukt. Deze tests vereisen de agentdependencies en de index. De installatie en basis van AppTest volgen de [officiële Streamlit-documentatie](https://docs.streamlit.io/develop/concepts/app-testing/get-started).
 
 Controleer de echte lokale keten van persoon 1, 2 en 4 met:
 
@@ -63,4 +71,12 @@ Controleer de echte lokale keten van persoon 1, 2 en 4 met:
 
 Deze integratiecheck bouwt beide indexen indien nodig en kan het embeddingmodel downloaden. Vier tests controleren met de huidige dataset 51 scenario's: tien zoekvragen (inclusief de zeven nieuwe vragen van persoon 1), het herschalen van alle 36 recepten, een losse schaalvraag, een begroeting en drie ongeldige/onvolledige schaalvragen. De controles gebruiken de echte lokale zoekfunctie en MCP-server, zonder Groq. Bij herschalen worden alle ingrediënten gecontroleerd, inclusief eenheden, notities en hoeveelheden naar smaak. Nieuwe recepten vragen ook om representatieve nieuwe zoekvragen; dit is geen beoordeling van door een taalmodel geschreven antwoorden.
 
-Zie [het projectrapport](RAPPORT.md) voor de werkelijk uitgevoerde controles en beperkingen. De opdracht-pdf en het GenAI-beleid zijn hier nog niet beschikbaar; de eisen voor dit werkpakket komen uit de aangeleverde taakverdeling. Persoon 4 moet de code, demonstratie en AI-verantwoording nog zelf nalopen.
+Een echte live controle met de twee gewone demovragen kun je herhalen met:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/test_ui_live.py
+```
+
+De sleutel wordt uit GROQ_API_KEY gelezen of verborgen gevraagd. De controle voert de twee demovragen via de interface uit met echte Groq-modelaanroepen en schrijft metingen zonder sleutel naar het genegeerde `reports/ui-live.json`. De controle verwacht 4 porties bij zoeken en 735 ml water bij schalen. Dit is een gerichte interfacecontrole; het vervangt de volledige benchmark van persoon 3 niet.
+
+Zie [het projectrapport](RAPPORT.md) voor uitgevoerde controles en de echte meetwaarden. De technische interface is getest met de dataset van 36 recepten en visueel in Chrome gecontroleerd. De opdracht-pdf en het GenAI-beleid zijn hier nog niet beschikbaar; de eisen voor dit werkpakket komen uit de aangeleverde taakverdeling. Persoon 4 moet de code, demonstratie en AI-verantwoording nog zelf nalopen.

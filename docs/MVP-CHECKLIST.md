@@ -34,12 +34,16 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 - [x] Sluit Groq aan met een beschikbaar model op het gratis plan. De live evaluatie gebruikte `openai/gpt-oss-20b`. [Projectkeuzes](PROJECTKEUZES.md)
 - [x] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT) in de live agentbenchmark. TTFT is gemeten voor de 22 gestreamde antwoorden. [Live meetverslag](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting)
-- [ ] Maak een eenvoudige lokale interface met gesprekken, opgehaalde tekststukken, MCP-toolcalls en live metingen.
+- [x] Maak een eenvoudige lokale interface met gesprekken, opgehaalde tekststukken, MCP-toolcalls en beschikbare live metingen.
   - [x] Bouw het scherm in `chef_ui.py` met vraag/antwoord, bronfragmenten, toolinvoer/-uitvoer en beschikbare metingen na afloop; zie [persoon 4](LOKALE-INTERFACE.md).
   - [x] Voeg expliciete meldingen voor ontbrekende metingen en een gemarkeerde gesimuleerde voorbeeldmodus toe; controleer die met AppTest.
   - [x] Controleer de echte lokale zoek- en schaalvraag via AppTest: curryfragment met 420 ml water, daarna MCP-resultaat 735 ml voor 7 porties.
   - [x] Controleer ook de 33 nieuwe recepten; de voorbeeldmodus kiest de curry op ID en blijft werken bij een andere datasetvolgorde.
-  - [ ] Controleer live Groq-tokenmetingen en TTFT met een beschikbare sleutel en oefen de demo zelf. Tussenstappen worden nog niet tijdens uitvoering gestreamd.
+  - [x] Controleer echte Groq-metingen en TTFT bij de zoekdemo (4 porties) en modeltokens bij de schaalvraag (735 ml water voor 7 porties).
+  - [x] Toon afgeronde tussenstappen tijdens de aanvraag en bewaar voltooide bronnen/metingen bij fouten; voeg hersteladvies en opnieuw proberen toe.
+  - [x] Controleer de interface visueel in Chrome; toon exacte toolinvoer/-uitvoer en maak een broncontrole voor de bekende dubbeltelling bij de watervraag.
+  - [x] Leg de demostappen en uitleg voor de verdediging vast in [de handleiding](LOKALE-INTERFACE.md).
+  - [ ] Oefen de demo en code-uitleg zelf en rond de eigen review/GenAI-verantwoording af. Het modelantwoord verschijnt na de antwoordstap; losse teksttokens worden niet op het scherm gestreamd.
 
 ## 5. Proces en GenAI · 10%
 

@@ -62,7 +62,7 @@ De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide inde
 
 ### Volgende stappen
 
-**Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
+**Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert 51 echte lokale scenario's; `python scripts/test_chef_ui.py` controleert twaalf schermscenario's zonder modellen. De interface van persoon 4 is ook met echte Groq-aanroepen en visueel in Chrome gecontroleerd. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
 
 1. **Controleer de foutgevallen opnieuw bij agentwijzigingen.** Gebruik de 20 vragen om te zien of de routerings-, zoek- en antwoordfouten zich nog voordoen. [Evaluatie met 36 recepten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
-2. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via de interface blijven te controleren. De interface toont metingen na afloop. Zie [de handleiding](LOKALE-INTERFACE.md).
+2. **Oefen de opgeleverde interface-demo.** Gesprekken, bronfragmenten, exacte MCP-gegevens en echte Groq-metingen zijn gecontroleerd. Tussenstanden verschijnen na iedere afgeronde stap. Gebruik de portievraag en schaalvraag voor de gewone demo en Broncontrole om de bekende waterdubbeltelling te analyseren. Persoon 4 moet de demo zelf nog oefenen. Zie [de handleiding](LOKALE-INTERFACE.md).
