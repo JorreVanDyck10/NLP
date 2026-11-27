@@ -13,7 +13,7 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 - **Receptendataset.** Deze referentiemeting gebruikte de eerste drie proefrecepten van Health Canada. Het gaat om kikkererwten-groentecurry, lasagne uit de slowcooker en aardbeienpannenkoeken.
 - **Recepten zoeken.** `recipe_search.py` maakt met LlamaIndex en een meertalig FastEmbed-model twee lokale Qdrant-indexen. Splitsen op tokenlengte levert 17 fragmenten op. Splitsen per receptonderdeel levert 20 fragmenten op. Beide indexen geven fragmenten met een bronlink en een overeenkomstscore terug.
 - **Agent en MCP.** `chef_agent.py` gebruikt LangGraph voor de gespreksroute, receptzoekroute, directe rekentoolroute en de gecombineerde zoek- en rekentoolroute. `scale_server.py` biedt de MCP-tool `scale_ingredients` via stdio aan. De agent rekende onder meer 420 ml water voor vier porties om naar 735 ml voor zeven porties.
-- **Evaluatie.** `data/evaluation.json` bevat 18 vragen met verwachte routes, referentieantwoorden en waar relevant controleerbare bronfragmenten of MCP-uitkomsten. `evaluate_chef.py` vergelijkt de twee chunkmethodes. De volledige lokale meetuitvoer staat in `reports/baseline.json`.
+- **Evaluatie.** Deze referentiemeting bevat 18 vragen met verwachte routes, referentieantwoorden en waar relevant controleerbare bronfragmenten of MCP-uitkomsten. `evaluate_chef.py` vergelijkt de twee chunkmethodes. De volledige lokale referentiemeting staat in `reports/baseline.json`.
 - **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De latere live Groq- en Ragas-proef op de drie proefrecepten staat in het [projectrapport](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting).
 
 ### Lokale referentiemeting
@@ -57,11 +57,11 @@ Stel `GROQ_API_KEY` lokaal in als omgevingsvariabele. Bij deze benchmark ontvang
 
 ### Uitgebreide receptendataset
 
-De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide indexen opnieuw met `recipe_search.py build`. Voer `python -m scripts.compare_chunking --output reports/chunking-local.json` uit in de virtuele omgeving om de lokale zoekvergelijking te herhalen. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de [resultaten](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
+De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide indexen opnieuw met `recipe_search.py build`. De [actuele agentbenchmark](../data/evaluation.json) bevat 20 vragen. `python -m scripts.compare_chunking --output reports/chunking-local.json` meet met de huidige testset alleen de 12 zoekvragen met positief bronbewijs en de 7 aanvullende zoekvragen. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de resultaten van de [eerdere zoekvergelijking](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
 
 ### Volgende stappen
 
 **Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
 
-1. **Breid de volledige agent-evaluatie uit voor de nieuwe recepten.** De zoekvergelijking heeft zeven nieuwe vragen. Voeg aan de 18 agentvragen ook zoeken, herschalen en onbekende vragen over de nieuwe recepten toe. Herhaal daarna de live Ragas-meting op de uitgebreide dataset.
+1. **Herhaal de live Ragas-meting op 36 recepten.** De agentbenchmark bevat nu 20 vragen met drie nieuwe cases. Controleer de bron en het gegenereerde antwoord ook bij de vraag over de ontbrekende bakvormmaat. [Evaluatie met 36 recepten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
 2. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via de interface blijven te controleren. De interface toont metingen na afloop. Zie [de handleiding](LOKALE-INTERFACE.md).

@@ -24,10 +24,11 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 
 ## 3. Evaluatie · 20%
 
-- [x] Leg 18 controlevragen vast en controleer de referenties tegen de recepten en de portieberekeningen.
+- [x] Leg 20 controlevragen vast en controleer de referenties tegen de recepten en de portieberekeningen.
 - [x] Meet beide chunkmethodes lokaal en controleer per vraag de route, opgehaalde bronnen, tooluitkomst en het antwoord.
 - [x] Meet Context Precision, Context Recall en Faithfulness live met Ragas en vergelijk de antwoorden met de referenties. Ragas scoorde negen van de elf zoekvragen per methode op de drie proefrecepten. De [foutanalyse](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting) behandelt de overige vragen.
-- [ ] Breid de agent-evaluatie uit met vragen over de nieuwe recepten en herhaal de live meting op de uitgebreide dataset.
+- [x] Breid de agent-evaluatie uit met vragen over de nieuwe recepten. Controleer ook of de agent het juiste recept ophaalt als het gevraagde detail ontbreekt.
+- [ ] Herhaal de live meting op de 36 recepten en controleer of het antwoord ontbrekende informatie correct meldt.
 
 ## 4. Inference, metingen en lokale interface · 10%
 

@@ -158,6 +158,30 @@ Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd ger
 
 De evaluatiecode, de foutanalyse en het keuzeoverzicht zijn samengevoegd met de versie met 36 recepten en de lokale interface. Codex hielp bij het samenvoegen en testen. De zeven schermtests en de vier integratietests, inclusief herschalen van alle 36 recepten, slaagden lokaal. De lokale benchmark met het uitgebreide corpus haalde per methode 18/18 routes en 6/6 MCP-uitkomsten. De top 3 bevatte het volledige bewijs bij 9/11 zoekvragen met tokenchunks en 10/11 met receptsecties. Deze herhaling gebruikte de bestaande 18 agentvragen. De live Ragas-meting hierboven blijft de referentie op drie proefrecepten.
 
+## 27 november 2026 | Evaluatie met 36 recepten
+
+**Raoul.** De agenttestset bevat nu 20 vragen, binnen de 15–20 uit de opdracht. Er zijn twaalf zoekvragen met beantwoordbare referenties, één vraag over ontbrekende receptinformatie, zes schaalvragen en één begroeting. De schaalvraag waarbij het aantal porties gelijk bleef, maakte plaats voor het herschalen van Quiche Lorraine van zes naar vier porties. De extra zoekvragen gaan over de 75 ml olijfolie voor marmitako en de ontbrekende bakvormmaat bij yoghurtcake. De nieuwe referenties zijn tegen de vastgelegde bron gecontroleerd. [Evaluatievragen](../data/evaluation.json) · [Corpusversie](https://github.com/Rippy1911/open-recipe-corpus/tree/86102603bac07d79b94bc35cba5b50346798cc09)
+
+**Methode.** Beide chunkmethodes gebruikten dezelfde 36 recepten, 20 vragen, top 3 en het meertalige MiniLM-embeddingmodel. `recipe_search.py build` controleerde of de actuele indexen klaarstonden. De receptenhash begint met `cfe4adba054de` en de vragenhash met `70c673ccf1d1`. De volledige hashes staan in de lokale JSON-uitvoer. De toets op ontbrekende informatie controleert of de agent het juiste recept ophaalt. De inhoud van het gegenereerde antwoord wordt handmatig gecontroleerd. De drie Ragas-metrieken zijn bestemd voor de twaalf zoekvragen met positief bronbewijs. [Meetinstructies](VOORTGANG.md#live-benchmark-met-groq-en-ragas)
+
+### Lokale agentbenchmark met 20 vragen
+
+Uitgevoerd met `evaluate_chef.py --output reports/evaluation-expanded.json` in Python 3.13.15.
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Fragmenten in de index | 106 | 133 |
+| Verwachte route | 20/20 | 20/20 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Alle benodigde broninformatie in het eerste fragment | 6/12 | 9/12 |
+| Alle benodigde broninformatie in de top 3 | 10/12 | 11/12 |
+
+De route, bewijsrang en toolcontrole voor de zeventien gedeelde vragen kwamen overeen met de vorige lokale run op 36 recepten. De 75 ml olijfolie stond bij beide methodes in het eerste fragment. Voor Quiche Lorraine leverde MCP bij beide methodes 200 g hartig kruimeldeeg, vier plakken gerookt spek en twee eieren. Bij de vraag naar een bakvormmaat haalden beide methodes alleen fragmenten uit het juiste yoghurtcakerecept op. De lokale agent geeft deze fragmenten terug.
+
+De zoekcontrole met hetzelfde receptfilter over alle fragmenten van het recept plaatste de bloemkoolvervanging op plek 6 bij tokenchunks en plek 7 bij receptsecties. De ricotta stond op plek 5 met tokens en plek 3 met secties. De broninformatie staat in beide indexen. Bij de missers valt het benodigde fragment buiten de top 3 die de agent ontvangt.
+
+**GenAI-vermelding.** Codex hielp met het uitbreiden en controleren van de testset, het uitvoeren van de metingen en de foutanalyse.
+
 ## Volgende fasen
 
 Noteer per fase de datum, het projectwerk onder de naam van de projectauteur, de gemaakte keuze en het testresultaat. Vermeld eventueel GenAI-gebruik apart en werk de MVP-checklist bij.
