@@ -243,11 +243,33 @@ Na de integratie met persoon 4 is de volledige lokale benchmark herhaald. Alle r
 
 **Lokale benchmark.** Beide methodes haalden 20/20 routes en 6/6 MCP-uitkomsten. In de top 3 kwam volledig bronbewijs bij 11/12 vragen met tokenchunks en bij 12/12 met receptsecties. De afzonderlijke zoekvergelijking zonder receptfilter mat 19 unieke vragen. Die haalde 14/19 met tokenchunks en 15/19 met receptsecties. Vergelijk de aantallen per methode binnen elke test, aangezien de vraagsets verschillen.
 
+### Live nameting op de MVP
+
+| Meting | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Verwachte route | 20/20 | 20/20 |
+| Gecontroleerde MCP-uitkomsten | 6/6 | 6/6 |
+| Volledig bronbewijs in top 3 | 11/12 | 12/12 |
+| Handmatig juiste antwoorden op beantwoordbare bronvragen | 11/12 | 12/12 |
+| Inputtokens voor 33 agentaanroepen | 9619 | 9100 |
+| Outputtokens voor 33 agentaanroepen | 1445 | 1350 |
+| Mediane antwoord-TTFT over 13 antwoordaanroepen | 368 ms | 264 ms |
+
+De live nulmeting uit PR #7 haalde voor beide methodes 18/20 routes en 9/12 met volledig bronbewijs in de top 3. De 19 gedeelde vragen, waaronder alle twaalf bronvragen, blijven vergelijkbaar. Bij yoghurtcake vonden beide strategieën het juiste recept en meldden ze terecht dat de afmetingen van de bakvorm ontbreken. De enige inhoudelijke misser bij de beantwoordbare vragen is de hoeveelheid ricotta in de tokenmethode. De agent onthoudt zich daar van een hoeveelheid omdat het relevante fragment ontbreekt.
+
+| Ragas met Qwen | Op tokenlengte | Per receptsectie |
+| --- | ---: | ---: |
+| Context Precision | 0,6167 (10/12) | Geen score (0/12) |
+| Context Recall | 0,9000 (10/12) | Geen score (0/12) |
+| Faithfulness | 1,0000 (10/12) | Geen score (0/12) |
+
+De live agentrun leverde voor beide strategieën alle antwoorden en tussenresultaten op. De Qwen-beoordelaar bereikte zijn dagelijkse Groq-tokenlimiet na de eerste tien tokenvragen. Een poging met alleen ontbrekende beoordelingen werd ook na de door Groq opgegeven wachttijd begrensd. De bestaande scores en foutlog zijn bewaard. De actuele Ragas-dekking laat nog geen vergelijking tussen beide methodes toe. Voltooi de nameting zodra dezelfde Qwen-beoordelaar voldoende quotum heeft. De nulmeting op 36 recepten uit PR #7 blijft beschikbaar.
+
 **Reproduceerbaarheid.** De [meetcommando’s](VOORTGANG.md#live-benchmark-met-groq-en-ragas) bouwen beide Qdrant-indexen en gebruiken top 3. De beoordelaar voor vergelijking met PR #7 is `qwen/qwen3.8-27b`, met `openai/gpt-oss-20b` voor de agent. Een tussentijdse poging met de oude GPT-OSS 120B-beoordelaar liep tegen de gebruikslimiet aan. De JSON-rapporten zijn lokaal. Ze bevatten corpus- en testsethashes, bronfragmenten, gekozen route, tool- en antwoorduitvoer en de beschikbare metingen.
 
 **Demoketen.** Streamlits live controle testte het antwoord **4 porties**, de schaaluitkomst **735 ml** en `convert_units` met **0,25 kg**. De zoekvraag gebruikte 606 inputtokens en 108 outputtokens, met een antwoord-TTFT van 401 ms. De schaalvraag gebruikte 224 inputtokens en 38 outputtokens. De conversie gebruikte 219 inputtokens en 29 outputtokens. Bij die twee vragen komen de routetokens van Groq en de berekening van MCP. De conversie is ook via de browser uitgevoerd. Gebruik het vroegere antwoord van **795 ml** voor de diagnose tijdens de verdediging.
 
-**GenAI-vermelding.** Het team stelde de scope vast en maakte Groq-toegang beschikbaar. Codex hielp met de implementatie, regressietests, meting en rapportering. De eigen teamreview en demo-oefening blijven open. Het exacte GenAI-beleid van de opleiding is nog te controleren.
+**Regressie en GenAI.** Twaalf schermtests, zeven Groq-protocoltests en zes integratietests met de echte lokale zoekfunctie en MCP-server slaagden. De gecombineerde lokale vraag “Zoek de curry en schaal die naar 7 porties” toont de route, drie fragmenten en `scale_ingredients` met **735 ml**. Het team stelde de scope vast en maakte Groq-toegang beschikbaar. Codex hielp met de implementatie, regressietests, meting en rapportering. De persoonlijke teamreview en demo-oefening blijven open. Het exacte GenAI-beleid van de opleiding is nog te controleren.
 
 ## Volgende fasen
 

@@ -63,5 +63,5 @@ De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide inde
 
 ### Volgende stappen
 
-1. **Herhaal de actuele benchmark bij agentwijzigingen.** Bouw na wijzigingen aan de chunks eerst beide indexen opnieuw. De [MVP-meting](RAPPORT.md#27-november-2026--mvp-oplevering) bevat de diagnose op de 20 referentievragen.
+1. **Vul de Ragas-nameting aan zodra Groq-quotum beschikbaar is.** Gebruik dezelfde Qwen-beoordelaar en behoud de twaalf bronvragen voor de vergelijking met PR #7. De [MVP-meting](RAPPORT.md#live-nameting-op-de-mvp) bevat de live agentresultaten en de huidige scoredekking. Bouw na wijzigingen aan de chunks eerst beide indexen opnieuw.
 2. **Oefen de opgeleverde interface-demo.** Gebruik de portievraag, het herschalen van de curry, een eenheidsconversie en de Broncontrole. Neem de eigen code-review en GenAI-verantwoording mee. Zie [de handleiding](LOKALE-INTERFACE.md).

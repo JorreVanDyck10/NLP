@@ -28,6 +28,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 - [x] Breid de agent-evaluatie uit met vragen over de nieuwe recepten. Controleer ook of de agent het juiste recept ophaalt als het gevraagde detail ontbreekt.
 - [x] Herhaal de live meting op de 36 recepten. Ragas scoorde tien van twaalf beantwoordbare zoekvragen per methode. Beide antwoorden meldden terecht dat de yoghurtcakebron geen bakvormmaat vermeldt. [Uitgebreide evaluatie](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
 - [x] Controleer de vier bekende fouten op de standaardmethode na de agentwijzigingen. [MVP-meting](RAPPORT.md#27-november-2026--mvp-oplevering)
+- [ ] Vul de ontbrekende Ragas-nameting aan zodra Groq-quotum beschikbaar is. Qwen scoorde 10/12 met tokenchunks en 0/12 met receptsecties voor elk van de drie metrieken. De live agentrun is volledig. [Nameting](RAPPORT.md#live-nameting-op-de-mvp)
 
 ## 4. Inference, metingen en lokale interface · 10%
 
