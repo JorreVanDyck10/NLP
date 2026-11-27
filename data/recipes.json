@@ -1,0 +1,102 @@
+[
+  {
+    "id": "kikkererwten-groentecurry",
+    "title": "Kikkererwten-groentecurry",
+    "aliases": ["curry", "groentecurry", "kikkererwtencurry"],
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 20}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/chickpea-vegetable-curry.html",
+    "ingredients": [
+      {"name": "kerriepoeder", "quantity": 45, "unit": "ml"},
+      {"name": "water", "quantity": 420, "unit": "ml"},
+      {"name": "gele ui", "quantity": 0.5, "unit": "stuk"},
+      {"name": "knoflook", "quantity": 3, "unit": "teen"},
+      {"name": "bleekselderij", "quantity": 1, "unit": "stengel"},
+      {"name": "groene paprika, in blokjes", "quantity": 60, "unit": "ml"},
+      {"name": "tomaat", "quantity": 1, "unit": "stuk"},
+      {"name": "garam masala", "quantity": 5, "unit": "ml"},
+      {"name": "zout", "quantity": 2.5, "unit": "ml"},
+      {"name": "kikkererwten zonder toegevoegd zout, uitgelekt en gespoeld", "quantity": 1, "unit": "blik", "note": "blik van 540 ml"},
+      {"name": "bloemkoolroosjes", "quantity": 500, "unit": "ml"},
+      {"name": "diepvrieserwten, ontdooid", "quantity": 250, "unit": "ml"},
+      {"name": "olie of bakspray voor de pan"}
+    ],
+    "instructions": [
+      "Roer het kerriepoeder los met 45 ml van het water.",
+      "Mix een kwart ui met de knoflook, selderij, paprika en een halve tomaat. Snijd het resterende kwart ui en de andere halve tomaat klein.",
+      "Vet een pan licht in en verhit op middelhoog tot hoog vuur. Bak de kerriepasta een halve minuut. Voeg het gemixte mengsel en de gesneden groenten toe en bak 10 minuten op middelhoog vuur.",
+      "Doe er de resterende 375 ml water, garam masala en zout bij. Laat afgedekt 10 minuten zachtjes koken en roer af en toe.",
+      "Voeg de kikkererwten en bloemkool toe en kook verder tot de bloemkool gaar genoeg is. Warm de erwten op het laatst kort mee."
+    ],
+    "substitutions": ["Vervang bloemkool eventueel door wortel, aubergine, pompoen of broccoli."]
+  },
+  {
+    "id": "slowcooker-lasagne",
+    "title": "Lasagne uit de slowcooker",
+    "aliases": ["lasagne"],
+    "servings": 8,
+    "prep_minutes": 20,
+    "cook_times": [
+      {"minutes": 360, "max_minutes": 480, "setting": "lage stand"},
+      {"minutes": 180, "max_minutes": 240, "setting": "hoge stand"}
+    ],
+    "dietary_tags": ["bevat vlees"],
+    "source_url": "https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/slow-cooked-lasagna.html",
+    "ingredients": [
+      {"name": "mager rundergehakt", "quantity": 225, "unit": "g"},
+      {"name": "ui, fijngehakt", "quantity": 1, "unit": "stuk"},
+      {"name": "knoflook, fijngehakt", "quantity": 3, "unit": "teen"},
+      {"name": "gedroogde oregano", "quantity": 10, "unit": "ml"},
+      {"name": "chilivlokken", "quantity": 1, "unit": "ml"},
+      {"name": "tomatenpassata", "quantity": 700, "unit": "ml"},
+      {"name": "water", "quantity": 250, "unit": "ml"},
+      {"name": "volkoren lasagnevellen", "quantity": 10, "unit": "stuk"},
+      {"name": "magere ricotta", "quantity": 475, "unit": "g"},
+      {"name": "babyspinazie, fijngesneden", "quantity": 142, "unit": "g"},
+      {"name": "verse basilicum of peterselie, fijngesneden", "quantity": 60, "unit": "ml"},
+      {"name": "geraspte Parmezaanse kaas", "quantity": 30, "unit": "ml"},
+      {"name": "geraspte mozzarella", "quantity": 125, "unit": "ml"},
+      {"name": "bakspray voor de slowcooker"}
+    ],
+    "instructions": [
+      "Vet de slowcooker licht in. Bak het gehakt rul in een koekenpan en giet het vet af.",
+      "Bak het gehakt met de ui, knoflook, oregano en chilivlokken nog ongeveer 5 minuten. Voeg passata en water toe en zet het vuur uit.",
+      "Meng de ricotta met spinazie, basilicum of peterselie en Parmezaanse kaas.",
+      "Bedek de bodem met wat vleessaus. Leg daarop een laag lasagnevellen, een kwart van de saus en een derde van het ricottamengsel. Herhaal twee keer en eindig met de resterende vleessaus.",
+      "Gaar de lasagne afgedekt 6–8 uur op de lage stand of 3–4 uur op de hoge stand. Strooi er ongeveer 15 minuten vóór het serveren mozzarella over en laat die op de lage stand smelten."
+    ],
+    "substitutions": ["Rundergehakt kan worden vervangen door mager kalkoengehakt."]
+  },
+  {
+    "id": "aardbeienpannenkoeken",
+    "title": "Aardbeienpannenkoeken",
+    "aliases": ["pannenkoeken"],
+    "servings": 14,
+    "prep_minutes": 10,
+    "cook_times": [{"minutes": 15}],
+    "dietary_tags": ["vegetarisch"],
+    "source_url": "https://www.canada.ca/en/health-canada/services/food-guide/eating-support/kitchen/recipes/strawberry-pancakes.html",
+    "ingredients": [
+      {"name": "volkoren tarwemeel", "quantity": 250, "unit": "ml"},
+      {"name": "tarwebloem", "quantity": 125, "unit": "ml"},
+      {"name": "kristalsuiker", "quantity": 30, "unit": "ml"},
+      {"name": "bakpoeder", "quantity": 10, "unit": "ml"},
+      {"name": "gemalen kaneel", "quantity": 1, "unit": "snufje"},
+      {"name": "magere melk", "quantity": 375, "unit": "ml"},
+      {"name": "ei", "quantity": 1, "unit": "stuk"},
+      {"name": "plantaardige olie", "quantity": 30, "unit": "ml"},
+      {"name": "vanille", "quantity": 10, "unit": "ml"},
+      {"name": "verse aardbeien, in blokjes", "quantity": 250, "unit": "ml"},
+      {"name": "bakspray voor de pan"}
+    ],
+    "instructions": [
+      "Verwarm de oven tot 120 °C om de gebakken pannenkoeken warm te houden.",
+      "Meng beide soorten meel met de suiker, het bakpoeder en de kaneel. Klop in een andere kom de melk, het ei, de olie en de vanille los.",
+      "Roer het melkmengsel door de droge ingrediënten en meng de aardbeien door het beslag.",
+      "Vet een pan licht in en verwarm op middelhoog vuur. Gebruik ongeveer 60 ml beslag per pannenkoek. Draai na circa 2 minuten om zodra er luchtbelletjes verschijnen en bak de tweede kant nog ongeveer 1 minuut. Houd gebakken pannenkoeken warm in de oven."
+    ],
+    "substitutions": ["Gebruik eventueel ander seizoensfruit in plaats van aardbeien."]
+  }
+]

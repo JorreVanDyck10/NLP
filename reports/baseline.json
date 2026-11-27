@@ -1,0 +1,893 @@
+{
+  "mode": "local",
+  "ragas_executed": false,
+  "strategies": {
+    "tokens": {
+      "summary": {
+        "routes_correct": 18,
+        "routes_total": 18,
+        "evidence_at_1": 5,
+        "evidence_at_3": 9,
+        "retrieval_total": 11,
+        "mean_reciprocal_evidence_rank": 0.6212,
+        "tools_correct": 6,
+        "tools_total": 6,
+        "median_latency_ms": 1064.61
+      },
+      "cases": [
+        {
+          "id": "curry-water",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1163.18,
+          "llm_calls": [],
+          "evidence_rank": 2,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.5066
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.4917
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.4562
+            }
+          ]
+        },
+        {
+          "id": "curry-water-stages",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1153.2,
+          "llm_calls": [],
+          "evidence_rank": 2,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.5075
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.4848
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.4505
+            }
+          ]
+        },
+        {
+          "id": "curry-portions",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1053.46,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.1046
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.0617
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.0469
+            }
+          ]
+        },
+        {
+          "id": "curry-substitution",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1034.71,
+          "llm_calls": [],
+          "evidence_rank": null,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.515
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.4923
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Volledige recept",
+              "score": 0.4749
+            }
+          ],
+          "retrieved_text": [
+            "Kikkererwten-groentecurry | Volledige recept\n250 ml diepvrieserwten, ontdooid\nolie of bakspray voor de pan\n\nBereiding\n1. Roer het kerriepoeder los met 45 ml van het water.\n2. Mix een kwart ui met de knoflook, selderij, paprika en een halve tomaat. Snijd het resterende kwart ui en de andere halve tomaat klein.",
+            "Kikkererwten-groentecurry | Volledige recept\n4. Doe er de resterende 375 ml water, garam masala en zout bij. Laat afgedekt 10 minuten zachtjes koken en roer af en toe.\n5. Voeg de kikkererwten en bloemkool toe en kook verder tot de bloemkool gaar genoeg is. Warm de erwten op het laatst kort mee.",
+            "Kikkererwten-groentecurry | Volledige recept\n3. Vet een pan licht in en verhit op middelhoog tot hoog vuur. Bak de kerriepasta een halve minuut. Voeg het gemixte mengsel en de gesneden groenten toe en bak 10 minuten op middelhoog vuur."
+          ]
+        },
+        {
+          "id": "lasagne-ricotta",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1067.36,
+          "llm_calls": [],
+          "evidence_rank": null,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.6045
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.5785
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.5753
+            }
+          ],
+          "retrieved_text": [
+            "Lasagne uit de slowcooker | Volledige recept\n5. Gaar de lasagne afgedekt 6–8 uur op de lage stand of 3–4 uur op de hoge stand. Strooi er ongeveer 15 minuten vóór het serveren mozzarella over en laat die op de lage stand smelten.\n\nVervangingen\nRundergehakt kan worden vervangen door mager kalkoengehakt.",
+            "Lasagne uit de slowcooker | Volledige recept\nOverzicht\nPorties: 8. Voorbereiding: 20 minuten. Kooktijd: 360–480 minuten (lage stand) of 180–240 minuten (hoge stand). Dieettags: bevat vlees.\n\nIngrediënten\n225 g mager rundergehakt\n1 stuk ui, fijngehakt\n3 teen knoflook, fijngehakt",
+            "Lasagne uit de slowcooker | Volledige recept\n2. Bak het gehakt met de ui, knoflook, oregano en chilivlokken nog ongeveer 5 minuten. Voeg passata en water toe en zet het vuur uit.\n3. Meng de ricotta met spinazie, basilicum of peterselie en Parmezaanse kaas."
+          ]
+        },
+        {
+          "id": "lasagne-high",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1136.43,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.6368
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.5416
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.4563
+            }
+          ]
+        },
+        {
+          "id": "lasagne-substitution",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1061.85,
+          "llm_calls": [],
+          "evidence_rank": 3,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.5795
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.518
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.499
+            }
+          ]
+        },
+        {
+          "id": "lasagne-mozzarella",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1120.08,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.7025
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.6595
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Volledige recept",
+              "score": 0.65
+            }
+          ]
+        },
+        {
+          "id": "pancakes-milk",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1075.49,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.6948
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.563
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.5403
+            }
+          ]
+        },
+        {
+          "id": "pancakes-substitution",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1131.43,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.8409
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.6723
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.5927
+            }
+          ]
+        },
+        {
+          "id": "pancakes-temperature",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1021.38,
+          "llm_calls": [],
+          "evidence_rank": 2,
+          "retrieved": [
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.6708
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.506
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Volledige recept",
+              "score": 0.3209
+            }
+          ]
+        },
+        {
+          "id": "scale-grams",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 713.9,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-millilitres",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 685.46,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-decimal",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 905.93,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-unchanged",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 874.8,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-curry",
+          "expected_route": "scale_recipe",
+          "actual_route": "scale_recipe",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_recipe",
+            "RAG: 3 fragmenten",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 1870.83,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-lasagne",
+          "expected_route": "scale_recipe",
+          "actual_route": "scale_recipe",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_recipe",
+            "RAG: 3 fragmenten",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 1871.14,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "chat-greeting",
+          "expected_route": "chat",
+          "actual_route": "chat",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): chat"
+          ],
+          "latency_ms": 1.44,
+          "llm_calls": []
+        }
+      ]
+    },
+    "sections": {
+      "summary": {
+        "routes_correct": 18,
+        "routes_total": 18,
+        "evidence_at_1": 8,
+        "evidence_at_3": 10,
+        "retrieval_total": 11,
+        "mean_reciprocal_evidence_rank": 0.7879,
+        "tools_correct": 6,
+        "tools_total": 6,
+        "median_latency_ms": 1014.81
+      },
+      "cases": [
+        {
+          "id": "curry-water",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1005.89,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Ingrediënten",
+              "score": 0.5292
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Bereiding",
+              "score": 0.5026
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Ingrediënten",
+              "score": 0.4918
+            }
+          ]
+        },
+        {
+          "id": "curry-water-stages",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1094.73,
+          "llm_calls": [],
+          "evidence_rank": 3,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Bereiding",
+              "score": 0.5092
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Ingrediënten",
+              "score": 0.4913
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Bereiding",
+              "score": 0.4879
+            }
+          ]
+        },
+        {
+          "id": "curry-portions",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1142.31,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Overzicht",
+              "score": 0.2481
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Ingrediënten",
+              "score": 0.0877
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Bereiding",
+              "score": 0.0423
+            }
+          ]
+        },
+        {
+          "id": "curry-substitution",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1021.43,
+          "llm_calls": [],
+          "evidence_rank": null,
+          "retrieved": [
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Ingrediënten",
+              "score": 0.4609
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Bereiding",
+              "score": 0.4296
+            },
+            {
+              "recipe_id": "kikkererwten-groentecurry",
+              "section": "Bereiding",
+              "score": 0.4233
+            }
+          ],
+          "retrieved_text": [
+            "Kikkererwten-groentecurry | Ingrediënten\n5 ml garam masala\n2.5 ml zout\n1 blik kikkererwten zonder toegevoegd zout, uitgelekt en gespoeld (blik van 540 ml)\n500 ml bloemkoolroosjes\n250 ml diepvrieserwten, ontdooid\nolie of bakspray voor de pan",
+            "Kikkererwten-groentecurry | Bereiding\n4. Doe er de resterende 375 ml water, garam masala en zout bij. Laat afgedekt 10 minuten zachtjes koken en roer af en toe.\n5. Voeg de kikkererwten en bloemkool toe en kook verder tot de bloemkool gaar genoeg is. Warm de erwten op het laatst kort mee.",
+            "Kikkererwten-groentecurry | Bereiding\n3. Vet een pan licht in en verhit op middelhoog tot hoog vuur. Bak de kerriepasta een halve minuut. Voeg het gemixte mengsel en de gesneden groenten toe en bak 10 minuten op middelhoog vuur."
+          ]
+        },
+        {
+          "id": "lasagne-ricotta",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 932.23,
+          "llm_calls": [],
+          "evidence_rank": 3,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.6009
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.5883
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Ingrediënten",
+              "score": 0.5638
+            }
+          ]
+        },
+        {
+          "id": "lasagne-high",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1049.21,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.6935
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Overzicht",
+              "score": 0.6009
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.5165
+            }
+          ]
+        },
+        {
+          "id": "lasagne-substitution",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1008.19,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Vervangingen",
+              "score": 0.7244
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.5903
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Ingrediënten",
+              "score": 0.4668
+            }
+          ]
+        },
+        {
+          "id": "lasagne-mozzarella",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1117.63,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.7052
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Bereiding",
+              "score": 0.6354
+            },
+            {
+              "recipe_id": "slowcooker-lasagne",
+              "section": "Ingrediënten",
+              "score": 0.5905
+            }
+          ]
+        },
+        {
+          "id": "pancakes-milk",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1000.69,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Ingrediënten",
+              "score": 0.5867
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Bereiding",
+              "score": 0.5432
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Bereiding",
+              "score": 0.5272
+            }
+          ]
+        },
+        {
+          "id": "pancakes-substitution",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 1027.34,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Vervangingen",
+              "score": 0.8487
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Bereiding",
+              "score": 0.6997
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Ingrediënten",
+              "score": 0.6476
+            }
+          ]
+        },
+        {
+          "id": "pancakes-temperature",
+          "expected_route": "search",
+          "actual_route": "search",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): search",
+            "RAG: 3 fragmenten"
+          ],
+          "latency_ms": 977.54,
+          "llm_calls": [],
+          "evidence_rank": 1,
+          "retrieved": [
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Bereiding",
+              "score": 0.7545
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Bereiding",
+              "score": 0.7109
+            },
+            {
+              "recipe_id": "aardbeienpannenkoeken",
+              "section": "Overzicht",
+              "score": 0.3297
+            }
+          ]
+        },
+        {
+          "id": "scale-grams",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 705.56,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-millilitres",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 894.57,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-decimal",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 801.0,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-unchanged",
+          "expected_route": "scale_quantity",
+          "actual_route": "scale_quantity",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_quantity",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 1395.95,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-curry",
+          "expected_route": "scale_recipe",
+          "actual_route": "scale_recipe",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_recipe",
+            "RAG: 3 fragmenten",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 2248.09,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "scale-lasagne",
+          "expected_route": "scale_recipe",
+          "actual_route": "scale_recipe",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): scale_recipe",
+            "RAG: 3 fragmenten",
+            "MCP: scale_ingredients"
+          ],
+          "latency_ms": 2109.83,
+          "llm_calls": [],
+          "tool_ok": true
+        },
+        {
+          "id": "chat-greeting",
+          "expected_route": "chat",
+          "actual_route": "chat",
+          "route_ok": true,
+          "trace": [
+            "router (lokaal): chat"
+          ],
+          "latency_ms": 1.46,
+          "llm_calls": []
+        }
+      ]
+    }
+  }
+}

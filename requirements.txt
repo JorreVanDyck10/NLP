@@ -1,0 +1,7 @@
+llama-index-core==0.14.26
+fastembed==0.9.1
+qdrant-client==1.20.0
+langgraph==1.2.23
+mcp==1.30.0
+httpx>=0.28,<1
+pydantic>=2.11,<3

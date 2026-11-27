@@ -2,7 +2,9 @@
 
 ## 19 november 2026
 
-Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De huidige versie werkt lokaal via PowerShell. De code, dataset en meetresultaten staan in de lokale projectmap. Deze eerste GitHub-update bevat het overdrachtsverslag. Voor een werkende checkout heeft een opvolger ook de hieronder genoemde projectbestanden nodig.
+Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De huidige versie werkt lokaal via PowerShell.
+
+**27 november 2026.** De broncode, proefrecepten, testvragen en lokale benchmark staan in deze repository. Bouw na het klonen de zoekindexen op met de onderstaande instructies.
 
 ### Gebouwd en getest
 
