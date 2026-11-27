@@ -13,6 +13,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 - [x] Maak vijf voorbeeldrecepten en een lokale LlamaIndex-vectorindex.
 - [x] Breid de agentdataset uit naar 30–50 gevarieerde recepten met ingrediënten, stappen, kooktijd, dieetlabels en herkomst. De agent gebruikt 36 recepten.
 - [x] Vergelijk tokengebaseerde chunking met splitsen per receptsectie op dezelfde vragen. Zie de resultaten en foutanalyse in het [projectrapport](RAPPORT.md#receptendataset-en-chunking).
+  - [x] Test parent-child als derde methode, met dezelfde vragen en zes meerstapsvragen. [Resultaten](RAPPORT.md#parent-child-chunking)
 
 ## 2. Agent en MCP · 35%
 
