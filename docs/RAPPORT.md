@@ -58,6 +58,10 @@ Bij de vraag *Hoeveel water gaat er in totaal in de curry?* kwam bij splitsen pe
 
 Splitsen per onderdeel gaf op deze vragen vaker het bewijs op plek 1. Bij enkele vragen gaf tokenlengte een beter resultaat. De vergelijking is klein en meet toegang tot broninformatie. De live Ragas-beoordeling en het GenAI-beleid van de opleiding vragen nog verificatie. De recepttijden zijn bronwaarden en de bereidingen zijn niet fysiek uitgeprobeerd.
 
+### Drie of vijf zoekfragmenten
+
+In een aanvullende test op dezelfde 18 vragen vond splitsen per receptonderdeel zonder receptfilter al het bewijs bij 14 vragen met drie fragmenten en bij 15 met vijf. Met de bestaande receptnaamherkenning van de agent vond de zoeker het bewijs bij 17 van de 18 vragen, zowel met drie als met vijf fragmenten. De gemiddelde hoeveelheid fragmenttekst steeg daarbij van 616 naar 915 tekens. Het voorstel is daarom om drie fragmenten als standaard te behouden. De bloemkoolvervanging bleef de enige misser met receptnaamherkenning. Het juiste fragment stond op plek 7 bij de sectiemethode.
+
 ### Gecontroleerd
 
 - 36 unieke recept-ID's en de vereiste velden. De oorspronkelijke drie records zijn inhoudelijk ongewijzigd.
