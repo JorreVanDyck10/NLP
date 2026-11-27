@@ -21,6 +21,8 @@ Bijgewerkt op **27 november 2026**. `main` bevat de agent, MCP-tool, 36 recepten
 2. Gebruik de controle uit je werkpakket om je wijziging te verifiëren. Gebruik bij het vergelijken dezelfde vragen en noteer het corpus en de instellingen. De gedeelde meetresultaten staan in het rapport. [Projectrapport](RAPPORT.md)
 3. Werk dit document bij in dezelfde wijziging als de stand, een keuze of een volgende stap verandert. Noteer bij een nieuwe keuze wat we gebruiken en waarom, met een verwijzing naar de code, bron of les. Bewaar meetdetails bij de betrokken fase in het rapport en wijzig de checklist als een opleverpunt van status verandert. [MVP-checklist](MVP-CHECKLIST.md)
 
+Deze lees- en bijwerkafspraak geldt ook voor de begeleider `nlpagent`. Die bewaart hier de actuele keuzes en werkpakketstatus en zet uitvoerings- en testbewijs in het bestaande rapport. De lokale skill bevat alleen de werkwijze, zodat de inhoud niet tussen de skill en deze documenten uit elkaar gaat lopen.
+
 ## 19 november 2026 | Eerste RAG-demo
 
 | Wat gebruiken we? | Waarvoor en waarom? |

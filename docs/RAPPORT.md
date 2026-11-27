@@ -68,6 +68,8 @@ Ook de zoekvergelijking zonder receptfilter is op de geïntegreerde versie herha
 
 De [projectkeuzes](PROJECTKEUZES.md) leggen vast wat we gebruiken, waarvoor en waarom. Fasedetails en meetresultaten staan bij de betrokken projectfase.
 
+De begeleider `nlpagent` leest bij iedere nieuwe werkfase eerst beide documenten en de MVP-checklist. Bij een nieuwe of gewijzigde keuze werkt hij het bestaande keuzeoverzicht bij met techniek/hulpmiddel, toepassing, reden, lesbasis of bron en beperking. In dit rapport legt hij vast wat is uitgevoerd, welke controles werkelijk zijn gedaan, waar AI hielp en wat nog niet is geverifieerd. De checklist verandert alleen op basis van aantoonbaar resultaat. Dit gebeurt in dezelfde wijziging als de implementatie; er komt geen tweede logboek.
+
 ## Receptendataset en chunking
 
 **27 november 2026.** De gebruiker koos taak 1 voor het team en gaf PowerPoint 1 als lesbasis. Codex hielp met de bronselectie, de Nederlandse bewerking, het vergelijkingsscript, de uitvoering en de documentatie. De drie bestaande recepten zijn behouden. De [33 nieuwe recepten](../data/README.md#herkomst-van-de-agentrecepten) zijn verspreid over acht categorieën, waaronder ontbijt, lunch, avondeten en dessert.
@@ -157,6 +159,10 @@ Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd ger
 ## 27 november 2026 | Integratie van werkpakket 3
 
 De evaluatiecode, de foutanalyse en het keuzeoverzicht zijn samengevoegd met de versie met 36 recepten en de lokale interface. Codex hielp bij het samenvoegen en testen. De zeven schermtests en de vier integratietests, inclusief herschalen van alle 36 recepten, slaagden lokaal. De lokale benchmark met het uitgebreide corpus haalde per methode 18/18 routes en 6/6 MCP-uitkomsten. De top 3 bevatte het volledige bewijs bij 9/11 zoekvragen met tokenchunks en 10/11 met receptsecties. Deze herhaling gebruikte de bestaande 18 agentvragen. De live Ragas-meting hierboven blijft de referentie op drie proefrecepten.
+
+## 27 november 2026 | Werkwijze nlpagent vastgelegd
+
+De gebruiker wees dit bestaande rapport aan als uitgangspunt. De lokale Codex-skill `nlpagent` is op basis van de eerder opgegeven begeleidersinstructies ingericht en gekoppeld aan dit rapport en PROJECTKEUZES.md. De skill bewaart de lees- en bijwerkafspraken; actuele technieken, redenen en resultaten blijven in de gedeelde repository staan. Codex hielp met deze instructies en documentatie. De skillstructuur, repositorycontrole en whitespace zijn gecontroleerd. Er is voor deze wijziging geen modelbenchmark uitgevoerd; eigen code-review en demo-oefening van de gebruiker blijven onveranderd open.
 
 ## Volgende fasen
 
