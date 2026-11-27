@@ -53,6 +53,14 @@ python scripts/check_repository.py
 git diff --check
 ```
 
-De zes interfacechecks gebruiken Streamlits AppTest en controleren voorbeelden, geschiedenis wissen, herkomst bij moduswissels, een ontbrekende sleutel, ontbrekende/gedeeltelijke tokenmetingen en een mislukte agentaanroep. Ze downloaden geen modellen en draaien ook in GitHub Actions. De installatie en basis van AppTest volgen de [officiële Streamlit-documentatie](https://docs.streamlit.io/develop/concepts/app-testing/get-started).
+De zeven interfacechecks gebruiken Streamlits AppTest en controleren voorbeelden, geschiedenis wissen, herkomst bij moduswissels, een ontbrekende sleutel, ontbrekende/gedeeltelijke tokenmetingen, een mislukte agentaanroep en een andere volgorde van de recepten. Ze downloaden geen modellen en draaien ook in GitHub Actions. De installatie en basis van AppTest volgen de [officiële Streamlit-documentatie](https://docs.streamlit.io/develop/concepts/app-testing/get-started).
+
+Controleer de echte lokale keten van persoon 1, 2 en 4 met:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/test_integration.py
+```
+
+Deze integratiecheck bouwt beide indexen indien nodig en kan het embeddingmodel downloaden. Vier tests controleren elf scenario's: zoeken en herschalen voor elk van de drie huidige recepten, een losse schaalvraag, een begroeting en drie ongeldige/onvolledige schaalvragen. De controles gebruiken de echte lokale zoekfunctie en MCP-server, zonder Groq. Nieuwe recepten vragen ook om representatieve nieuwe scenario's; deze check bewijst niet de juistheid van een toekomstige uitgebreide dataset.
 
 Zie [het projectrapport](RAPPORT.md) voor de werkelijk uitgevoerde controles en beperkingen. De opdracht-pdf en het GenAI-beleid zijn hier nog niet beschikbaar; de eisen voor dit werkpakket komen uit de aangeleverde taakverdeling. Persoon 4 moet de code, demonstratie en AI-verantwoording nog zelf nalopen.

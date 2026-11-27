@@ -43,7 +43,9 @@ python -m venv .venv
 
 ### Volgende stappen
 
+**Integratie persoon 1 + 2 + 4 (27 november).** De huidige drie recepten, zoekfunctie, agent, MCP-tool en interface zijn samen getest. `python scripts/test_integration.py` herhaalt elf echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. De agentdataset is nog niet uitgebreid naar 30–50 recepten. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
+
 1. **Breid de dataset uit naar 30–50 recepten.** Gebruik dezelfde structuur en unieke ID's, controleer de hoeveelheden en bewaar de bronlinks. Bouw beide indexen opnieuw en voeg representatieve testvragen over de nieuwe recepten toe.
 2. **Voer de live Ragas-benchmark uit.** Installeer `requirements-eval.txt`, stel `GROQ_API_KEY` in als omgevingsvariabele en voer `python evaluate_chef.py --ragas --output reports/ragas.json` uit in de virtuele omgeving. Vergelijk Context Precision, Context Recall en Faithfulness per strategie. Controleer ook de token- en tijdmetingen.
 3. **Onderzoek de zoekfouten opnieuw met de grotere dataset.** Gebruik de vraag over bloemkool als regressievoorbeeld. Vergelijk de positie van het juiste fragment en meet bij wijzigingen ook de invloed op het aantal contexttokens en de responstijd.
-4. **Bouw de lokale interface zodra het volledige opleverpunt aan bod komt.** De opdracht-pdf vraagt om een interface die gesprekken, opgehaalde fragmenten, MCP-aanroepen en telemetrie toont.
+4. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via Groq blijven open; de interface toont metingen na afloop en streamt nog geen tussenstappen. Zie [de handleiding](LOKALE-INTERFACE.md).

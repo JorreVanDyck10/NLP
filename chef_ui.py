@@ -38,7 +38,7 @@ def example_state(question):
     """Vaste schermvoorbeelden; geen model, zoekindex of MCP-server aangeroepen."""
     if question not in (SEARCH_QUESTION, SCALE_QUESTION):
         raise ValueError("Kies in voorbeeldmodus de knop Zoekvraag of Schaalvraag.")
-    recipe = recipes()[0]
+    recipe = next(recipe for recipe in recipes() if recipe["id"] == "kikkererwten-groentecurry")
     text = "\n".join(
         f"{item['quantity']} {item['unit']} {item['name']}"
         for item in recipe["ingredients"] if "quantity" in item

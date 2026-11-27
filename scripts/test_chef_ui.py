@@ -14,10 +14,17 @@ from streamlit.testing.v1 import AppTest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from chef_ui import MODES, SCALE_QUESTION, SEARCH_QUESTION, example_state
+from chef_ui import MODES, SEARCH_QUESTION, example_state, recipes
 
 
 class InterfaceTests(unittest.TestCase):
+    def test_example_keeps_curry_when_dataset_order_changes(self):
+        reordered = list(reversed(recipes()))
+        with patch("chef_ui.recipes", return_value=reordered):
+            state = example_state(SEARCH_QUESTION)
+        self.assertEqual(state["hits"][0]["recipe_id"], "kikkererwten-groentecurry")
+        self.assertIn("420 ml water", state["hits"][0]["text"])
+
     def app(self):
         app = AppTest.from_file(str(ROOT / "chef_ui.py"), default_timeout=15).run()
         self.assertEqual(len(app.exception), 0)
