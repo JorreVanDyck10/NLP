@@ -32,7 +32,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
 ## 4. Inference, metingen en lokale interface · 10%
 
 - [x] Sluit Groq aan met een beschikbaar model op het gratis plan. De live evaluatie gebruikte `openai/gpt-oss-20b`. [Projectkeuzes](PROJECTKEUZES.md)
-- [ ] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT).
+- [x] Meet inputtokens, outputtokens, totale antwoordtijd en tijd tot de eerste token (TTFT) in de live agentbenchmark. TTFT is gemeten voor de 22 gestreamde antwoorden. [Live meetverslag](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting)
 - [ ] Maak een eenvoudige lokale interface met gesprekken, opgehaalde tekststukken, MCP-toolcalls en live metingen.
   - [x] Bouw het scherm in `chef_ui.py` met vraag/antwoord, bronfragmenten, toolinvoer/-uitvoer en beschikbare metingen na afloop; zie [persoon 4](LOKALE-INTERFACE.md).
   - [x] Voeg expliciete meldingen voor ontbrekende metingen en een gemarkeerde gesimuleerde voorbeeldmodus toe; controleer die met AppTest.

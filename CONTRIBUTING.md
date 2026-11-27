@@ -35,7 +35,7 @@ NLP/
 
 1. Lees deze afspraken en de relevante documentatie. Controleer met `git status --short` of er bestaand werk is. Maak of hergebruik een passende taakbranch vanaf een actuele `main`, bijvoorbeeld `feat/recepten`, `fix/zoekresultaten` of `docs/installatie`. Verplaats bestaand werk niet ongemerkt en herschrijf geen gedeelde geschiedenis.
 2. Houd de wijziging gericht. Meng een nieuwe feature niet met een grote herstructurering. Verplaats bestaande bestanden in plaats van kopieën achter te laten en werk alle links bij.
-3. Werk de relevante documentatie mee bij. Leg een nieuwe projectfase of meetresultaat vast in `docs/RAPPORT.md`; werk de voortgang en checklist bij waar de wijziging daar aanleiding toe geeft. Maak geen nieuwe losse voortgangsbestanden.
+3. Controleer de [projectoverdracht](docs/PROJECTKEUZES.md) vóór oplevering. Werk de stand van het betrokken werkpakket en gewijzigde keuzes bij in dezelfde wijziging. Leg een nieuwe projectfase of meetresultaat vast in `docs/RAPPORT.md` en pas de checklist aan als een opleverpunt van status verandert.
 4. Controleer vanuit de repository-root:
 
    ```powershell
