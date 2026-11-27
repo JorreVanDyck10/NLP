@@ -1,6 +1,36 @@
-.venv/
-.venv-demo/
+# Lokale Python-omgevingen en caches
+.venv*/
+venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Gegenereerde zoekindexen en modellen
 .recipe-index/
 storage/
+models/
+
+# Lokale configuratie en geheimen
 .env
+.env.*
+!.env.example
+.vscode/
+.idea/
+
+# Alleen bewust bewaarde referentiemetingen volgen
+reports/*
+!reports/baseline.json
+!reports/README.md
+
+# Tijdelijke uitvoer, lesmateriaal en systeembestanden
+*.log
+*.tmp
+*.bak
+~$*
+lesmateriaal/
+Thumbs.db
+.DS_Store

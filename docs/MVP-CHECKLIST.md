@@ -1,10 +1,12 @@
 # Flavor Chef | MVP-checklist
 
+[Terug naar de README](../README.md)
+
 **Doel:** een werkende MVP die Raoul zelf kan uitleggen. Volgens de rubric kan een volledige MVP met goede analyse maximaal 85% halen.
 
 Deze checklist volgt de eerste Ollama-demo. De voortgang van de agent, MCP-tool en benchmark staat in [VOORTGANG.md](VOORTGANG.md).
 
-De percentages hieronder zijn de gewichten van de beoordelingscriteria. De vereisten staan in de opdracht-pdf in de lokale map `C:\NLPFull\lesmateriaal`.
+De percentages hieronder zijn de gewichten van de beoordelingscriteria. De vereisten staan in de opdracht-pdf. Bewaar het lesmateriaal in een eigen lokale map buiten Git.
 
 ## 1. Recepten en chunking · 25%
 

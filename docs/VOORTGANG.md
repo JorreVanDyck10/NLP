@@ -1,5 +1,7 @@
 # Flavor Chef
 
+[Terug naar de README](../README.md). Voer alle commando's hieronder uit vanuit de repository-root.
+
 ## 19 november 2026
 
 Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De huidige versie werkt lokaal via PowerShell.
@@ -34,8 +36,10 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe recipe_search.py build
 .\.venv\Scripts\python.exe chef_agent.py "Schaal de curry van 4 naar 7 porties" --trace --telemetry
-.\.venv\Scripts\python.exe evaluate_chef.py --output reports/baseline.json
+.\.venv\Scripts\python.exe evaluate_chef.py --output reports/local.json
 ```
+
+`reports/local.json` blijft buiten Git. De bestaande `reports/baseline.json` is de bewaarde referentiemeting; vervang die alleen bewust volgens de [onderhoudsafspraken](../CONTRIBUTING.md).
 
 ### Volgende stappen
 

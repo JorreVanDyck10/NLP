@@ -1,38 +1,38 @@
 # Flavor Chef
 
-Voor de Flavor Chef-agent met receptzoeker, MCP-tool en benchmark volg je de installatie en voorbeelden in [VOORTGANG.md](VOORTGANG.md).
+Een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De repository bevat een agent met MCP-tool en benchmark, en een aparte lokale Ollama-demo.
 
-Deze README beschrijft de lokale Ollama-demo die vragen beantwoordt op basis van vijf eigen voorbeeldrecepten.
+**Ga je iets wijzigen? Lees eerst de [onderhoudsafspraken in CONTRIBUTING.md](CONTRIBUTING.md).** Dat geldt voor code, data, documentatie en AI-agenten. [AGENTS.md](AGENTS.md) legt deze leesstap ook vast voor coding agents.
 
-- [Projectrapport](RAPPORT.md)
-- [MVP-checklist](MVP-CHECKLIST.md)
+## Kies je startpunt
 
-De PowerPoints en de opdracht-pdf staan in de lokale map `C:\NLPFull\lesmateriaal`.
+| Onderdeel | Uitleg en installatie | Bestanden |
+| --- | --- | --- |
+| Agent, receptzoeker, MCP en benchmark | [Installatie en voortgang](docs/VOORTGANG.md) | `chef_agent.py`, `recipe_search.py`, `scale_server.py`, `evaluate_chef.py`, `requirements.txt` en optioneel `requirements-eval.txt` |
+| Lokale RAG-demo met Ollama | [Demo starten](docs/OLLAMA-DEMO.md) | `flavor_chef.py`, `requirements-demo.txt` |
 
-## Starten op Windows
+Voer alle installatie- en startcommando's uit vanuit de repository-root: de map met deze README. De twee onderdelen gebruiken verschillende datasets en virtuele omgevingen.
 
-Start Ollama. De demo gebruikt `qwen3-embedding:0.6b` en `qwen3.5:4b-q4_K_M`. Op de werk-pc staan beide modellen al klaar. Op een andere pc kun je elk ontbrekend model ophalen met `ollama pull <modelnaam>`.
+## Wegwijzer
 
-Open PowerShell in de projectmap.
+| Locatie | Inhoud |
+| --- | --- |
+| [docs/](docs/README.md) | Installatie, voortgang, projectrapport en MVP-checklist |
+| [data/](data/README.md) | Recepten en evaluatievragen met uitleg over hun gebruik |
+| [reports/](reports/README.md) | Bewaarde referentiebenchmark; nieuwe lokale metingen worden genegeerd |
+| [scripts/](scripts/check_repository.py) | Controle op structuur, lokale Markdown-links, Python-syntax en JSON |
+| [.github/](.github/workflows/repository-check.yml) | GitHub Actions-controle en PR-checklist |
+
+Lesmateriaal, modellen, sleutels, virtuele omgevingen en zoekindexen blijven buiten Git. Gebruik voor lesmateriaal een eigen lokale map; een pc-specifiek pad is geen installatievereiste.
+
+## Controle voor een commit
 
 ```powershell
-py -3.12 -m venv .venv-demo
-.\.venv-demo\Scripts\python.exe -m pip install -r requirements-demo.txt
-.\.venv-demo\Scripts\python.exe flavor_chef.py index
+python scripts/check_repository.py
+git diff --check
+git status --short
+git diff
+git diff --cached
 ```
 
-Gebruik `index` opnieuw na wijzigingen aan `data/demo_recipes.json`. De index komt in `storage/`.
-
-## Demo
-
-```powershell
-.\.venv-demo\Scripts\python.exe flavor_chef.py search "Hoe lang moet de chili pruttelen?"
-.\.venv-demo\Scripts\python.exe flavor_chef.py ask "Hoe lang moet de chili pruttelen?"
-.\.venv-demo\Scripts\python.exe flavor_chef.py ask "Hoe lang moet de chocoladetaart bakken?"
-```
-
-1. `index` splitst elk recept in overzicht, ingrediënten en bereiding. Ollama zet elk stuk om in een vector. LlamaIndex bewaart de index op schijf.
-2. `search` zet de vraag met hetzelfde model om in een vector. LlamaIndex haalt de drie best passende tekststukken op.
-3. `ask` toont die stukken en geeft ze mee aan het taalmodel als context. Het antwoord over de chili hoort **20 minuten** te zijn. Voor chocoladetaart ontbreekt de informatie in de recepten.
-
-De demo stuurt vragen en recepttekst naar Ollama op de eigen pc. De uitleg volgt PowerPoint 1, slides 21–45 en 84–90.
+De repositorycontrole gebruikt alleen de Python-standaardbibliotheek en Git; er worden geen modellen of projectdependencies gedownload. Zie [CONTRIBUTING.md](CONTRIBUTING.md) voor de volledige werkwijze en aanvullende functionele controles.
