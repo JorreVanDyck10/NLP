@@ -4,12 +4,14 @@ import json
 import math
 import os
 import re
+from collections import Counter
 from decimal import Decimal
+from hashlib import sha256
 from pathlib import Path
 from statistics import mean, median
 
 from chef_agent import build_agent, groq_client, invoke_agent
-from recipe_search import ROOT, STRATEGIES
+from recipe_search import MODEL_NAME, RECIPES_PATH, ROOT, STRATEGIES
 
 
 CASES = ROOT / "data" / "evaluation.json"
@@ -40,18 +42,40 @@ def tool_answer_matches(expected, actual):
                for item in expected["ingredients"])
 
 
+def failure_stage(case, row):
+    if not row["route_ok"]:
+        return "routing"
+    if case["route"] == "chat" and (row["retrieved"] or row["tool_result"] is not None):
+        return "routing"
+    if "evidence" in case and row["evidence_rank"] is None:
+        return "retrieval"
+    if case["route"] == "scale_recipe":
+        hits = row["retrieved"]
+        if not hits or hits[0]["recipe_id"] != case["recipe_id"]:
+            return "retrieval"
+    if row.get("tool_ok") is False:
+        return "calculation"
+    if not (row["answer"] or "").strip():
+        return "answer"
+    return None
+
+
 async def score_ragas(metrics, case, state):
     inputs = {
         "user_input": case["question"],
         "retrieved_contexts": [hit["text"] for hit in state.get("hits", [])],
     }
+    if state["route"] != case["route"] or not inputs["retrieved_contexts"]:
+        return dict.fromkeys(metrics)
+
     scores = {}
     for name, metric in metrics.items():
-        if not inputs["retrieved_contexts"]:
-            scores[name] = None
-            continue
         if name == "faithfulness":
-            extra = {"response": state["answer"].partition("\n\nBronnen\n")[0]}
+            response = (state.get("answer") or "").partition("\n\nBronnen\n")[0].strip()
+            if not response:
+                scores[name] = None
+                continue
+            extra = {"response": response}
         else:
             extra = {"reference": case["reference"]}
         value = float((await metric.ascore(**inputs, **extra)).value)
@@ -67,25 +91,34 @@ async def evaluate(cases, strategy, groq=None, metrics=None):
         hits = state.get("hits", [])
         row = {
             "id": case["id"],
+            "question": case["question"],
+            "reference": case["reference"],
             "expected_route": case["route"],
             "actual_route": state["route"],
             "route_ok": case["route"] == state["route"],
+            "retrieved": [
+                {"recipe_id": hit["recipe_id"], "section": hit["section"],
+                 "source_url": hit["source_url"], "score": round(hit["score"], 4)}
+                for hit in hits
+            ],
+            "retrieved_text": [hit["text"] for hit in hits],
+            "tool_result": state.get("tool_result"),
+            "answer": state.get("answer"),
             "trace": state["trace"],
             "latency_ms": state["latency_ms"],
             "llm_calls": state["llm_calls"],
         }
+        if "recipe_id" in case:
+            row["expected_recipe_id"] = case["recipe_id"]
         if "evidence" in case:
+            row["expected_evidence"] = case["evidence"]
             row["evidence_rank"] = evidence_rank(case, hits)
-            row["retrieved"] = [{"recipe_id": hit["recipe_id"], "section": hit["section"],
-                                 "score": round(hit["score"], 4)} for hit in hits]
-            if row["evidence_rank"] is None:
-                row["retrieved_text"] = [hit["text"] for hit in hits]
             if metrics:
                 row["ragas"] = await score_ragas(metrics, case, state)
         if "tool" in case:
-            row["tool_ok"] = tool_answer_matches(case["tool"], state.get("tool_result"))
-        if metrics or not row["route_ok"] or row.get("tool_ok") is False:
-            row["answer"] = state["answer"]
+            row["expected_tool"] = case["tool"]
+            row["tool_ok"] = tool_answer_matches(case["tool"], row["tool_result"])
+        row["failure_stage"] = failure_stage(case, row)
         rows.append(row)
 
     retrieval = [row["evidence_rank"] for row in rows if "evidence_rank" in row]
@@ -100,19 +133,32 @@ async def evaluate(cases, strategy, groq=None, metrics=None):
         "tools_correct": sum(tools),
         "tools_total": len(tools),
         "median_latency_ms": round(median(row["latency_ms"] for row in rows), 2),
+        "failures_by_stage": dict(Counter(row["failure_stage"] for row in rows if row["failure_stage"])),
     }
     if metrics:
         summary["ragas"] = {}
         for name in metrics:
             scores = [row.get("ragas", {}).get(name) for row in rows]
             scores = [score for score in scores if score is not None]
-            summary["ragas"][name] = {"mean": round(mean(scores), 4) if scores else None, "scored": len(scores)}
+            summary["ragas"][name] = {
+                "mean": round(mean(scores), 4) if scores else None,
+                "scored": len(scores),
+                "total": len(retrieval),
+            }
     return {"summary": summary, "cases": rows}
 
 
 async def benchmark(api_key):
-    cases = json.loads(CASES.read_text(encoding="utf-8"))
-    report = {"mode": "groq_ragas" if api_key else "local", "ragas_executed": bool(api_key), "strategies": {}}
+    case_data = CASES.read_bytes()
+    cases = json.loads(case_data)
+    report = {
+        "mode": "groq_ragas" if api_key else "local",
+        "ragas_executed": bool(api_key),
+        "embedding_model": MODEL_NAME,
+        "recipes_sha256": sha256(RECIPES_PATH.read_bytes()).hexdigest(),
+        "evaluation_sha256": sha256(case_data).hexdigest(),
+        "strategies": {},
+    }
     if not api_key:
         for strategy in STRATEGIES:
             print(f"Lokale benchmark: {strategy}", flush=True)
