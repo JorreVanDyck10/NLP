@@ -6,7 +6,7 @@
 
 **Doel:** een volledige MVP die Raoul zelf kan uitleggen. De rubric voorziet maximaal 85% voor een werkende MVP met goede analyse.
 
-**Huidige fase.** De agent met MCP-tool, 36 recepten, de lokale interface en de evaluatiecode zijn geïntegreerd. De actuele lokale en live agentevaluatie gebruikt 20 vragen op 36 recepten. De Ollama-demo is een apart onderdeel. Zie de [projectoverdracht](PROJECTKEUZES.md), de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
+**Huidige fase.** De agent gebruikt 36 recepten en ondersteunt zoeken, porties herschalen en g ↔ kg omrekenen via de lokale interface. De MVP-evaluatie gebruikt 20 vragen op 36 recepten. De Ollama-demo is een apart onderdeel. Zie de [projectoverdracht](PROJECTKEUZES.md), de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
 
 ## 19 november 2026 | Eerste RAG-demo
 
@@ -228,6 +228,20 @@ De aantallen tonen wat op deze 20 vragen is gemeten. De zes gecontroleerde MCP-u
 Na de integratie met persoon 4 is de volledige lokale benchmark herhaald. Alle routerings-, schaal- en zoekuitkomsten kwamen overeen. De drie nieuwe vragen zijn voor beide chunkmethodes opnieuw live via Groq gecontroleerd, inclusief de exacte MCP-invoer bij het herschalen. De twaalf schermtests slaagden ook.
 
 **GenAI-vermelding.** Codex hielp met het uitbreiden en controleren van de testset, het uitvoeren van de metingen en de foutanalyse.
+
+## 27 november 2026 | MVP-oplevering
+
+**Uitgangspunt.** PR #6 leverde de live interface op. PR #7 leverde de live nulmeting op de uitgebreide dataset. De huidige testset bewaart negentien van de twintig vragen van PR #7, inclusief alle twaalf bronvragen, de vraag naar de bakvormmaat en de Quiche Lorraine-schaalvraag. De losse schaalvraag over 200 g maakte plaats voor **250 g → 0,25 kg**. De omgekeerde conversie en een expliciet onbekende recepttitel zitten in de integratietests. [Gebruikt en waarom](PROJECTKEUZES.md#27-november-2026--keuzes-voor-de-mvp-oplevering)
+
+**Gerichte live vergelijking.** Op de versie vóór de fixes koos Groq bij receptsecties twee maal de goede route. Het antwoord op de watervraag was **795 ml** ondanks het opgehaalde ingrediëntentotaal. Met de wijzigingen geeft dezelfde methode de juiste receptenroute en levert ze **475 g ricotta** en **120 °C**. De curryvervanging staat voortaan als derde fragment in beide strategieën. Het antwoord noemt wortel, aubergine, pompoen en broccoli. Bij de watervraag kwam de ingrediëntregel met **420 ml water** op plek 1 bij secties en plek 2 bij tokens. De agent gebruikt die regel rechtstreeks als totaal. Voor ricotta mist de tokenmethode nog het fragment en meldt het model dat de hoeveelheid ontbreekt. De sectiemethode haalt het bewijs op plek 3 op.
+
+**Lokale benchmark.** Beide methodes haalden 20/20 routes en 6/6 MCP-uitkomsten. In de top 3 kwam volledig bronbewijs bij 11/12 vragen met tokenchunks en bij 12/12 met receptsecties. De afzonderlijke zoekvergelijking zonder receptfilter mat 19 unieke vragen. Die haalde 14/19 met tokenchunks en 15/19 met receptsecties. Vergelijk de aantallen per methode binnen elke test, aangezien de vraagsets verschillen.
+
+**Reproduceerbaarheid.** De [meetcommando’s](VOORTGANG.md#live-benchmark-met-groq-en-ragas) bouwen beide Qdrant-indexen en gebruiken top 3. De beoordelaar voor vergelijking met PR #7 is `qwen/qwen3.8-27b`, met `openai/gpt-oss-20b` voor de agent. Een tussentijdse poging met de oude GPT-OSS 120B-beoordelaar liep tegen de gebruikslimiet aan. De JSON-rapporten zijn lokaal. Ze bevatten corpus- en testsethashes, bronfragmenten, gekozen route, tool- en antwoorduitvoer en de beschikbare metingen.
+
+**Demoketen.** Streamlits live controle testte het antwoord **4 porties**, de schaaluitkomst **735 ml** en `convert_units` met **0,25 kg**. De zoekvraag gebruikte 606 inputtokens en 108 outputtokens, met een antwoord-TTFT van 401 ms. De schaalvraag gebruikte 224 inputtokens en 38 outputtokens. De conversie gebruikte 219 inputtokens en 29 outputtokens. Bij die twee vragen komen de routetokens van Groq en de berekening van MCP. De conversie is ook via de browser uitgevoerd. Gebruik het vroegere antwoord van **795 ml** voor de diagnose tijdens de verdediging.
+
+**GenAI-vermelding.** Het team stelde de scope vast en maakte Groq-toegang beschikbaar. Codex hielp met de implementatie, regressietests, meting en rapportering. De eigen teamreview en demo-oefening blijven open. Het exacte GenAI-beleid van de opleiding is nog te controleren.
 
 ## Volgende fasen
 

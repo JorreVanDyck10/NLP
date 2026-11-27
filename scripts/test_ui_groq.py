@@ -113,6 +113,35 @@ class GroqInterfaceTests(unittest.TestCase):
         self.assertEqual(app.metric[2].value, "Niet gemeten")
         self.assertNotEqual(app.metric[3].value, "Niet gemeten")
 
+    def test_known_recipe_overrides_incorrect_route_and_uses_sourced_total(self):
+        def handler(request):
+            self.assertTrue(json.loads(request.content).get("response_format"))
+            return httpx.Response(200, json={
+                "choices": [{"message": {"content": '{"route":"scale_quantity"}'}}],
+                "usage": {"prompt_tokens": 12, "completion_tokens": 4},
+            })
+
+        app = self.app(handler)
+        app.button(key="source_check").click().run(timeout=60)
+        state = app.session_state["messages"][-1]
+        self.assertNotIn("error", state)
+        self.assertEqual(state["route"], "search")
+        self.assertIn("routecontrole: scale_quantity → search", state["trace"])
+        self.assertIn("420 ml water", state["answer"])
+        self.assertEqual(len(state["llm_calls"]), 1)
+        self.assertFalse(state.get("tool_result"))
+
+    def test_mcp_failure_preserves_route_and_sources(self):
+        app = self.app(self.response)
+        with patch("chef_agent.call_mcp_tool", side_effect=chef_agent.McpToolError(chef_agent.MCP_ERROR)):
+            app.button(key="scale").click().run(timeout=60)
+        state = app.session_state["messages"][-1]
+        self.assertEqual(state["route"], "scale_recipe")
+        self.assertTrue(state["hits"])
+        self.assertIn("Controleer de lokale MCP-server", state["error"])
+        self.assertFalse(state.get("tool_result"))
+        self.assertEqual(app.metric[-3].value, "120")
+
     def test_invalid_key_rate_limit_and_timeout_give_recovery_advice(self):
         app = self.app(self.response)
         for code, expected in ((401, "weigert de sleutel"), (429, "gebruikslimiet")):

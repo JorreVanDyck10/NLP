@@ -1,6 +1,6 @@
 # Flavor Chef
 
-Een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De repository bevat een agent met MCP-tool en benchmark, en een aparte lokale Ollama-demo.
+Een kookassistent die recepten opzoekt, porties herschaalt en gram en kilogram omrekent. De repository bevat een agent met MCP-tools en benchmark, en een aparte lokale Ollama-demo.
 
 **Ga je iets wijzigen? Lees eerst de [onderhoudsafspraken in CONTRIBUTING.md](CONTRIBUTING.md).** Dat geldt voor code, data, documentatie en AI-agenten. [AGENTS.md](AGENTS.md) legt deze leesstap ook vast voor coding agents.
 

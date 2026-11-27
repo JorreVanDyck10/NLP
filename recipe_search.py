@@ -63,11 +63,18 @@ class RecipeSearch:
             for strategy, blocks in (("tokens", {"Volledige recept": full_text}), ("sections", sections)):
                 for label, block in blocks.items():
                     for part in splitter.split_text(block):
+                        normalized = " ".join(part.split())
                         self.chunks[strategy].append({
                             "recipe_id": recipe["id"],
                             "title": recipe["title"],
                             "source_url": recipe["source_url"],
                             "section": label,
+                            "has_substitution": label == "Vervangingen" or (
+                                strategy == "tokens" and any(
+                                    " ".join(line.split()) in normalized
+                                    for line in recipe.get("substitutions", []) if line.strip()
+                                )
+                            ),
                             "text": f"{recipe['title']} | {label}\n{part}",
                         })
 
@@ -111,25 +118,36 @@ class RecipeSearch:
         ])
         return len(chunks)
 
-    def search(self, question, strategy="sections", top_k=3, recipe_id=None):
+    def search(self, question, strategy="sections", top_k=3, recipe_id=None, *, prefer_substitutions=False):
         if not question.strip() or top_k < 1:
             raise ValueError("Geef een vraag op en kies minstens één resultaat.")
         if not self.is_built(strategy):
             raise ValueError("De index voor deze dataset ontbreekt. Voer eerst 'python recipe_search.py build' uit.")
 
-        recipe_filter = None
+        conditions = []
         if recipe_id is not None:
-            recipe_filter = models.Filter(must=[
-                models.FieldCondition(key="recipe_id", match=models.MatchValue(value=recipe_id))
-            ])
+            conditions.append(models.FieldCondition(key="recipe_id", match=models.MatchValue(value=recipe_id)))
+        name = self.collection_name(strategy)
+        query = next(self.model().query_embed(question)).tolist()
         results = self.client.query_points(
-            self.collection_name(strategy),
-            query=next(self.model().query_embed(question)).tolist(),
+            name,
+            query=query,
             limit=top_k,
             with_payload=True,
-            query_filter=recipe_filter,
-        )
-        return [{**point.payload, "score": point.score} for point in results.points]
+            query_filter=models.Filter(must=conditions) if conditions else None,
+        ).points
+        if prefer_substitutions and recipe_id is not None:
+            if not any(point.payload["has_substitution"] for point in results):
+                substitution = self.client.query_points(
+                    name, query=query, limit=1, with_payload=True,
+                    query_filter=models.Filter(must=[
+                        *conditions,
+                        models.FieldCondition(key="has_substitution", match=models.MatchValue(value=True)),
+                    ]),
+                ).points
+                if substitution:
+                    results = [*results[:top_k - 1], *substitution]
+        return [{**point.payload, "score": point.score} for point in results]
 
 
 def main():
