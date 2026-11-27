@@ -4,15 +4,15 @@
 
 **Doel:** een werkende MVP die Raoul zelf kan uitleggen. Volgens de rubric kan een volledige MVP met goede analyse maximaal 85% halen.
 
-Deze checklist volgt de eerste Ollama-demo. De voortgang van de agent, MCP-tool en benchmark staat in [VOORTGANG.md](VOORTGANG.md).
+Deze checklist volgt de oplevercriteria voor de Ollama-demo en de agent. De voortgang van de agent, MCP-tool en benchmark staat in [VOORTGANG.md](VOORTGANG.md).
 
 De percentages hieronder zijn de gewichten van de beoordelingscriteria. De vereisten staan in de opdracht-pdf. Bewaar het lesmateriaal in een eigen lokale map buiten Git.
 
 ## 1. Recepten en chunking · 25%
 
 - [x] Maak vijf voorbeeldrecepten en een lokale LlamaIndex-vectorindex.
-- [ ] Breid uit naar 30–50 gevarieerde recepten met ingrediënten, stappen, kooktijd en dieetlabels. Houd de herkomst per recept bij.
-- [ ] Vergelijk tokengebaseerde chunking met splitsen per receptsectie. Gebruik dezelfde vragen en leg uit welke antwoorden beter worden opgehaald en waarom.
+- [x] Breid de agentdataset uit naar 30–50 gevarieerde recepten met ingrediënten, stappen, kooktijd, dieetlabels en herkomst. De agent gebruikt 36 recepten.
+- [x] Vergelijk tokengebaseerde chunking met splitsen per receptsectie op dezelfde vragen. Zie de resultaten en foutanalyse in het [projectrapport](RAPPORT.md#receptendataset-en-chunking).
 
 ## 2. Agent en MCP · 35%
 
@@ -20,7 +20,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
   - [x] De vier lokale routes werken samen met de interface, brondata en MCP-tool; modelroutering via Groq blijft nog live te controleren.
 - [ ] Maak één lokale MCP-tool die hoeveelheden schaalt op basis van het aantal porties. Test de berekening en ongeldige invoer.
 - [ ] Test alle routes. Combineer ook beide stappen in één vraag, bijvoorbeeld “Zoek de chili en schaal het recept naar zes porties.”
-  - [x] Herhaalbare integratiecheck voor persoon 1 + 2 + 4: drie zoekvragen, drie volledige recepten herschalen, een losse schaalvraag, chat en drie ongeldige/onvolledige vragen.
+  - [x] Herhaalbare integratiecheck voor persoon 1 + 2 + 4: tien zoekvragen, alle 36 recepten herschalen, een losse schaalvraag, chat en drie ongeldige/onvolledige vragen.
 
 ## 3. Evaluatie · 20%
 
@@ -35,7 +35,7 @@ De percentages hieronder zijn de gewichten van de beoordelingscriteria. De verei
   - [x] Bouw het scherm in `chef_ui.py` met vraag/antwoord, bronfragmenten, toolinvoer/-uitvoer en beschikbare metingen na afloop; zie [persoon 4](LOKALE-INTERFACE.md).
   - [x] Voeg expliciete meldingen voor ontbrekende metingen en een gemarkeerde gesimuleerde voorbeeldmodus toe; controleer die met AppTest.
   - [x] Controleer de echte lokale zoek- en schaalvraag via AppTest: curryfragment met 420 ml water, daarna MCP-resultaat 735 ml voor 7 porties.
-  - [x] Controleer ook lasagne en pannenkoeken; de voorbeeldmodus kiest de curry op ID en blijft werken bij een andere datasetvolgorde.
+  - [x] Controleer ook de 33 nieuwe recepten; de voorbeeldmodus kiest de curry op ID en blijft werken bij een andere datasetvolgorde.
   - [ ] Controleer live Groq-tokenmetingen en TTFT met een beschikbare sleutel en oefen de demo zelf. Tussenstappen worden nog niet tijdens uitvoering gestreamd.
 
 ## 5. Proces en GenAI · 10%

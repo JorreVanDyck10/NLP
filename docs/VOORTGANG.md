@@ -8,7 +8,7 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 
 **27 november 2026.** De broncode, proefrecepten, testvragen en lokale benchmark staan in deze repository. Bouw na het klonen de zoekindexen op met de onderstaande instructies.
 
-### Gebouwd en getest
+### Eerste referentiemeting met drie proefrecepten
 
 - **Receptendataset.** `data/recipes.json` bevat drie proefrecepten van Health Canada met bronlinks, porties, tijden, ingrediënten, bereidingsstappen en dieettags. Het gaat om kikkererwten-groentecurry, lasagne uit de slowcooker en aardbeienpannenkoeken.
 - **Recepten zoeken.** `recipe_search.py` maakt met LlamaIndex en een meertalig FastEmbed-model twee lokale Qdrant-indexen. Splitsen op tokenlengte levert 17 fragmenten op. Splitsen per receptonderdeel levert 20 fragmenten op. Beide indexen geven fragmenten met een bronlink en een overeenkomstscore terug.
@@ -41,11 +41,14 @@ python -m venv .venv
 
 `reports/local.json` blijft buiten Git. De bestaande `reports/baseline.json` is de bewaarde referentiemeting; vervang die alleen bewust volgens de [onderhoudsafspraken](../CONTRIBUTING.md).
 
+### Uitgebreide receptendataset
+
+De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide indexen opnieuw met `recipe_search.py build`. Voer `python -m scripts.compare_chunking --output reports/chunking-local.json` uit in de virtuele omgeving om de lokale zoekvergelijking te herhalen. De [bronvermeldingen](../data/README.md#herkomst-van-de-agentrecepten) en de [resultaten](RAPPORT.md#receptendataset-en-chunking) staan bij de projectdocumentatie.
+
 ### Volgende stappen
 
-**Integratie persoon 1 + 2 + 4 (27 november).** De huidige drie recepten, zoekfunctie, agent, MCP-tool en interface zijn samen getest. `python scripts/test_integration.py` herhaalt elf echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. De agentdataset is nog niet uitgebreid naar 30–50 recepten. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
+**Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
 
-1. **Breid de dataset uit naar 30–50 recepten.** Gebruik dezelfde structuur en unieke ID's, controleer de hoeveelheden en bewaar de bronlinks. Bouw beide indexen opnieuw en voeg representatieve testvragen over de nieuwe recepten toe.
-2. **Voer de live Ragas-benchmark uit.** Installeer `requirements-eval.txt`, stel `GROQ_API_KEY` in als omgevingsvariabele en voer `python evaluate_chef.py --ragas --output reports/ragas.json` uit in de virtuele omgeving. Vergelijk Context Precision, Context Recall en Faithfulness per strategie. Controleer ook de token- en tijdmetingen.
-3. **Onderzoek de zoekfouten opnieuw met de grotere dataset.** Gebruik de vraag over bloemkool als regressievoorbeeld. Vergelijk de positie van het juiste fragment en meet bij wijzigingen ook de invloed op het aantal contexttokens en de responstijd.
-4. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via Groq blijven open; de interface toont metingen na afloop en streamt nog geen tussenstappen. Zie [de handleiding](LOKALE-INTERFACE.md).
+1. **Voer de live Ragas-benchmark uit.** Installeer `requirements-eval.txt`, stel `GROQ_API_KEY` in als omgevingsvariabele en voer `python evaluate_chef.py --ragas --output reports/ragas.json` uit in de virtuele omgeving. Vergelijk Context Precision, Context Recall en Faithfulness per strategie. Controleer ook de token- en tijdmetingen.
+2. **Breid de volledige agent-evaluatie uit voor de nieuwe recepten.** De zoekvergelijking heeft zeven nieuwe vragen, maar `data/evaluation.json` bevat nog de oorspronkelijke 18 agentvragen. Neem ook zoeken, herschalen en onbekende vragen over de nieuwe recepten op.
+3. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via Groq blijven open; de interface toont metingen na afloop en streamt nog geen tussenstappen. Zie [de handleiding](LOKALE-INTERFACE.md).

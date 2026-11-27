@@ -1,6 +1,7 @@
 """Echte lokale keten 1 + 2 + 4; vereist requirements-ui.txt en embeddingmodel."""
 
 from decimal import Decimal
+import json
 from pathlib import Path
 import sys
 import unittest
@@ -42,31 +43,31 @@ class IntegrationTests(unittest.TestCase):
 
     def test_search_from_interface_returns_correct_source_and_amount(self):
         app = self.app()
-        for question, recipe_id, evidence in (
-            ("Hoeveel water gaat er in totaal in de curry?", "kikkererwten-groentecurry", "420 ml water"),
-            ("Hoeveel ricotta heb ik nodig voor de lasagne?", "slowcooker-lasagne", "475 g magere ricotta"),
-            ("Hoeveel melk gaat er in de pannenkoeken?", "aardbeienpannenkoeken", "375 ml magere melk"),
-        ):
+        cases = [
+            {"question": "Hoeveel water gaat er in totaal in de curry?", "recipe_id": "kikkererwten-groentecurry", "evidence": [["420 ml water"]]},
+            {"question": "Hoeveel ricotta heb ik nodig voor de lasagne?", "recipe_id": "slowcooker-lasagne", "evidence": [["475 g magere ricotta"]]},
+            {"question": "Hoeveel melk gaat er in de pannenkoeken?", "recipe_id": "aardbeienpannenkoeken", "evidence": [["375 ml magere melk"]]},
+        ]
+        cases += json.loads((ROOT / "data" / "retrieval_checks.json").read_text(encoding="utf-8"))
+        for case in cases:
+            recipe_id = case["recipe_id"]
             with self.subTest(recipe=recipe_id):
-                state = self.ask(app, question)
+                state = self.ask(app, case["question"])
                 self.assertEqual(state["route"], "search")
                 self.assertTrue(state["hits"])
-                self.assertTrue(all(hit["recipe_id"] == recipe_id for hit in state["hits"]))
-                self.assertTrue(any(evidence in hit["text"] for hit in state["hits"]))
-                self.assertTrue(all(hit["source_url"] == self.recipes[recipe_id]["source_url"] for hit in state["hits"]))
+                correct = [hit for hit in state["hits"] if hit["recipe_id"] == recipe_id]
+                for group in case["evidence"]:
+                    self.assertTrue(any(phrase in hit["text"] for phrase in group for hit in correct), case)
+                self.assertTrue(all(hit["source_url"] == self.recipes[hit["recipe_id"]]["source_url"] for hit in state["hits"]))
                 self.assertFalse(state.get("tool_result"))
-        self.assertEqual(len(app.chat_message), 6)
+        self.assertEqual(len(app.chat_message), 2 * len(cases))
 
     def test_search_then_real_mcp_scales_all_ingredients(self):
         app = self.app()
-        for recipe_id, alias, target in (
-            ("kikkererwten-groentecurry", "curry", 7),
-            ("slowcooker-lasagne", "lasagne", 4),
-            ("aardbeienpannenkoeken", "pannenkoeken", 2),
-        ):
+        for recipe_id, recipe in self.recipes.items():
+            target = recipe["servings"] + 1
             with self.subTest(recipe=recipe_id):
-                state = self.ask(app, f"Schaal de {alias} naar {target} porties.")
-                recipe = self.recipes[recipe_id]
+                state = self.ask(app, f"Schaal {recipe['title']} naar {target} porties.")
                 self.assertEqual(state["route"], "scale_recipe")
                 self.assertTrue(state["hits"])
                 self.assertEqual(state["hits"][0]["recipe_id"], recipe_id)

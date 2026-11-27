@@ -15,7 +15,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m streamlit run chef_ui.py --server.address 127.0.0.1 --browser.gatherUsageStats false
 ```
 
-Open de lokale URL die Streamlit afdrukt, normaal `http://127.0.0.1:8501`. Sluit af met Ctrl+C in de terminal. De eerste indexbouw downloadt het embeddingmodel. Bouw de index opnieuw na receptwijzigingen. Verwijder of vervang geen actieve index terwijl een andere gebruiker die gebruikt.
+Open de lokale URL die Streamlit afdrukt, normaal `http://127.0.0.1:8501`. Sluit af met Ctrl+C in de terminal. De eerste indexbouw downloadt het embeddingmodel. Bouw de index opnieuw na receptwijzigingen. Voer indexbouw, benchmark en integratiecheck na elkaar uit en laat tijdens die controles geen andere aanvraag dezelfde lokale index gebruiken: Qdrant local laat één proces tegelijk toe.
 
 De **voorbeeldmodus** heeft geen agent, modellen, index of API-sleutel nodig. Hiervoor volstaat een omgeving met `streamlit==1.45.0`; sla de indexbouw dan over. Gebruik de knoppen Zoekvraag en Schaalvraag. Antwoorden komen uit vaste voorbeelden en de tijden, scores en tokens zijn uitdrukkelijk **gesimuleerd**. Deze modus bewijst de schermwerking, niet de werking van RAG, Groq of MCP.
 
@@ -61,6 +61,6 @@ Controleer de echte lokale keten van persoon 1, 2 en 4 met:
 .\.venv\Scripts\python.exe scripts/test_integration.py
 ```
 
-Deze integratiecheck bouwt beide indexen indien nodig en kan het embeddingmodel downloaden. Vier tests controleren elf scenario's: zoeken en herschalen voor elk van de drie huidige recepten, een losse schaalvraag, een begroeting en drie ongeldige/onvolledige schaalvragen. De controles gebruiken de echte lokale zoekfunctie en MCP-server, zonder Groq. Nieuwe recepten vragen ook om representatieve nieuwe scenario's; deze check bewijst niet de juistheid van een toekomstige uitgebreide dataset.
+Deze integratiecheck bouwt beide indexen indien nodig en kan het embeddingmodel downloaden. Vier tests controleren met de huidige dataset 51 scenario's: tien zoekvragen (inclusief de zeven nieuwe vragen van persoon 1), het herschalen van alle 36 recepten, een losse schaalvraag, een begroeting en drie ongeldige/onvolledige schaalvragen. De controles gebruiken de echte lokale zoekfunctie en MCP-server, zonder Groq. Bij herschalen worden alle ingrediënten gecontroleerd, inclusief eenheden, notities en hoeveelheden naar smaak. Nieuwe recepten vragen ook om representatieve nieuwe zoekvragen; dit is geen beoordeling van door een taalmodel geschreven antwoorden.
 
 Zie [het projectrapport](RAPPORT.md) voor de werkelijk uitgevoerde controles en beperkingen. De opdracht-pdf en het GenAI-beleid zijn hier nog niet beschikbaar; de eisen voor dit werkpakket komen uit de aangeleverde taakverdeling. Persoon 4 moet de code, demonstratie en AI-verantwoording nog zelf nalopen.
