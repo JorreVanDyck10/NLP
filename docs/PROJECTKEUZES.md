@@ -17,6 +17,8 @@ Bijgewerkt op **27 november 2026**. `main` bevat de agent, MCP-tool, 36 recepten
 
 ## Overnemen en bijhouden
 
+**Mijn afgeronde bijdrage is werkpakket 4: de lokale interface en demo.** Ik heb dit technische onderdeel met ondersteuning van Codex opgeleverd. De uitvoering, keuzes en testresultaten staan in mijn [ik-verslag in het projectrapport](RAPPORT.md#27-november-2026--persoon-4-technisch-opgeleverd). Mijn eigen code-review, demo-oefening en GenAI-verantwoording blijven open. Gebruik dit onderscheid bij een volgende overdracht: de technische implementatie is afgerond.
+
 1. Haal `main` op, lees de installatie voor jouw onderdeel en maak je taakbranch volgens de onderhoudsafspraken. [Startpunt](../README.md) · [Onderhoudsafspraken](../CONTRIBUTING.md)
 2. Gebruik de controle uit je werkpakket om je wijziging te verifiëren. Gebruik bij het vergelijken dezelfde vragen en noteer het corpus en de instellingen. De gedeelde meetresultaten staan in het rapport. [Projectrapport](RAPPORT.md)
 3. Werk dit document bij in dezelfde wijziging als de stand, een keuze of een volgende stap verandert. Noteer bij een nieuwe keuze wat we gebruiken en waarom, met een verwijzing naar de code, bron of les. Bewaar meetdetails bij de betrokken fase in het rapport en wijzig de checklist als een opleverpunt van status verandert. [MVP-checklist](MVP-CHECKLIST.md)
