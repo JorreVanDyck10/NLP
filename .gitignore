@@ -1,3 +1,6 @@
 .venv/
+.venv-demo/
 __pycache__/
 .recipe-index/
+storage/
+.env
