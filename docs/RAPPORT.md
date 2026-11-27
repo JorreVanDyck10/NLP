@@ -6,7 +6,7 @@
 
 **Doel:** een volledige MVP die Raoul zelf kan uitleggen. De rubric voorziet maximaal 85% voor een werkende MVP met goede analyse.
 
-**Huidige fase:** de eerste Ollama-demo en de agent met MCP-tool en lokale benchmark zijn samengebracht. De [voortgang](VOORTGANG.md) beschrijft de actuele agentstatus; de [MVP-checklist](MVP-CHECKLIST.md) volgt de eerste demo.
+**Huidige fase.** De Ollama-demo en de agent staan samen in de repository. De agent gebruikt nu 36 recepten en beide chunkmethodes zijn op die set vergeleken. Zie de [voortgang](VOORTGANG.md) en de [MVP-checklist](MVP-CHECKLIST.md).
 
 ## 19 november 2026 | Eerste RAG-demo
 
@@ -37,6 +37,34 @@ De installatie-uitleg, voortgang, het rapport en de checklist staan gegroepeerd 
 De onderhoudsafspraken staan in [CONTRIBUTING.md](../CONTRIBUTING.md). [AGENTS.md](../AGENTS.md) verplicht coding agents die eerst te lezen; de PR-template vraagt dezelfde bevestiging aan bijdragers. De workflow `Repositorycontrole` controleert structuur, lokale Markdown-bestandslinks, Python-syntax, JSON en whitespace. Uitgebreide ignore-regels houden lokale omgevingen, indexen en proefmetingen buiten Git.
 
 **Controle.** De repositorycontrole en whitespacecontrole zijn lokaal uitgevoerd. Ook de ignore-regels zijn nagegaan. Voor deze documentatie- en onderhoudswijziging is geen nieuwe modelbenchmark uitgevoerd. Voor de documentatie en controles is Codex gebruikt.
+
+## Receptendataset en chunking
+
+**27 november 2026.** De gebruiker koos taak 1 voor het team en gaf PowerPoint 1 als lesbasis. Codex hielp met de bronselectie, de Nederlandse bewerking, het vergelijkingsscript, de uitvoering en de documentatie. De drie bestaande recepten zijn behouden. De [33 nieuwe recepten](../data/README.md#herkomst-van-de-agentrecepten) zijn verspreid over acht categorieën, waaronder ontbijt, lunch, avondeten en dessert.
+
+Dia's 29–36 behandelen hoe chunkgrenzen bepalen welk deel van een recept je kunt terugvinden. De eerste methode splitst de volledige recepttekst op maximaal 96 tokens met maximaal 16 tokens overlap. De tweede methode houdt overzicht, ingrediënten, bereiding en eventuele vervangingen apart en hanteert binnen elk onderdeel dezelfde limiet. De 96 tokens slaan op de tekst vóór het toevoegen van de kop. Beide methodes gebruiken hetzelfde meertalige embeddingmodel en dezelfde lokale Qdrant-vectorstore, zoals besproken op dia's 37–45.
+
+### Lokale zoekvergelijking
+
+`python -m scripts.compare_chunking --output reports/chunking-local.json` vergelijkt de elf bestaande zoekvragen en zeven nieuwe vragen. De zoeker doorzoekt alle 36 recepten zonder receptfilter, router of taalmodel. Een vraag telt als gevonden zodra de fragmenten samen alle afgesproken tekstbewijzen uit het juiste recept bevatten. De top 10 maakt de diagnose mogelijk. De tabel telt de eerste één en drie plaatsen.
+
+| Meting | Op tokenlengte | Per receptonderdeel |
+| --- | ---: | ---: |
+| Fragmenten in de index | 106 | 133 |
+| Al het benodigde bewijs op plek 1 | 6/18 | 11/18 |
+| Al het benodigde bewijs in de top 3 | 13/18 | 14/18 |
+
+Bij de vraag *Hoeveel water gaat er in totaal in de curry?* kwam bij splitsen per onderdeel eerst het ingrediëntenfragment met **420 ml water**. Bij splitsen op tokenlengte kwam eerst een bereidingsstap met **375 ml**, de hoeveelheid voor één stap. Het volledige antwoord stond daar op plek 2. Bij de bloemkoolvervanging kwam het juiste fragment bij beide methodes buiten de top 10. De sectiemethode zette bijvoorbeeld de kalkoenvervanging van de lasagne op plek 1. De vervanging stond wel in het curryrecept, dus de fout ontstond bij het rangschikken van de zoekresultaten.
+
+Splitsen per onderdeel gaf op deze vragen vaker het bewijs op plek 1. Bij enkele vragen gaf tokenlengte een beter resultaat. De vergelijking is klein en meet toegang tot broninformatie. De live Ragas-beoordeling en het GenAI-beleid van de opleiding vragen nog verificatie. De recepttijden zijn bronwaarden en de bereidingen zijn niet fysiek uitgeprobeerd.
+
+### Gecontroleerd
+
+- 36 unieke recept-ID's en de vereiste velden. De oorspronkelijke drie records zijn inhoudelijk ongewijzigd.
+- Hoeveelheden, porties en tijden van de 33 aanvullingen vergeleken met de vastgelegde corpusversie. De 33 bronrevisies zijn bevestigd via Wikibooks. Dieettags zijn gekozen op basis van de opgenomen ingrediënten.
+- Beide Qdrant-indexen opnieuw opgebouwd. De repositorycontrole en `git diff --check` zijn uitgevoerd.
+- De bestaande lokale agentbenchmark opnieuw uitgevoerd. Beide methodes behouden 18/18 juiste routes en 6/6 correcte MCP-uitkomsten.
+- Nieuw recept via de bestaande agent getest. Bij *Schaal Quiche Lorraine van 6 naar 4 porties* vond RAG drie fragmenten en rekende de MCP-tool onder meer 300 g kruimeldeeg om naar 200 g.
 
 ## Volgende fasen
 

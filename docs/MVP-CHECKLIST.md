@@ -4,15 +4,15 @@
 
 **Doel:** een werkende MVP die Raoul zelf kan uitleggen. Volgens de rubric kan een volledige MVP met goede analyse maximaal 85% halen.
 
-Deze checklist volgt de eerste Ollama-demo. De voortgang van de agent, MCP-tool en benchmark staat in [VOORTGANG.md](VOORTGANG.md).
+Deze checklist volgt de oplevercriteria voor de Ollama-demo en de agent. De voortgang van de agent, MCP-tool en benchmark staat in [VOORTGANG.md](VOORTGANG.md).
 
 De percentages hieronder zijn de gewichten van de beoordelingscriteria. De vereisten staan in de opdracht-pdf. Bewaar het lesmateriaal in een eigen lokale map buiten Git.
 
 ## 1. Recepten en chunking · 25%
 
 - [x] Maak vijf voorbeeldrecepten en een lokale LlamaIndex-vectorindex.
-- [ ] Breid uit naar 30–50 gevarieerde recepten met ingrediënten, stappen, kooktijd en dieetlabels. Houd de herkomst per recept bij.
-- [ ] Vergelijk tokengebaseerde chunking met splitsen per receptsectie. Gebruik dezelfde vragen en leg uit welke antwoorden beter worden opgehaald en waarom.
+- [x] Breid de agentdataset uit naar 30–50 gevarieerde recepten met ingrediënten, stappen, kooktijd, dieetlabels en herkomst. De agent gebruikt 36 recepten.
+- [x] Vergelijk tokengebaseerde chunking met splitsen per receptsectie op dezelfde vragen. Zie de resultaten en foutanalyse in het [projectrapport](RAPPORT.md#receptendataset-en-chunking).
 
 ## 2. Agent en MCP · 35%
 
