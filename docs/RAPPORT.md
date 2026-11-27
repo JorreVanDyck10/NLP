@@ -143,6 +143,8 @@ De route, MCP-controle en bewijsrang kwamen per vraag overeen met de [bewaarde r
 
 Ragas scoorde bij beide methodes dezelfde negen zoekvragen. De twee verkeerd gerouteerde zoekvragen leverden geen receptcontext op. Per receptsectie lag de gemiddelde Context Precision iets hoger en lag de gemiddelde Context Recall lager. De vergelijking geldt voor deze proef met drie recepten.
 
+**Telemetrie.** De ruwe live-uitvoer bevat inputtokens, outputtokens en duur voor alle 58 Groq-aanroepen van de agent. De 22 gestreamde antwoordaanroepen bevatten ook TTFT. De 36 routeaanroepen geven in één keer JSON terug. De weergave van live metingen in de Streamlit-interface blijft te controleren.
+
 **Inhoudelijke controle.** Per methode zijn zeven van de elf zoekvragen volledig juist beantwoord. Bij één vraag gaf de agent terecht aan dat de opgehaalde fragmenten onvoldoende informatie bevatten. De overige drie antwoorden hadden een routerings- of antwoordfout.
 
 - `lasagne-ricotta` ging bij beide methodes naar `scale_quantity`. De agent vroeg het aantal porties in plaats van de 475 g ricotta uit het recept op te halen.

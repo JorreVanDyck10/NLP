@@ -1,8 +1,25 @@
-# Flavor Chef | Projectkeuzes voor het eindrapport
+# Flavor Chef | Projectoverdracht en projectkeuzes
 
 [Documentatiewegwijzer](README.md) · [Projectrapport en resultaten](RAPPORT.md)
 
-Vul dit document bij elke projectfase aan zodra een keuze verandert of erbij komt. Noteer wat we gebruiken, waarvoor het dient en waarom we het gekozen hebben. Voeg een versie, instelling, bron of beperking toe als die nodig is om de keuze uit te leggen of de proef te herhalen. Noteer meetresultaten in het [projectrapport](RAPPORT.md).
+Gebruik dit document om een werkpakket over te nemen of de keuzes voor het eindrapport terug te vinden. Begin met de stand van je werkpakket en volg de link naar de code, controlevragen of handleiding.
+
+## Stand per werkpakket
+
+Bijgewerkt op **27 november 2026**. `main` bevat de agent, MCP-tool, 36 recepten, lokale interface en evaluatiecode. De aparte Ollama-demo gebruikt vijf eigen voorbeeldrecepten.
+
+| Werkpakket | Gedaan en gecontroleerd | Hier kun je verder |
+| --- | --- | --- |
+| **1. Recepten en zoeken** | Breidde de dataset uit naar 36 recepten met bronvermeldingen. Beide indexen zijn gebouwd en vergeleken op 18 zoekvragen. Receptsecties gaven in die vergelijking vaker volledig bewijs op plek 1. | Onderzoek waarom de bloemkoolvervanging buiten de top 3 valt. Meet bij een wijziging opnieuw op dezelfde vragen. [Zoekcode](../recipe_search.py) · [Zoekvergelijking](RAPPORT.md#receptendataset-en-chunking) |
+| **2. Agent, Groq en MCP** | De vier lokale routes werken en alle 36 recepten zijn via MCP herschaald. De live Groq-proef haalde 16/18 routes per methode en registreerde tokens en TTFT. De benchmark herstelde van tijdelijke Groq-limieten, HTTP 429. | Onderzoek de twee verkeerd gerouteerde receptvragen en test de afhandeling bij Groq- of MCP-uitval. [Agentcode](../chef_agent.py) · [MCP-tool](../scale_server.py) · [Live foutanalyse](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting) |
+| **3. Evaluatie en foutanalyse** | De 18 referentievragen zijn nagekeken. De lokale benchmark draaide op beide chunkmethodes. Ragas scoorde op de oorspronkelijke drie proefrecepten dezelfde 9 van de 11 zoekvragen per methode. | Voeg agentvragen toe over de nieuwe recepten. Herhaal daarna de live meting met beide indexen op de uitgebreide dataset. [Evaluatievragen](../data/evaluation.json) · [Benchmarkcode](../evaluate_chef.py) · [Uitvoeren](VOORTGANG.md#live-benchmark-met-groq-en-ragas) |
+| **4. Lokale interface en demo** | Streamlit toont antwoord, route, bronnen, MCP en metingen. Zeven schermtests en vier lokale integratietests zijn geslaagd. De voorbeeldmodus markeert gesimuleerde waarden. | Controleer tokens en TTFT in de interface met een echte Groq-aanvraag en oefen de demo. [Interfacehandleiding](LOKALE-INTERFACE.md) · [Schermtests](../scripts/test_chef_ui.py) |
+
+## Overnemen en bijhouden
+
+1. Haal `main` op, lees de installatie voor jouw onderdeel en maak je taakbranch volgens de onderhoudsafspraken. [Startpunt](../README.md) · [Onderhoudsafspraken](../CONTRIBUTING.md)
+2. Gebruik de controle uit je werkpakket om je wijziging te verifiëren. Gebruik bij het vergelijken dezelfde vragen en noteer het corpus en de instellingen. De gedeelde meetresultaten staan in het rapport. [Projectrapport](RAPPORT.md)
+3. Werk dit document bij in dezelfde wijziging als de stand, een keuze of een volgende stap verandert. Noteer bij een nieuwe keuze wat we gebruiken en waarom, met een verwijzing naar de code, bron of les. Bewaar meetdetails bij de betrokken fase in het rapport en wijzig de checklist als een opleverpunt van status verandert. [MVP-checklist](MVP-CHECKLIST.md)
 
 ## 19 november 2026 | Eerste RAG-demo
 

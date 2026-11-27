@@ -4,6 +4,8 @@ Een kookassistent die recepten opzoekt en ingrediënthoeveelheden herschaalt. De
 
 **Ga je iets wijzigen? Lees eerst de [onderhoudsafspraken in CONTRIBUTING.md](CONTRIBUTING.md).** Dat geldt voor code, data, documentatie en AI-agenten. [AGENTS.md](AGENTS.md) legt deze leesstap ook vast voor coding agents.
 
+Neem je een werkpakket over? Bekijk de stand, gemaakte keuzes en open punten in de [projectoverdracht](docs/PROJECTKEUZES.md).
+
 ## Kies je startpunt
 
 | Onderdeel | Uitleg en installatie | Bestanden |
