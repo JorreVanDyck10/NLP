@@ -35,9 +35,9 @@ class InterfaceTests(unittest.TestCase):
         app.radio[0].set_value(MODES[2]).run()
         app.button(key="search").click().run()
         self.assertEqual(len(app.exception), 0)
-        self.assertIn("420 ml", app.session_state["messages"][0]["answer"])
+        self.assertIn("4 porties", app.session_state["messages"][0]["answer"])
         self.assertTrue(any("Gesimuleerd voorbeeld" in warning.value for warning in app.warning))
-        self.assertEqual([metric.value for metric in app.metric], ["1250 ms", "180", "24"])
+        self.assertEqual([metric.value for metric in app.metric], ["1250 ms", "180", "24", "180 ms"])
         app.button(key="scale").click().run()
         self.assertEqual(len(app.exception), 0)
         self.assertEqual(len(app.chat_message), 4)
@@ -58,7 +58,7 @@ class InterfaceTests(unittest.TestCase):
         self.assertEqual(len(app.exception), 0)
         self.assertIn("GROQ_API_KEY ontbreekt", app.error[0].value)
         self.assertEqual(app.session_state["messages"][0]["question"], SEARCH_QUESTION)
-        self.assertEqual(len(app.metric), 0)
+        self.assertTrue(all(metric.value == "Niet gemeten" for metric in app.metric[1:]))
 
     def test_missing_measurements_are_not_zero(self):
         app = self.app()
@@ -67,7 +67,7 @@ class InterfaceTests(unittest.TestCase):
         app.session_state["messages"] = [state]
         app.run()
         self.assertEqual(len(app.exception), 0)
-        self.assertEqual([metric.value for metric in app.metric], ["1250 ms", "Niet gemeten", "Niet gemeten"])
+        self.assertEqual([metric.value for metric in app.metric], ["1250 ms", "Niet gemeten", "Niet gemeten", "Niet gemeten"])
         self.assertTrue(any("Geen taalmodel aangeroepen" in info.value for info in app.info))
 
     def test_partial_measurements_are_not_a_complete_total(self):
@@ -94,7 +94,10 @@ class InterfaceTests(unittest.TestCase):
         self.assertEqual(app.session_state["messages"][0]["mode"], MODES[2])
 
     def test_agent_failure_keeps_question_and_hides_raw_error(self):
-        async def failing_agent(question, api_key):
+        async def failing_agent(question, api_key, on_update=None):
+            if on_update:
+                on_update({"question": question, "route": "search", "trace": ["router: search"],
+                           "llm_calls": [], "latency_ms": 999999})
             raise RuntimeError("Interne verbinding: gevoelig-testdetail")
 
         with patch.dict(sys.modules, {"chef_agent": SimpleNamespace(run=failing_agent)}):
@@ -104,7 +107,81 @@ class InterfaceTests(unittest.TestCase):
         self.assertIn("kon de aanvraag niet afronden", app.error[0].value)
         self.assertNotIn("gevoelig-testdetail", app.error[0].value)
         self.assertEqual(app.session_state["messages"][0]["question"], SEARCH_QUESTION)
-        self.assertEqual(len(app.metric), 0)
+        self.assertEqual(app.session_state["messages"][0]["route"], "search")
+        self.assertEqual(app.session_state["messages"][0]["trace"], ["router: search"])
+        self.assertLess(app.session_state["messages"][0]["latency_ms"], 999999)
+        self.assertTrue(all(metric.value == "Niet gemeten" for metric in app.metric[1:]))
+
+    def test_session_key_is_not_saved_in_messages_and_can_be_cleared(self):
+        received = []
+
+        async def fake_agent(question, api_key, on_update=None):
+            received.append(api_key)
+            state = example_state(question)
+            if on_update:
+                on_update(state)
+            return state
+
+        with patch.dict(os.environ, {}, clear=True), patch.dict(sys.modules, {"chef_agent": SimpleNamespace(run=fake_agent)}):
+            app = self.app()
+            app.radio[0].set_value("Groq").run()
+            app.text_input(key="groq_api_key").set_value("test-sleutel-geen-echte-key").run()
+            app.button(key="search").click().run()
+            self.assertEqual(received, ["test-sleutel-geen-echte-key"])
+            self.assertNotIn("test-sleutel-geen-echte-key", str(app.session_state["messages"]))
+            self.assertEqual(len(app.exception), 0)
+            app.button(key="clear_key").click().run()
+            self.assertEqual(app.text_input(key="groq_api_key").value, "")
+
+    def test_retry_after_failure_keeps_history_and_can_succeed(self):
+        attempts = []
+
+        async def intermittent_agent(question, api_key, on_update=None):
+            attempts.append(question)
+            if len(attempts) == 1:
+                raise RuntimeError("tijdelijk niet bereikbaar")
+            return example_state(question)
+
+        with patch.dict(sys.modules, {"chef_agent": SimpleNamespace(run=intermittent_agent)}):
+            app = self.app()
+            app.button(key="search").click().run()
+            app.button(key="retry_0").click().run()
+        self.assertEqual(len(app.exception), 0)
+        self.assertEqual(len(app.session_state["messages"]), 2)
+        self.assertTrue(app.session_state["messages"][0].get("error"))
+        self.assertNotIn("error", app.session_state["messages"][1])
+        self.assertIn("4 porties", app.session_state["messages"][1]["answer"])
+
+    def test_source_control_preserves_model_answer_and_shows_reference(self):
+        async def wrong_answer(question, api_key, on_update=None):
+            state = example_state(SEARCH_QUESTION)
+            state["answer"] = "Er gaat 795 ml water in de curry."
+            return state
+
+        with patch.dict(sys.modules, {"chef_agent": SimpleNamespace(run=wrong_answer)}):
+            app = self.app()
+            app.button(key="source_check").click().run()
+        self.assertIn("795 ml", app.session_state["messages"][0]["answer"])
+        self.assertTrue(any("420 ml" in info.value and "dubbeltelling" in info.value for info in app.info))
+
+    def test_measured_zero_is_displayed_as_zero(self):
+        app = self.app()
+        state = example_state(SEARCH_QUESTION)
+        state["mode"] = "Groq"
+        state["llm_calls"][0].update(prompt_tokens=0, completion_tokens=0, ttft_ms=0)
+        app.session_state["messages"] = [state]
+        app.run()
+        self.assertEqual([metric.value for metric in app.metric[1:]], ["0", "0", "0 ms"])
+
+    def test_missing_answer_ttft_is_distinguished_from_router_ttft(self):
+        app = self.app()
+        state = example_state(SEARCH_QUESTION)
+        state["mode"] = "Groq"
+        state["llm_calls"][0]["ttft_ms"] = None
+        app.session_state["messages"] = [state]
+        app.run()
+        self.assertEqual(app.metric[3].value, "Niet gemeten")
+        self.assertTrue(any("TTFT ontbreekt" in caption.value and "antwoordaanroep" in caption.value for caption in app.caption))
 
 
 if __name__ == "__main__":
