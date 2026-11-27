@@ -10,12 +10,33 @@ from hashlib import sha256
 from pathlib import Path
 from statistics import mean, median
 
+import httpx
+
 from chef_agent import build_agent, groq_client, invoke_agent
 from recipe_search import MODEL_NAME, RECIPES_PATH, ROOT, STRATEGIES
 
 
 CASES = ROOT / "data" / "evaluation.json"
 GROQ_URL = "https://api.groq.com/openai/v1/"
+
+
+class GroqBenchmarkTransport(httpx.AsyncHTTPTransport):
+    async def handle_async_request(self, request):
+        for attempt in range(4):
+            response = await super().handle_async_request(request)
+            if response.status_code != 429 or attempt == 3:
+                return response
+
+            try:
+                delay = float(response.headers.get("retry-after", ""))
+            except ValueError:
+                return response
+            if not 0 <= delay <= 120:
+                return response
+
+            await response.aclose()
+            print(f"Groq-limiet bereikt. Nieuwe poging over {math.ceil(delay) + 1} s.", flush=True)
+            await asyncio.sleep(delay + 1)
 
 
 def contains(text, phrase):
@@ -171,7 +192,11 @@ async def benchmark(api_key):
 
     judge_model = os.environ.get("RAGAS_JUDGE_MODEL", "openai/gpt-oss-120b")
     report["judge_model"] = judge_model
-    async with AsyncOpenAI(base_url=GROQ_URL, api_key=api_key, timeout=60) as judge, groq_client(api_key) as agent_client:
+    judge_http = httpx.AsyncClient(transport=GroqBenchmarkTransport())
+    async with (
+        AsyncOpenAI(base_url=GROQ_URL, api_key=api_key, timeout=60, http_client=judge_http) as judge,
+        groq_client(api_key, transport=GroqBenchmarkTransport()) as agent_client,
+    ):
         llm = llm_factory(judge_model, client=judge, temperature=0)
         metrics = {
             "context_precision": ContextPrecision(llm=llm),

@@ -54,6 +54,9 @@ async def groq_reply(client, system, user, *, json_mode=False):
         "temperature": 0,
         "max_completion_tokens": 512,
     }
+    if body["model"] in {"openai/gpt-oss-20b", "openai/gpt-oss-120b"}:
+        # GPT-OSS counts reasoning tokens toward the same budget as the visible answer.
+        body.update(reasoning_effort="low", max_completion_tokens=1024)
     start = perf_counter()
     ttft_ms = None
     usage = {}
@@ -259,11 +262,12 @@ async def invoke_agent(agent, question):
     return state
 
 
-def groq_client(api_key):
+def groq_client(api_key, *, transport=None):
     return httpx.AsyncClient(
         base_url="https://api.groq.com/openai/v1/",
         headers={"Authorization": f"Bearer {api_key}"},
         timeout=20,
+        transport=transport,
     )
 
 
