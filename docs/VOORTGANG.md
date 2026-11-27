@@ -14,7 +14,7 @@ Flavor Chef is een kookassistent die recepten opzoekt en ingrediënthoeveelheden
 - **Recepten zoeken.** `recipe_search.py` maakt met LlamaIndex en een meertalig FastEmbed-model twee lokale Qdrant-indexen. Splitsen op tokenlengte levert 17 fragmenten op. Splitsen per receptonderdeel levert 20 fragmenten op. Beide indexen geven fragmenten met een bronlink en een overeenkomstscore terug.
 - **Agent en MCP.** `chef_agent.py` gebruikt LangGraph voor de gespreksroute, receptzoekroute, directe rekentoolroute en de gecombineerde zoek- en rekentoolroute. `scale_server.py` biedt de MCP-tool `scale_ingredients` via stdio aan. De agent rekende onder meer 420 ml water voor vier porties om naar 735 ml voor zeven porties.
 - **Evaluatie.** Deze referentiemeting bevat 18 vragen met verwachte routes, referentieantwoorden en waar relevant controleerbare bronfragmenten of MCP-uitkomsten. `evaluate_chef.py` vergelijkt de twee chunkmethodes. De volledige lokale referentiemeting staat in `reports/baseline.json`.
-- **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De latere live Groq- en Ragas-proef op de drie proefrecepten staat in het [projectrapport](RAPPORT.md#27-november-2026--live-groq--en-ragas-meting).
+- **Telemetrie.** `--telemetry` toont de responstijd van de agent. Met `--groq` registreert de code ook prompttokens, antwoordtokens en de tijd tot het eerste zichtbare antwoordfragment. De latere live Groq- en Ragas-proef op de drie proefrecepten staat in het [projectrapport](RAPPORT.md#eerste-proef-met-drie-recepten).
 
 ### Lokale referentiemeting
 
@@ -54,7 +54,7 @@ $env:RAGAS_JUDGE_MODEL = 'qwen/qwen3.8-27b'
 .\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/ragas-expanded.json
 ```
 
-Het ingestelde beoordelaarsmodel hoort bij de actuele evaluatie op 36 recepten. `scored` en `total` geven het aantal gescoorde en verwachte zoekvragen per metriek aan. De meetuitvoer blijft lokaal. Bij tijdelijke Groq-gebruikslimieten wacht de benchmark voor een nieuwe poging, waardoor de meting langer kan duren. [Resultaten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten) · [Groq-limieten](https://console.groq.com/docs/rate-limits)
+Het ingestelde beoordelaarsmodel hoort bij de actuele evaluatie op 36 recepten. `scored` en `total` geven het aantal gescoorde en verwachte zoekvragen per metriek aan. De meetuitvoer blijft lokaal. Bij tijdelijke Groq-gebruikslimieten wacht de benchmark voor een nieuwe poging, waardoor de meting langer kan duren. [Resultaten](RAPPORT.md#evaluatie-met-36-recepten) · [Groq-limieten](https://console.groq.com/docs/rate-limits)
 
 ### Uitgebreide receptendataset
 
@@ -64,5 +64,5 @@ De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide inde
 
 **Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert 51 echte lokale scenario's; `python scripts/test_chef_ui.py` controleert twaalf schermscenario's zonder modellen. De interface van persoon 4 is ook met echte Groq-aanroepen en visueel in Chrome gecontroleerd. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
 
-1. **Controleer de foutgevallen opnieuw bij agentwijzigingen.** Gebruik de 20 vragen om te zien of de routerings-, zoek- en antwoordfouten zich nog voordoen. [Evaluatie met 36 recepten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
+1. **Controleer de foutgevallen opnieuw bij agentwijzigingen.** Gebruik de 20 vragen om te zien of de routerings-, zoek- en antwoordfouten zich nog voordoen. [Evaluatie met 36 recepten](RAPPORT.md#evaluatie-met-36-recepten)
 2. **Oefen de opgeleverde interface-demo.** Gesprekken, bronfragmenten, exacte MCP-gegevens en echte Groq-metingen zijn gecontroleerd. Tussenstanden verschijnen na iedere afgeronde stap. Gebruik de portievraag en schaalvraag voor de gewone demo en Broncontrole om de bekende waterdubbeltelling te analyseren. Persoon 4 moet de demo zelf nog oefenen. Zie [de handleiding](LOKALE-INTERFACE.md).
