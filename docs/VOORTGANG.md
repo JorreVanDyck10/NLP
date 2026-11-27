@@ -50,10 +50,11 @@ Stel `GROQ_API_KEY` lokaal in als omgevingsvariabele. Bij deze benchmark ontvang
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-eval.txt
 .\.venv\Scripts\python.exe recipe_search.py build
-.\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/ragas.json
+$env:RAGAS_JUDGE_MODEL = 'qwen/qwen3.8-27b'
+.\.venv\Scripts\python.exe evaluate_chef.py --ragas --output reports/ragas-expanded.json
 ```
 
-`scored` en `total` geven het aantal gescoorde en verwachte zoekvragen per metriek aan. De meetuitvoer blijft lokaal. Bij tijdelijke Groq-gebruikslimieten wacht de benchmark voor een nieuwe poging, waardoor de meting langer kan duren. [Groq-limieten](https://console.groq.com/docs/rate-limits)
+Het ingestelde beoordelaarsmodel hoort bij de actuele evaluatie op 36 recepten. `scored` en `total` geven het aantal gescoorde en verwachte zoekvragen per metriek aan. De meetuitvoer blijft lokaal. Bij tijdelijke Groq-gebruikslimieten wacht de benchmark voor een nieuwe poging, waardoor de meting langer kan duren. [Resultaten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten) · [Groq-limieten](https://console.groq.com/docs/rate-limits)
 
 ### Uitgebreide receptendataset
 
@@ -63,5 +64,5 @@ De agent gebruikt nu 36 recepten. Bouw na een wijziging in de dataset beide inde
 
 **Integratie persoon 1 + 2 + 4 (27 november).** De uitgebreide dataset is samengevoegd met de bestaande agent, MCP-tool en interface. `python scripts/test_integration.py` controleert echte lokale scenario's; `python scripts/test_chef_ui.py` controleert zeven schermscenario's zonder modellen. Gebruikte technieken, redenen en verificatiestatus staan in [het rapport](RAPPORT.md#gebruikt-en-waarom).
 
-1. **Herhaal de live Ragas-meting op 36 recepten.** De agentbenchmark bevat nu 20 vragen met drie nieuwe cases. Controleer de bron en het gegenereerde antwoord ook bij de vraag over de ontbrekende bakvormmaat. [Evaluatie met 36 recepten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
+1. **Controleer de foutgevallen opnieuw bij agentwijzigingen.** Gebruik de 20 vragen om te zien of de routerings-, zoek- en antwoordfouten zich nog voordoen. [Evaluatie met 36 recepten](RAPPORT.md#27-november-2026--evaluatie-met-36-recepten)
 2. **Controleer de bestaande interface met live Groq en oefen de demo.** Gesprekken, bronfragmenten, MCP en beschikbare metingen zijn zichtbaar. Tokenmetingen en TTFT via de interface blijven te controleren. De interface toont metingen na afloop. Zie [de handleiding](LOKALE-INTERFACE.md).
